@@ -13,8 +13,8 @@ class CreateResidentsTable extends Migration
             $table->string('reg_number')->unique(); // This will be our custom primary key
             $table->string('lname');
             $table->string('fname');
-            $table->string('mname');
-            $table->string('ext');
+            $table->string('mname')->nullable();
+            $table->string('ext')->nullable();
             $table->string('address');
             $table->string('household');
             $table->string('Birth');
@@ -29,8 +29,8 @@ class CreateResidentsTable extends Migration
             $table->string('owner_type');
             $table->string('owner_name');
             $table->integer('number_of_family');
-            $table->string('proof_of_owner');
-            $table->string('voters_filename');
+            $table->string('proof_of_owner')->nullable();
+            $table->string('voters_filename')->nullable();
             $table->string('valid_id_filename');
             $table->string('image_filename');
             $table->string('email');

@@ -112,6 +112,7 @@
                     <script src="../js/main.js"></script>
    
    <script type="text/javascript">
+    
                      const passwordInput = document.getElementById('password');
                      const toggleButton = document.getElementById('togglePassword');
                      const eyeIcon = document.getElementById('eyeIcon');
@@ -196,6 +197,7 @@
                     <script>
         var step = 1;
     $(document).ready(function(){
+         $('.alert-danger').css('display', 'none');
         $(document).on('click', '.firststep-btn', function () {
     var button = $(this);
     var spinner = button.find('.spinner-border');
@@ -269,33 +271,44 @@
     }
     // Create an array to store checked checkboxes
     var checkboxes = [];
-    // Check each checkbox and add its value to the array if checked
-    if ($('#employed').is(':checked')) {
-        checkboxes.push($('#employed').val());
-    }
-    if ($('#unemployed').is(':checked')) {
-        checkboxes.push($('#unemployed').val());
-    }
-    if ($('#PWD').is(':checked')) {
-        checkboxes.push($('#PWD').val());
-    }
-    if ($('#OFW').is(':checked')) {
-        checkboxes.push($('#OFW').val());
-    }
-    if ($('#soloparent').is(':checked')) {
-        checkboxes.push($('#soloparent').val());
-    }
-    if ($('#OSY').is(':checked')) {
-        checkboxes.push($('#OSY').val());
-    }
-    if ($('#student').is(':checked')) {
-        checkboxes.push($('#student').val());
-    }
-    if ($('#OSC').is(':checked')) {
-        checkboxes.push($('#OSC').val());
-    }
-    // Add the checkboxes array to the form data
-    formData.append('checkboxes', checkboxes);
+// Check each checkbox and add its value to the array if checked
+if ($('#employed').is(':checked')) {
+    checkboxes.push($('#employed').val());
+}
+
+if ($('#unemployed').is(':checked')) {
+    checkboxes.push($('#unemployed').val());
+}
+if ($('#PWD').is(':checked')) {
+    checkboxes.push($('#PWD').val());
+}
+if ($('#OFW').is(':checked')) {
+    checkboxes.push($('#OFW').val());
+}
+if ($('#soloparent').is(':checked')) {
+    checkboxes.push($('#soloparent').val());
+}
+if ($('#OSY').is(':checked')) {
+    checkboxes.push($('#OSY').val());
+}
+if ($('#student').is(':checked')) {
+    checkboxes.push($('#student').val());
+}
+if ($('#OSC').is(':checked')) {
+    checkboxes.push($('#OSC').val());
+}
+
+// Convert checkboxes array to JSON string
+console.log("Checked Checkboxes:", checkboxes);
+
+// Now add the checkboxes JSON string to the form data
+formData.append('checkboxes', checkboxesJSON);
+
+var checkboxesJSON = JSON.stringify(checkboxes);
+console.log("Checkbox JSON:", checkboxesJSON);
+
+
+
 
     // Get the CSRF token from the meta tag
     var csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -315,7 +328,13 @@
             $('#step2').find('input, select, textarea').removeClass('is-valid');
 
             // Check the status property of the result object for each step
-            if (result.status === 'success') {
+            if (checkboxes.length === 0) {
+    // Display error message
+    $('.alert-danger_message').css('display', 'block');
+} else {
+    // Hide the alert
+    $('.alert-danger_message').css('display', 'none');
+    if (result.status === 'success') {
                 $('#step1').find('input, select, textarea').each(function() {
                 $(this).addClass('is-valid');
                 $(this).removeClass('is-invalid');
@@ -329,9 +348,18 @@
                     nextStep(2); // Go to step 2
                 }
             } else {
-               
-                console.log('Next step not triggered. Response:', result);
+                // Display error messages for each field
+                if (result.errors) {
+                    $.each(result.errors, function(key, value) {
+                        var input = $('#' + key);
+                        input.addClass('is-invalid');
+                        input.parent().find('.valid-feedback').remove();
+                        input.parent().find('.invalid-feedback').remove(); // Remove previous error message
+                        input.parent().append('<div class="invalid-feedback">' + value[0] + '</div>');
+                    });
+                }
             }
+}
 
             spinner.addClass('d-none');
             // Show "Next" text and arrow icon again
@@ -349,7 +377,10 @@
             input.parent().find('.valid-feedback').remove();
             input.parent().find('.invalid-feedback').remove(); // Remove previous error message
             input.parent().append('<div class="invalid-feedback">' + value + '</div>');
+           // var errorContainer = $('.alert-danger');
+           // errorContainer.text(value + " " + key);
         });
+
     }else{
         $.each(xhr.responseJSON.errors, function(key, value) {
             var input = $('#' + key);
@@ -399,6 +430,7 @@
             } else if (key === 'cnum' && input.val().match(/[0-9]{2}-[0-9]{3}-[0-9]{4}/)) {
                 input.addClass('is-valid');
                 input.removeClass('is-invalid');
+                input.parent().find('.invalid-feedback').remove();
                 input.parent().find('.valid-feedback').remove();
                 input.parent().find('.invalid-feedback').remove();
                 input.parent().append('<div class="valid-feedback">Good.</div>');
@@ -406,7 +438,6 @@
                 input.addClass('is-valid');
                 input.removeClass('is-invalid');
                 input.parent().find('.valid-feedback').remove();
-                input.parent().find('.invalid-feedback').remove();
                 input.parent().append('<div class="valid-feedback">Good.</div>');
             } else if (key === 'occupation' && input.val().match(/^[a-zA-Z\s ]+$/)) {
                 input.addClass('is-valid');

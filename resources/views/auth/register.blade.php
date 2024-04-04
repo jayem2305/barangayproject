@@ -90,7 +90,7 @@
                             <input type="text" class="form-control form-control-lg " id="mname" placeholder="Middle Name" name="mname"  >
                         </div>
                         <div class="valid-secondary text-primary" style="margin-top: -1rem;">
-                        leave this field blank if you don't have.
+                        If applicable
                             </div>
                     </div>
                     <div class="col-lg-2">
@@ -99,7 +99,7 @@
                             <input type="text" class="form-control form-control-lg" id="ext" placeholder="Extension" name="ext"  >
                             </div>
                             <div class="valid-secondary text-primary" style="margin-top: -1rem;">
-                        leave this field blank if you don't have.
+                            If applicable
                             </div>
                     </div>
                     <div class="col-lg-6">
@@ -158,7 +158,7 @@
                             <label for="formGroupExampleInput" class="form-label">Phone Number<span class="text-danger">*</span></label>
                             <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon1">+639</span>
-                                <input type="tel" class="form-control form-control-lg" id="cnum" placeholder="xx-xxx-xxxx" name="cnum"pattern="[0-9]{2}-[0-9]{3}-[0-9]{4}"  >
+                                <input type="tel" class="form-control form-control-lg" id="cnum" placeholder="xx-xxx-xxxx" name="cnum"pattern="[0-9]{2}-[0-9]{3}-[0-9]{4}" maxlength="11" >
                             </div>
                             </div>
                         </div>
@@ -213,22 +213,25 @@
                     </div>
                     <div class="col-lg-12">
                     <label for="formGroupExampleInput" class="form-label text-primary"><b>Indicate if: <span class="text-danger">*</span></label>
-                    @if ($errors->has('employed'))
-                        <div class="alert alert-danger" role="alert">
-                            {{ $errors->first('employed') }}
-                        </div>
-                    @endif
+                   <div style="display: none;" class="alert-danger_message">
+                    <div class="alert alert-danger d-flex align-items-center" role="alert">
+  <svg class="bi flex-shrink-0 me-2"  width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+    <div>
+        Please select at least one option from the checkboxes.
+    </div>
+</div>
+</div>
 
                     <div class="row">
                             <div class="col-lg-3">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="Employed" id="employed"checked>
+                                    <input class="form-check-input" type="checkbox" value="Employed" id="employed" name="employed" >
                                     <label class="form-check-label" for="employed">
                                         Labor / Employed
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="Unemployed" id="unemployed">
+                                    <input class="form-check-input" type="checkbox" value="Unemployed" id="unemployed" name="unemployed">
                                     <label class="form-check-label" for="Unemployed">
                                         Unemployed
                                     </label>
@@ -236,13 +239,13 @@
                             </div> 
                             <div class="col-lg-3">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="PWD" id="PWD">
+                                    <input class="form-check-input" type="checkbox" value="PWD" id="PWD" name="PWD">
                                     <label class="form-check-label" for="PWD">
                                        PWD
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="OFW" id="OFW">
+                                    <input class="form-check-input" type="checkbox" value="OFW" id="OFW"name="OFW">
                                     <label class="form-check-label" for="OFW">
                                         OFW
                                     </label>
@@ -250,13 +253,13 @@
                             </div> 
                             <div class="col-lg-3">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="Solor Parent" id="soloparent">
+                                    <input class="form-check-input" type="checkbox" value="Solo Parent" id="soloparent" name="soloparent">
                                     <label class="form-check-label" for="soloparent">
                                        Solo Parent
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="Out of School Youth (OSY)" id="OSY">
+                                    <input class="form-check-input" type="checkbox" value="Out of School Youth (OSY)" id="OSY" name="OSY">
                                     <label class="form-check-label" for="OSY">
                                         Out of School Youth (OSY)
                                     </label>
@@ -264,13 +267,13 @@
                             </div> 
                             <div class="col-lg-3">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="Student" id="student">
+                                    <input class="form-check-input" type="checkbox" value="Student" id="student" name="student">
                                     <label class="form-check-label" for="student">
                                     Student
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="Out of School Children (OSC)" id="OSC">
+                                    <input class="form-check-input" type="checkbox" value="Out of School Children (OSC)" id="OSC" name="OSC">
                                     <label class="form-check-label" for="OSC">
                                         Out of School Children (OSC)
                                     </label>
@@ -288,14 +291,79 @@
                     <div class="col-lg-6">
                     <label for="formGroupExampleInput" class="form-label">Password<span class="text-danger">*</span></label>
                         <div class="input-group mb-3">
-                            <input type="password" class="form-control form-control-lg" id="password" placeholder="Password" name="password" >
+                            <input type="password" class="form-control form-control-lg" id="password" placeholder="Password" name="password" oninput="updatePasswordRequirements()">
                             <span class="input-group-text" id="basic-addon2">
                                 <a id="togglePassword" type="button"><i class="bi bi-eye-slash" id="eyeIcon"></i></a>
                             </span>
                             </div>
+                            <div class="text-primary" style="margin-top: -1rem;" id="charac">
+                            <b><i class="bi bi-emoji-smile-fill" id="eigth_id"></i></b> Must Have 8 Characters long.
+                            </div>
+                            <div class="text-primary" style="margin-top: -.3rem;" id="cap">
+                            <b><i class="bi bi-emoji-smile-fill"id="cap_id"></i></b> Atleast 1 Capital Letter
+                            </div>
+                            <div class="text-primary" style="margin-top: -.2rem;"id="num">
+                            <b><i class="bi bi-emoji-smile-fill" id="num_id"></i></b> Atleast 1 Number
+                            </div>
+                            <div class=" text-primary" style="margin-top: -.1rem;"id="spec">
+                            <b><i class="bi bi-emoji-smile-fill" id="char_id"></i></b> Atleast 1 Special Character [@_><,.?..]
+                            </div>
 
                     </div>
                 </div>
+                <script>
+                    function updatePasswordRequirements() {
+    var pass = document.getElementById('password').value;
+    var Characters = document.getElementById('charac');
+    var passwordRequirements = document.getElementById('cap');
+    var numRequirements = document.getElementById('num');
+    var cspecRequirements = document.getElementById('spec');
+                                // Define the password requirements
+    var hasMinLength = pass.length >= 8;
+    var hasUppercase = /[A-Z]/.test(pass);
+    var hasNumber = /\d/.test(pass);
+    var hasSpecialChar = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(pass);
+
+                                // Update the display based on the requirements
+    //passwordRequirements.innerHTML = "Password must have at least 1 Capital Letter";
+   if (hasUppercase) {
+            $('#cap').removeClass('text-danger').addClass('text-success');
+            $('#cap_id').removeClass('bi bi-emoji-frown-fill').addClass('bi bi-emoji-laughing-fill');
+            $('#cap_id').removeClass('bi bi-emoji-smile-fill');
+        } else {
+            $('#cap').removeClass('text-success').addClass('text-danger');
+            $('#cap_id').removeClass('bi bi-emoji-laughing-fill').removeClass('bi-emoji-smile-fill').addClass('bi bi-emoji-frown-fill');
+        }
+ // Characters.innerHTML = "Password Must Have 8 Characters long.";
+  //numRequirements.innerHTML = "Password must have at least 1 Number.";
+    if (hasMinLength) {
+        $('#charac').removeClass('text-danger').addClass('text-success');
+        $('#eigth_id').removeClass('bi bi-emoji-frown-fill').addClass('bi bi-emoji-laughing-fill');
+            $('#eigth_id').removeClass('bi bi-emoji-smile-fill');
+        } else {
+            $('#charac').removeClass('text-success').addClass('text-danger');
+            $('#eigth_id').removeClass('bi bi-emoji-laughing-fill').removeClass('bi-emoji-smile-fill').addClass('bi bi-emoji-frown-fill');
+        }
+ 
+    if (hasNumber) {
+        $('#num').removeClass('text-danger').addClass('text-success');
+        $('#num_id').removeClass('bi bi-emoji-frown-fill').addClass('bi bi-emoji-laughing-fill');
+            $('#num_id').removeClass('bi bi-emoji-smile-fill');
+        } else {
+            $('#num').removeClass('text-success').addClass('text-danger');
+            $('#num_id').removeClass('bi bi-emoji-laughing-fill').removeClass('bi-emoji-smile-fill').addClass('bi bi-emoji-frown-fill');
+        }
+  //cspecRequirements.innerHTML = "Password must have at least 1 Special Character.";
+    if (hasSpecialChar) {
+        $('#spec').removeClass('text-danger').addClass('text-success');
+        $('#char_id').removeClass('bi bi-emoji-frown-fill').addClass('bi bi-emoji-laughing-fill');
+            $('#char_id').removeClass('bi bi-emoji-smile-fill');
+        } else {
+            $('#spec').removeClass('text-success').addClass('text-danger');
+            $('#char_id').removeClass('bi bi-emoji-laughing-fill').removeClass('bi-emoji-smile-fill').addClass('bi bi-emoji-frown-fill');
+        }
+}
+</script>
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
   <button class="btn btn-primary firststep-btn" type="submit" 
 data-lname="lname"

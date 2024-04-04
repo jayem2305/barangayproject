@@ -6,27 +6,15 @@ use Illuminate\Contracts\Validation\Rule;
 
 class CheckAtLeastOneCheckbox implements Rule
 {
-    protected $checkboxGroup;
-
-    public function __construct($checkboxGroup)
-    {
-        $this->checkboxGroup = $checkboxGroup;
-    }
-
     public function passes($attribute, $value)
     {
-        // Check if at least one checkbox in the group is checked
-        foreach ($this->checkboxGroup as $checkbox) {
-            if (request()->has($checkbox)) {
-                return true;
-            }
-        }
-
-        return false;
+        // Check if at least one checkbox is checked
+        return is_array($value) && count($value) > 0;
     }
 
     public function message()
     {
-        return 'Please check at least one option from the group.';
+        return 'At least one checkbox must be checked.';
     }
 }
+

@@ -11,6 +11,7 @@ use Illuminate\Validation\Rule;
 use App\Rules\AgeMatchesBirthday;
 use App\Rules\agematchesbirthdaymember;
 use App\Rules\CheckAtLeastOneCheckbox;
+use App\Rules\UniqueNameCombination;
 use Illuminate\Support\Facades\Log;
 use App\Models\Resident;
 use App\Models\Member;
@@ -42,11 +43,12 @@ function registerPost(Request $request){
     }
     function step1(Request $request){
   // Define validation rules
+  //dump($request->input('options'));
   $rules = [
-    'lname' => 'required|regex:/^[a-zA-Z\s ]+$/',
-    'fname' => 'required|regex:/^[a-zA-Z\s ]+$/',
-    'mname' => 'nullable|regex:/^[a-zA-Z\s ]+$/',
-    'ext' => 'nullable|regex:/^[a-zA-Z\s .]+$/',
+    'lname' => ['required','regex:/^[a-zA-Z\s ]+$/', new UniqueNameCombination],
+    'fname' => ['required','regex:/^[a-zA-Z\s ]+$/', new UniqueNameCombination],
+    'mname' => ['nullable','regex:/^[a-zA-Z\s ]+$/', new UniqueNameCombination],
+    'ext' => ['nullable','regex:/^[a-zA-Z\s ]+$/', new UniqueNameCombination],
     'address' => 'required|regex:/^[a-zA-Z0-9 .,()-]*$/',
     'household' => 'required',
     'Birth' => 'required',
@@ -57,15 +59,22 @@ function registerPost(Request $request){
     'civil' => 'required|in:Single,Widowed,Married',
     'citizenship' => 'required|regex:/^[a-zA-Z\s ]+$/',
     'occupation' => 'required|regex:/^[a-zA-Z\s ]+$/',
-    'email' => 'required|email',
+    'email' => 'required|email|unique:residents,email',
     'password' => 'required|min:8|regex:/^(?=.*[a-zA-Z0-9 ])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]+$/',
-    'employed' => new CheckAtLeastOneCheckbox(['employed', 'unemployed']),
-    'PWD' => new CheckAtLeastOneCheckbox(['PWD', 'OFW']),
-    'soloparent' => new CheckAtLeastOneCheckbox(['soloparent', 'OSY']),
-    'student' => new CheckAtLeastOneCheckbox(['student', 'OSC']),
+    'employed' => 'nullable',
+    'unemployed' => 'nullable',
+    'PWD' => 'nullable',
+    'OFW' => 'nullable',
+    'soloparent' => 'nullable',
+    'OSY' => 'nullable',
+    'student' => 'nullable',
+    'OSC' => 'nullable',
+
+
 ];
 
 $messages = [
+    'email.unique' => 'The email has already been taken.',
     'lname.required' => 'The last name field is required.',
     'lname.regex' => 'The last name field should contain only letters and spaces.',
 
@@ -111,18 +120,6 @@ $messages = [
     'password.required' => 'The password field is required.',
     'password.min' => 'The password must be at least :min characters long.',
     'password.regex' => 'The password must contain at least one letter, one number, and one special character.',
-
-    'employed.required' => 'Please select at least one option for employment.',
-    'unemployed.required' => 'Please select at least one option for employment.',
-
-    'PWD.required' => 'Please select at least one option for special condition.',
-    'OFW.required' => 'Please select at least one option for special condition.',
-
-    'soloparent.required' => 'Please select at least one option for special condition.',
-    'OSY.required' => 'Please select at least one option for special condition.',
-
-    'student.required' => 'Please select at least one option for special condition.',
-    'OSC.required' => 'Please select at least one option for special condition.',
 ];
 $validator = Validator::make($request->all(), $rules,$messages);
 if ($validator->fails()) {
@@ -340,22 +337,54 @@ return response()->json(['status' => 'success']);
     $resident->civil = $request->session()->get('step1.civil');
     $resident->citizenship = $request->session()->get('step1.citizenship');
     $resident->occupation = $request->session()->get('step1.occupation');
-    $indicateIf = '';
-    if ($request->session()->has('step1.employed')) {
-        $indicateIf .= $request->session()->get('step1.employed') . ', ';
-    }
-    if ($request->session()->has('step1.PWD')) {
-        $indicateIf .= $request->session()->get('step1.PWD') . ', ';
-    }
-    if ($request->session()->has('step1.soloparent')) {
-        $indicateIf .= $request->session()->get('step1.soloparent') . ', ';
-    }
-    if ($request->session()->has('step1.student')) {
-        $indicateIf .= $request->session()->get('step1.student');
-    }
+    $indicateIf = [];
 
-    // Trim any trailing commas and spaces
-    $resident->indicate_if = rtrim(trim($indicateIf), ',');
+    if ($request->session()->has('step1.employed') && $request->session()->get('step1.employed')) {
+        $employed = $request->session()->get('step1.employed');
+        $indicateIf[] = $employed;
+    }
+    if ($request->session()->has('step1.unemployed') && $request->session()->get('step1.unemployed')) {
+        $unemployed = $request->session()->get('step1.unemployed');
+        $indicateIf[] = $unemployed;
+    }
+    
+    if ($request->session()->has('step1.PWD') && $request->session()->get('step1.PWD')) {
+        $PWD = $request->session()->get('step1.PWD');
+        $indicateIf[] = $PWD;
+    }
+    
+    if ($request->session()->has('step1.soloparent') && $request->session()->get('step1.soloparent')) {
+        $soloparent = $request->session()->get('step1.soloparent');
+        $indicateIf[] = $soloparent;
+    }
+    
+    if ($request->session()->has('step1.OFW') && $request->session()->get('step1.OFW')) {
+        $OFW = $request->session()->get('step1.OFW');
+        $indicateIf[] = $OFW;
+    }
+    
+    if ($request->session()->has('step1.student') && $request->session()->get('step1.student')) {
+        $student = $request->session()->get('step1.student');
+        $indicateIf[] = $student;
+    }
+    
+    if ($request->session()->has('step1.OSC') && $request->session()->get('step1.OSC')) {
+        $OSC = $request->session()->get('step1.OSC');
+        $indicateIf[] = $OSC;
+    }
+    
+    if ($request->session()->has('step1.OSY') && $request->session()->get('step1.OSY')) {
+        $OSY = $request->session()->get('step1.OSY');
+        $indicateIf[] = $OSY;
+    }
+    
+    // Implode the array into a comma-separated string
+    //$resident->indicate_if = implode(', ', $indicateIf);
+    
+    // Debugging to check the final value of indicate_if
+    //echo "Final indicate_if: " . $resident->indicate_if;
+    
+          
 
     $resident->owner_type = $request->session()->get('step2.owner');
     $resident->owner_name = $request->session()->get('step2.ownername');
