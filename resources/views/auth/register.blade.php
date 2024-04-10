@@ -45,10 +45,10 @@
                 <div class="col-lg-4">
                  <h5><span class="circle-number-color">1</span>Head of the Family Information<i class="bi bi-caret-right-fill"></i></h5>
              </div>
-             <div class="col-lg-3" >
-                 <h5><span class="circle-number">2</span>Family Information <i class="bi bi-caret-right-fill"></i></h5>
+             <div class="col-lg-4" >
+                 <h5><span class="circle-number">2</span>House Hold Information <i class="bi bi-caret-right-fill"></i></h5>
              </div>
-             <div class="col-lg-5" >
+             <div class="col-lg-4" >
                  <h5><span class="circle-number">3</span>Upload your Valid ID’s </h5>
              </div>
          </div>
@@ -407,10 +407,10 @@ data-password="password" name="firststep"> <span class="next-text ">Next</span>
                 <div class="col-lg-4 col-xs-4">
                     <h5><span class="circle-number-color">1</span>Head of the Family Information<i class="bi bi-caret-right-fill"></i></h5>
                 </div>
-                <div class="col-lg-3 col-xs-4" >
-                    <h5><span class="circle-number-color">2</span>Family Information <i class="bi bi-caret-right-fill"></i></h5>
+                <div class="col-lg-4 col-xs-4" >
+                    <h5><span class="circle-number-color">2</span>House Hold Information <i class="bi bi-caret-right-fill"></i></h5>
                 </div>
-                <div class="col-lg-5 col-xs-4" >
+                <div class="col-lg-4 col-xs-4" >
                     <h5><span class="circle-number">3</span>Upload your Valid ID’s </h5>
                 </div>
             </div>
@@ -448,22 +448,7 @@ data-password="password" name="firststep"> <span class="next-text ">Next</span>
     Head of the family is Excluded here.
 </div>
 </div>
-<div class="col-lg-6">
-<button type="button" class="btn btn-success btn-lg" style="margin-top: 1.5rem;" id="addfam" data-bs-toggle="modal" data-bs-target="#addmembers"><i class="bi bi-person-plus-fill"></i> Add a House Hold Member</button>
-</div>
-<hr>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-6 col-sm-6" >
-            <ol id="list_of_members">
 
-            </ol>
-        </div>
-        <div class="col-lg-6 col-sm-6" id="update_list_of_members">
-            
-        </div>
-    </div>
-</div>
             </div>
         </div>
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -492,7 +477,7 @@ data-password="password" name="firststep"> <span class="next-text ">Next</span>
         <h5><span class="circle-number-color">1</span>Head of the Family Information<i class="bi bi-caret-right-fill"></i></h5>
     </div>
     <div class="col-lg-3 col-xs-4" >
-        <h5><span class="circle-number-color">2</span>Family Information <i class="bi bi-caret-right-fill"></i></h5>
+        <h5><span class="circle-number-color">2</span>House hold Information <i class="bi bi-caret-right-fill"></i></h5>
     </div>
     <div class="col-lg-5 col-xs-4" >
         <h5><span class="circle-number-color">3</span>Upload your Valid ID’s </h5>
@@ -640,241 +625,6 @@ data-password="password" name="firststep"> <span class="next-text ">Next</span>
             </div>
         </div>
     </div>
-</div>
-
-   
-<!-- Modal -->
-<div class="modal fade" id="addmembers" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel"><i class="bi bi-person-plus-fill"></i> Add a House Hold Member</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-        <div class="col-lg-3">
-                    <label for="formGroupExampleInput" class="form-label">Last Name<span class="text-danger">*</span></label>
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control form-control-lg" id="lname_member" placeholder="Last Name" name="lname_member"  autofocus>
-                            </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="row">
-                            <div class="col-lg-12">
-                            <label for="formGroupExampleInput" class="form-label">First Name<span class="text-danger">*</span></label>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control form-control-lg" id="fname_member" placeholder="First Name" name="fname_member" >
-                            </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                    <label for="formGroupExampleInput" class="form-label">Middle Name<span class="text-danger">*</span></label>
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control form-control-lg" id="mname_member" placeholder="Middle Name" name="mname_member"  >
-                            </div>
-                    </div>
-                    <div class="col-lg-2">
-                    <label for="formGroupExampleInput" class="form-label">Ext. Name</label>
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control form-control-lg" id="ext_member" placeholder="Extension" name="ext_member"  >
-                            </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="row">
-                            <div class="col-lg-12">
-                            <label for="formGroupExampleInput" class="form-label">Relation to Head of the family<span class="text-danger">*</span></label>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control form-control-lg" id="household_member" name="household_member" placeholder="Relation to the Head of the family" >
-                            </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="row">
-                            <div class="col-lg-12">
-                            <label for="formGroupExampleInput" class="form-label">Place of Birth<span class="text-danger">*</span></label>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control form-control-lg" id="birth_member" placeholder="Place of Birth" name="birth_member" >
-                            </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="row">
-                            <div class="col-lg-12">
-                            <label for="formGroupExampleInput" class="form-label">Date of Birth<span class="text-danger">*</span></label>
-                            <div class="input-group mb-3">
-                                <input type="date" class="form-control form-control-lg" id="bday_member" placeholder="Date of Birth" name="bday_member" max="2009-12-31" >
-                            </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="row">
-                            <div class="col-lg-12">
-                            <label for="formGroupExampleInput" class="form-label">Age<span class="text-danger">*</span></label>
-                            <div class="input-group mb-3">
-                                <input type="number" class="form-control form-control-lg" id="age_member" placeholder="Age" name="age_member" min="15" >
-                            </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="row">
-                            <div class="col-lg-12">
-                            <label for="formGroupExampleInput" class="form-label">Sex<span class="text-danger">*</span></label>
-                            <select class="form-select form-select-lg mb-3" aria-label="Large select example" name="gender_member" id="gender_member">
-                                <option selected>------</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                            </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="row">
-                            <div class="col-lg-12">
-                            <label for="formGroupExampleInput" class="form-label">Civil Status<span class="text-danger">*</span></label>
-                            <select class="form-select form-select-lg mb-3" aria-label="Large select example" name="civil_member" id="civil_member">
-                                <option selected>------</option>
-                                <option value="Single">Single</option>
-                                <option value="Married">Married</option>
-                                <option value="Widowed">Widowed</option>
-                            </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="row">
-                            <div class="col-lg-12">
-                            <label for="formGroupExampleInput" class="form-label">Citizenship<span class="text-danger">*</span></label>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control form-control-lg" id="citizenship_member" placeholder="Citizenship" name="citizenship_member" >
-                            </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="row">
-                            <div class="col-lg-12">
-                            <label for="formGroupExampleInput" class="form-label">Occupation<span class="text-danger">*</span></label>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control form-control-lg" id="occupation_member" placeholder="Occupation" name="occupation_member" >
-                            </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-12">
-                    <label for="formGroupExampleInput" class="form-label text-primary"><b>Indicate if: <span class="text-danger">*</span></label>
-                        <div class="row">
-                            <div class="col-lg-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="Employed" id="employed_member"checked>
-                                    <label class="form-check-label" for="employed">
-                                        Labor / Employed
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="Unemployed" id="unemployed_member">
-                                    <label class="form-check-label" for="Unemployed">
-                                        Unemployed
-                                    </label>
-                                </div>
-                            </div> 
-                            <div class="col-lg-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="PWD" id="PWD_member">
-                                    <label class="form-check-label" for="PWD">
-                                       PWD
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="OFW" id="OFW_member">
-                                    <label class="form-check-label" for="OFW">
-                                        OFW
-                                    </label>
-                                </div>
-                            </div> 
-                            <div class="col-lg-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="Solor Parent" id="soloparent_member">
-                                    <label class="form-check-label" for="soloparent">
-                                       Solo Parent
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="Out of School Youth (OSY)" id="OSY_member">
-                                    <label class="form-check-label" for="OSY">
-                                        Out of School Youth (OSY)
-                                    </label>
-                                </div>
-                            </div> 
-                            <div class="col-lg-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="Student" id="student_member">
-                                    <label class="form-check-label" for="student">
-                                    Student
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="Out of School Children (OSC)" id="OSC_member">
-                                    <label class="form-check-label" for="OSC">
-                                        Out of School Children (OSC)
-                                    </label>
-                                </div>
-                            </div> 
-                        </div>
-                    </div>
-                <div class="row">
-                <div class="col-lg-6">
-                    <label for="formGroupExampleInput" class="form-label">Upload PSA/Senior ID/Student ID/Valid ID<span class="text-danger">*</span></label>
-                        <div class="input-group mb-3">
-                            <input type="file" class="form-control form-control-lg" id="id_member" placeholder="Upload PSA/Senior ID/Student ID" name="id_member"  >
-                            </div>
-                    </div>
-                    <div class="col-lg-6">
-                    <label for="formGroupExampleInput" class="form-label">Upload 2x2 Picture<span class="text-danger">*</span></label>
-                        <div class="input-group mb-3">
-                            <input type="file" class="form-control form-control-lg" id="pic_member" placeholder="Upload 2x2 Picture" name="pic_member"  >
-                            </div>
-                    </div>
-                </div>
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-  <button class="btn btn-primary addmember-btn" type="button" 
-data-lname="lname"
-data-fname="fname"
-data-mname="mname"
-data-ext="ext"
-data-address="address"
-data-household="household"
-data-Birth="Birth"
-data-birthday="birthday"
-data-age="age"
-data-cnum="cnum"
-data-gender="gender"
-data-civil="civil"
-data-citizenship="citizenship"
-data-occupation="occupation"
-data-employed="#employed_member"
-data-unemployed="#unemployed_member"
-data-PWD="#PWD_member"
-data-OFW="#OFW_member"
-data-soloparent="#soloparent_member"
-data-OSY="#OSY_member"
-data-student="#student_member"
-data-OSC="#OSC_member"
-> <span class="next-text ">Submit</span>
-    <div class="spinner-border text-light d-none" role="status">
-  <span class="visually-hidden">Loading...</span>
-</div>
-</i></button>
-</div>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 <div class="modal fade bg-primay" id="exampleModal"data-bs-backdrop="static" data-bs-keyboard="false"tabindex="-1"  aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl alert-success">

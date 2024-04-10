@@ -22,16 +22,27 @@ class AuthController extends Controller
 public function login(){
     return view("auth.login");
 }
-function loginPost(Request $request){
+public function loginPost(Request $request){
     $request->validate([
-        "email" => "required",
+        "email" => "required|email",
         "password" => "required",
     ]);
-    $credentials = $request->only("email","password");
+
+    $credentials = $request->only("email", "password");
+
     if(Auth::attempt($credentials)){
-        return redirect()->intended(route("home"));
+        $user = Auth::user();
+      /*  if ($user->isAdmin()) {
+            // Return "admin" for admin user
+            return response()->json("admin");
+        } else { }*/
+            // Return "resident" for regular user
+            return response()->json("resident");
+       
+    } else {
+        // Return error message for invalid credentials
+        return response()->json("Invalid credentials");
     }
-    return redirect(route("login"))->with("error ","Login failed");
 }
 function register(){
     return view("auth.register");
@@ -129,6 +140,8 @@ if ($validator->fails()) {
 $data = $request->all();
 
 $data_step1 = $validator->validated();
+$checkedCheckboxes = array_filter($data_step1);
+    $request->session()->put('step1', $checkedCheckboxes);
 // Remove 'proofofowner' from the data since we've stored the file name separately
 $request->session()->put('step1', $data_step1);
 
@@ -200,71 +213,6 @@ return response()->json(['status' => 'success']);
         // Return the success response
         return response()->json(['status' => 'NEXTSTEP']);
     }
-    
-    
-    public function storeMember(Request $request)
-    {
-        // Validate the incoming request data
-        $validatedDatamemnber = $request->validate([
-            'lname_member' => 'required|regex:/^[a-zA-Z\s .]+$/',
-            'fname_member' => 'required|regex:/^[a-zA-Z\s .]+$/',
-            'mname_member' => 'nullable|regex:/^[a-zA-Z\s .]+$/',
-            'ext_member' => 'nullable|regex:/^[a-zA-Z\s .]+$/',
-            'household_member' => 'required|regex:/^[a-zA-Z\s .]+$/',
-            'birth_member' => 'required',
-            'bday_member' => 'required|date',
-            'age_member' => ['required', 'numeric'],
-            'gender_member' => 'required|in:Male,Female',
-            'civil_member' => 'required|in:Single,Widowed,Married',
-            'citizenship_member' => 'required|regex:/^[a-zA-Z\s ]+$/',
-            'occupation_member' => 'required|regex:/^[a-zA-Z\s ]+$/',
-            'employed_member' => new CheckAtLeastOneCheckbox(['employed', 'unemployed']),
-            'PWD_member' => new CheckAtLeastOneCheckbox(['PWD', 'OFW']),
-            'soloparent_member' => new CheckAtLeastOneCheckbox(['soloparent', 'OSY']),
-            'student_member' => new CheckAtLeastOneCheckbox(['student', 'OSC']),
-            'id_member' => 'required|mimes:pdf,png,jpg,jpeg|max:2048',
-            'pic_member' => 'required|image|mimes:png,jpg,jpeg|max:2048',
-            // Add more validation rules for other fields as needed
-        ]);
-    
-        // If validation fails, return JSON response with errors
-        $validatormember = Validator::make($request->all(), $validatedDatamemnber);
-        if ($validatormember->fails()) {
-            return response()->json(['errors' => $validatormember->errors()], 422);
-        }
-    
-        // Handle uploaded ID file
-        if ($request->hasFile('id_member')) {
-            $idFile = $request->file('id_member');
-            $idFileName = time() . '_' . $idFile->getClientOriginalName();
-            // Move the uploaded ID file to public/residentprofile folder
-            $idFile->move(public_path('residentprofile'), $idFileName);
-            // Store the file name in the session
-            $request->session()->put('id_member_filename', $idFileName);
-        }
-    
-        // Handle uploaded picture file
-        if ($request->hasFile('pic_member')) {
-            $picFile = $request->file('pic_member');
-            $picFileName = time() . '_' . $picFile->getClientOriginalName();
-            // Move the uploaded picture file to public/residentprofile folder
-            $picFile->move(public_path('residentprofile'), $picFileName);
-            // Store the file name in the session
-            $request->session()->put('pic_member_filename', $picFileName);
-        }
-    
-        // Store validated data in the session or database if needed
-        $data_addmember = $validatormember->validated();
-        // Remove 'id_member' and 'pic_member' from the data since we've stored the file names separately
-        unset($data_addmember['id_member']);
-        unset($data_addmember['pic_member']);
-        $request->session()->put('addmember', $data_addmember);
-    
-        // Return a JSON response indicating successful addition of member
-        return response()->json(['status' => "Member_Added"]);
-    }
-    
-
     public function laststep(Request $request)
     {
         $validatedData = $request->validate([
@@ -318,7 +266,7 @@ return response()->json(['status' => 'success']);
     $latestResident = Resident::latest('id')->first();
     $lastId = $latestResident ? $latestResident->id : 0;
     $newId = $lastId + 1;
-    $regNumber = "REG_{$dateToday}_{$newId}";
+    $regNumber = "REG_{$dateToday}_0{$newId}";
 
     // Create a new Resident instance and store in the database
     $resident = new Resident();
@@ -337,55 +285,51 @@ return response()->json(['status' => 'success']);
     $resident->civil = $request->session()->get('step1.civil');
     $resident->citizenship = $request->session()->get('step1.citizenship');
     $resident->occupation = $request->session()->get('step1.occupation');
-    $indicateIf = [];
+    $checkboxes = ['employed', 'unemployed', 'PWD', 'soloparent', 'OFW', 'student', 'OSC', 'OSY'];
+    $indicateIfValues = [];
+ // Retrieve values from the session
+ $step1Data = $request->session()->get('step1');
+    if (isset($step1Data['employed']) && $step1Data['employed']) {
+    $employedValue = $step1Data['employed'];
 
-    if ($request->session()->has('step1.employed') && $request->session()->get('step1.employed')) {
-        $employed = $request->session()->get('step1.employed');
-        $indicateIf[] = $employed;
     }
-    if ($request->session()->has('step1.unemployed') && $request->session()->get('step1.unemployed')) {
-        $unemployed = $request->session()->get('step1.unemployed');
-        $indicateIf[] = $unemployed;
+    if (isset($step1Data['unemployed']) && $step1Data['unemployed']) {
+        $unemployedValue = $step1Data['unemployed'];
     }
     
-    if ($request->session()->has('step1.PWD') && $request->session()->get('step1.PWD')) {
-        $PWD = $request->session()->get('step1.PWD');
-        $indicateIf[] = $PWD;
+    if (isset($step1Data['PWD']) && $step1Data['PWD']) {
+        $PWDValue = $step1Data['PWD'];
     }
     
-    if ($request->session()->has('step1.soloparent') && $request->session()->get('step1.soloparent')) {
-        $soloparent = $request->session()->get('step1.soloparent');
-        $indicateIf[] = $soloparent;
+    if (isset($step1Data['soloparent']) && $step1Data['soloparent']) {
+        $soloparentValue = $step1Data['soloparent'];
     }
     
-    if ($request->session()->has('step1.OFW') && $request->session()->get('step1.OFW')) {
-        $OFW = $request->session()->get('step1.OFW');
-        $indicateIf[] = $OFW;
+    if (isset($step1Data['OFW']) && $step1Data['OFW']) {
+        $OFWValue = $step1Data['OFW'];
     }
     
-    if ($request->session()->has('step1.student') && $request->session()->get('step1.student')) {
-        $student = $request->session()->get('step1.student');
-        $indicateIf[] = $student;
+    if (isset($step1Data['student']) && $step1Data['student']) {
+        $studentValue = $step1Data['student'];
     }
     
-    if ($request->session()->has('step1.OSC') && $request->session()->get('step1.OSC')) {
-        $OSC = $request->session()->get('step1.OSC');
-        $indicateIf[] = $OSC;
+    if (isset($step1Data['OSC']) && $step1Data['OSC']) {
+        $OSCValue = $step1Data['OSC'];
     }
     
-    if ($request->session()->has('step1.OSY') && $request->session()->get('step1.OSY')) {
-        $OSY = $request->session()->get('step1.OSY');
-        $indicateIf[] = $OSY;
+   if (isset($step1Data['OSY']) && $step1Data['OSY']) {
+        $OSYValue = $step1Data['OSY'];
     }
-    
-    // Implode the array into a comma-separated string
-    //$resident->indicate_if = implode(', ', $indicateIf);
-    
-    // Debugging to check the final value of indicate_if
-    //echo "Final indicate_if: " . $resident->indicate_if;
-    
-          
-
+    foreach ($checkboxes as $checkbox) {
+        if (isset($step1Data[$checkbox]) && $step1Data[$checkbox]) {
+            $indicateIfValues[$checkbox] = 1;
+        } else {
+            $indicateIfValues[$checkbox] = 0;
+        }
+    }
+    // Convert the array to JSON string
+    $indicateIfString = json_encode($indicateIfValues);
+    $resident->indicate_if = $indicateIfString;
     $resident->owner_type = $request->session()->get('step2.owner');
     $resident->owner_name = $request->session()->get('step2.ownername');
     $resident->number_of_family = $request->session()->get('step2.numberoffam');
@@ -396,48 +340,6 @@ return response()->json(['status' => 'success']);
     $resident->email = $request->session()->get('step1.email');
     $resident->password = Hash::make($request->input('password'));
     $resident->save();
-    // Get the resident ID for the relationship
-    $residentId = $resident->id;
-
-    // Insert member data
-    $members = $request->session()->get('addmember', []);
-    foreach ($members as $memberData) {
-        $member = new Member();
-        $member->resident_id = $residentId;
-        $member->lname_member = $memberData['lname_member'];
-        $member->fname_member = $memberData['fname_member'];
-        $member->mname_member = $memberData['mname_member'];
-        $member->ext_member = $memberData['ext_member'];
-        $member->household_member = $memberData['household_member'];
-        $member->birth_member = $memberData['birth_member'];
-        $member->bday_member = $memberData['bday_member'];
-        $member->age_member = $memberData['age_member'];
-        $member->gender_member = $memberData['gender_member'];
-        $member->civil_member = $memberData['civil_member'];
-        $member->occupation_member = $memberData['occupation_member'];
-       // Combine values from the $memberData array into the indicate_if_member field
-        $indicateIfMember = '';
-        if (isset($memberData['employed_member'])) {
-            $indicateIfMember .= $memberData['employed_member'] . ', ';
-        }
-        if (isset($memberData['PWD_member'])) {
-            $indicateIfMember .= $memberData['PWD_member'] . ', ';
-        }
-        if (isset($memberData['soloparent_member'])) {
-            $indicateIfMember .= $memberData['soloparent_member'] . ', ';
-        }
-        if (isset($memberData['student_member'])) {
-            $indicateIfMember .= $memberData['student_member'];
-        }
-
-        // Trim any trailing commas and spaces
-        $member->indicate_if_member = rtrim(trim($indicateIfMember), ',');
-        $member->id_member = $memberData['id_member'];
-        $member->pic_member = $memberData['pic_member'];
-        
-        // Save the member
-        $member->save();
-    }
 
     // Clear the session data if needed
     $request->session()->forget('step1');
@@ -446,9 +348,8 @@ return response()->json(['status' => 'success']);
     $request->session()->forget('voters_filename');
     $request->session()->forget('valid_id_filename');
     $request->session()->forget('image_filename');
-    $request->session()->forget('addmember');
 
-    return response()->json(['status' => 'Complete'], 200);
+    return response()->json(['status' => 'Complete','reg_number' => $regNumber], 200);
     }
     
     /*$request->validate([

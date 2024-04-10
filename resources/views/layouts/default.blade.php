@@ -112,7 +112,44 @@
                     <script src="../js/main.js"></script>
    
    <script type="text/javascript">
-    
+    $(document).ready(function(){
+    $(document).on('click', '.login-btn', function () {
+        var email = $('#email').val();
+        var password = $('#password').val();
+        var formData = new FormData();
+        formData.append('_token', '{{ csrf_token() }}'); // Add CSRF token for Laravel
+        formData.append('email', email);
+        formData.append('password', password);
+
+        console.log('Sending AJAX request...');
+        $.ajax({
+            url: "{{ route('login.post') }}", // Use the named route for login
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (result) {
+                console.log('AJAX request successful:', result);
+
+                // Redirect based on the response
+                if (result.includes("resident")) {
+                    console.log('AJAX successful:', result);
+                    window.location.href = '{{ route("home") }}';
+               // } else if (result.includes("admin")) {
+                 //   window.location.href = route("admin.dashboard") }}';
+              //  } else {
+                    console.log('AJAX successful:', result);
+                    $('#opTag').html(result);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('AJAX request failed:', xhr, status, error);
+                $('#opTag').html("AJAX request failed: " + xhr.statusText);
+            }
+        });
+    });
+});
+
                      const passwordInput = document.getElementById('password');
                      const toggleButton = document.getElementById('togglePassword');
                      const eyeIcon = document.getElementById('eyeIcon');
@@ -153,22 +190,7 @@
                         // Update the age input value
                         ageInput.value = age;
                     });
-                    bday_member.addEventListener('change', function() {
-                        // Get the selected birthday value
-                        const selectedDate = new Date(this.value);
-                        const today = new Date();
-
-                        // Calculate the age
-                        let age_members = today.getFullYear() - selectedDate.getFullYear();
-                        const monthDiff = today.getMonth() - selectedDate.getMonth();
-                        
-                        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < selectedDate.getDate())) {
-                            age_members--;
-                        }
-
-                        // Update the age input value
-                        age_member.value = age_members;
-                    });
+                 
                     const mobileInput = document.getElementById('cnum');
 
                     // Add an event listener to show the format hint
@@ -667,27 +689,9 @@ $(document).ready(function () {
                 // If another role is selected, clear nameowner and enable the input
                 clearOwnerInfo();
                 $('#ownername').prop('readonly', false);
-                $('#proofofowner').prop('disabled', false);
-                
+                $('#proofofowner').prop('disabled', false);  
             }
         });
-      // Function to check numberoffam input and disable button
-    function checkNumberoffam() {
-        var numberoffamValue = $('#numberoffam').val().trim();
-        if (numberoffamValue === '0' || numberoffamValue === '') {
-            $('#addfam').prop('disabled', true);
-        } else {
-            $('#addfam').prop('disabled', false);
-        }
-    }
-    // Call the function on page load
-    checkNumberoffam();
-    // Call the function on change of numberoffam input
-    $('#numberoffam').on('change', function() {
-        checkNumberoffam();
-    });
-    });
-
     function displayOwnerInfo() {
         var lname = $('#lname').val();
         var fname = $('#fname').val();
@@ -697,250 +701,30 @@ $(document).ready(function () {
         // Concatenate lname, fname, and mname and set it as the value of nameowner
         $('#ownername').val(lname + ', ' + fname + ' ' + mname+' ' + ext);
     }
-
     function clearOwnerInfo() {
         // Clear the value of nameowner
         $('#ownername').val('');
     }  
-
-    $(document).ready(function() {
-    // Initialize array to store members
-    var members = [];
-
-    $('.addmember-btn').click(function() {
-        // Get values from input fields
-        var lname_member = $('#lname_member').val();
-        var fname_member = $('#fname_member').val();
-        var mname_member = $('#mname_member').val();
-        var ext_member = $('#ext_member').val();
-        var household_member = $('#household_member').val();
-        var birth_member = $('#birth_member').val();
-        var bday_member = $('#bday_member').val();
-        var age_member = $('#age_member').val();
-        var gender_member = $('#gender_member').val();
-        var civil_member = $('#civil_member').val();
-        var citizenship_member = $('#citizenship_member').val();
-        var occupation_member = $('#occupation_member').val();
-        var employed_member = $('#employed_member').val();
-        var unemployed_member = $('#unemployed_member').val();
-        var PWD_member = $('#PWD_member').val();
-        var OFW_member = $('#OFW_member').val();
-        var soloparent_member = $('#soloparent_member').val();
-        var OSY_member = $('#OSY_member').val();
-        var student_member = $('#student_member').val();
-        var OSC_member = $('#OSC_member').val();
-       // File inputs
-       var id_member = $('#id_member').prop('files')[0];
-        var pic_member = $('#pic_member').prop('files')[0];
-        // Create FormData object
-        var formData = new FormData();
-       // formData.append('addmember', addmember);
-        formData.append('lname_member', lname_member);
-        formData.append('fname_member', fname_member);
-        formData.append('mname_member', mname_member);
-        formData.append('ext_member', ext_member);
-        formData.append('household_member', household_member);
-        formData.append('birth_member', birth_member);
-        formData.append('bday_member', bday_member);
-        formData.append('age_member', age_member);
-        formData.append('gender_member', gender_member);
-        formData.append('civil_member', civil_member);
-        formData.append('citizenship_member', citizenship_member);
-        formData.append('occupation_member', occupation_member);
-        formData.append('id_member', id_member);
-        formData.append('pic_member', pic_member);
-        // Send AJAX request to store member
-        var checkboxes = [];
-        if ($('#employed_member').is(':checked')) {
-        checkboxes.push($('#employed_member').val());
-    }
-    if ($('#unemployed_member').is(':checked')) {
-        checkboxes.push($('#unemployed_member').val());
-    }
-    if ($('#PWD_member').is(':checked')) {
-        checkboxes.push($('#PWD_member').val());
-    }
-    if ($('#OFW_member').is(':checked')) {
-        checkboxes.push($('#OFW_member').val());
-    }
-    if ($('#soloparent_member').is(':checked')) {
-        checkboxes.push($('#soloparent_member').val());
-    }
-    if ($('#OSY_member').is(':checked')) {
-        checkboxes.push($('#OSY_member').val());
-    }
-    if ($('#student_member').is(':checked')) {
-        checkboxes.push($('#student_member').val());
-    }
-    if ($('#OSC_member').is(':checked')) {
-        checkboxes.push($('#OSC_member').val());
-    }
-    // Add the checkboxes array to the form data
-    formData.append('checkboxes', checkboxes);
-        $.ajax({
-            url: "{{ route('store.member') }}",
-            type: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(result) {
-                $('#addmembers').find('input, select, textarea').removeClass('is-valid');
-
-                // Check the status property of the result object for each step
-                if (result.status === 'Member_Added') {
-                    $('input, select').each(function() {
-                        $(this).addClass('is-valid');
-                        $(this).removeClass('is-invalid');
-                        $(this).parent().find('.valid-feedback').remove(); // Remove previous error message
-                        $(this).parent().find('.invalid-feedback').remove(); // Remove previous error message
-                        $(this).parent().append('<div class="valid-feedback">Good.</div>');
-                    });
-                    $('#addmembers')[0].reset();
-
-                }
-            },
-            error: function(xhr, status, errorThrown) {
-                console.error('AJAX request failed:', xhr, status, errorThrown);
-               // console.error(xhr.responseText);
-                if (xhr.responseJSON && xhr.responseJSON.errors) {
-                    $.each(xhr.responseJSON.errors, function(key, value) {
-                        var input = $('#' + key);
-                        input.addClass('is-invalid');
-                        input.parent().find('.valid-feedback').remove();
-                        input.parent().find('.invalid-feedback').remove();
-                        input.parent().append('<div class="invalid-feedback">' + value + '</div>');
-                    });
-                }
-            }
-        });
-               // Create member object
-               var member = {
-                    lname_member: lname_member,
-                    fname_member: fname_member,
-                    mname_member: mname_member,
-                    ext_member: ext_member,
-                    household_member: household_member,
-                    birth_member: birth_member,
-                    bday_member: bday_member,
-                    age_member: age_member,
-                    gender_member: gender_member,
-                    civil_member: civil_member,
-                    citizenship_member: citizenship_member,
-                    occupation_member: occupation_member,
-                    employed_member: checkboxes.includes('employed') ? 'employed' : '',
-                    unemployed_member: checkboxes.includes('unemployed') ? 'unemployed' : '',
-                    PWD_member: checkboxes.includes('PWD') ? 'PWD' : '',
-                    OFW_member: checkboxes.includes('OFW') ? 'OFW' : '',
-                    soloparent_member: checkboxes.includes('soloparent') ? 'soloparent' : '',
-                    OSY_member: checkboxes.includes('OSY') ? 'OSY' : '',
-                    student_member: checkboxes.includes('student') ? 'student' : '',
-                    OSC_member: checkboxes.includes('OSC') ? 'OSC' : '',
-                    id_member: id_member,
-                    pic_member: pic_member
-                    // Add other fields as needed
-                };
-                    // Add member object to members array
-                    members.push(member);
-
-                    
-                    // Update displayed list
-                    displayMembers();
-               // console.log(response);
     });
 
-    // Function to display members in #list_of_members
-    function displayMembers() {
-    var listHtml = '';
-    for (var i = 0; i < members.length; i++) {
-        var member = members[i];
-        // Check if all required fields are present and not empty
-        if (
-            member.hasOwnProperty('lname_member') && /^[a-zA-Z\s]+$/.test(member['lname_member'].trim()) &&
-            member.hasOwnProperty('fname_member') && /^[a-zA-Z\s]+$/.test(member['fname_member'].trim()) &&
-            (member.hasOwnProperty('mname_member') && /^[a-zA-Z\s]+$/.test(member['mname_member'].trim())) ||
-            !member.hasOwnProperty('mname_member') ||
-            (member.hasOwnProperty('ext_member') && /^[a-zA-Z\s .]+$/.test(member['ext_member'].trim())) ||
-            !member.hasOwnProperty('ext_member') &&
-            member.hasOwnProperty('household_member') && /^[a-zA-Z\s .]+$/.test(member['household_member'].trim()) &&
-            member.hasOwnProperty('birth_member') && member['birth_member'].trim() !== '' &&
-            member.hasOwnProperty('bday_member') && member['bday_member'].trim() !== '' &&
-            member.hasOwnProperty('age_member') && !isNaN(member['age_member']) && member['age_member'] >= 15 &&
-            member.hasOwnProperty('gender_member') && ['Male', 'Female'].includes(member['gender_member']) &&
-            member.hasOwnProperty('civil_member') && ['Single', 'Widowed', 'Married'].includes(member['civil_member']) &&
-            member.hasOwnProperty('citizenship_member') && /^[a-zA-Z\s]+$/.test(member['citizenship_member'].trim()) &&
-            member.hasOwnProperty('occupation_member') && /^[a-zA-Z\s]+$/.test(member['occupation_member'].trim()) &&
-            member.hasOwnProperty('employed_member') && ['employed', 'unemployed'].some(opt => member['employed_member'].includes(opt)) &&
-            member.hasOwnProperty('PWD_member') && ['PWD', 'OFW'].some(opt => member['PWD_member'].includes(opt)) &&
-            member.hasOwnProperty('soloparent_member') && ['soloparent', 'OSY'].some(opt => member['soloparent_member'].includes(opt)) &&
-            member.hasOwnProperty('student_member') && ['student', 'OSC'].some(opt => member['student_member'].includes(opt)) &&
-            member.hasOwnProperty('id_member') && ['pdf', 'png', 'jpg', 'jpeg'].some(ext => member['id_member'].toLowerCase().endsWith(ext)) &&
-            member.hasOwnProperty('pic_member') && ['png', 'jpg', 'jpeg'].some(ext => member['pic_member'].toLowerCase().endsWith(ext))
-
-        ) {
-            listHtml += '<li><button type="button" class="btn btn-warning btn-lg">' + member['lname_member'] + ', ' + member['fname_member'] + ' ' + member['mname_member'] + ' ' + (member['ext_member'] ? member['ext_member'] + ' ' : '') + ' - ' + member['household_member'] + '</button></li>';
-            // Add other fields as needed
-        } else {
-            console.log('Member at index ' + i + ' is missing required fields.');
-            // You can handle missing fields here, such as skipping this member or displaying an error
-        }
-    }
-    $('#list_of_members').html(listHtml);
-    // Check if the stored member count matches the numberoffam
-    var numberoffam = parseInt($('#numberoffam').val());
-    if (members.length === numberoffam) {
-        // Close the modal
-        $('#addmembers').modal('hide');
-        // Disable the addmember-btn
-        $('.addmember-btn').prop('disabled', true);
-        // Disable the addfam button
-        $('#addfam').prop('disabled', true);
-    } else {
-        // Enable the addmember-btn
-        $('.addmember-btn').prop('disabled', false);
-        // Enable the addfam button
-        $('#addfam').prop('disabled', false);
-    }
-}
-
-// Event listener for numberoffam input change
-$('#numberoffam').on('change', function() {
-    displayMembers();
-
-    // Display error message if numberoffam and members.length are not equal
-    var numberoffam = parseInt($(this).val());
-    if (numberoffam !== members.length) {
-        $('#numberoffam-error').text('The number of family members does not match the added members.');
-    } else {
-        $('#numberoffam-error').text('');
-    }
-});
-
+   
+    $(document).ready(function() {
+    // Initialize array to store members
 $('.laststep-btn').click(function() {
     var voterscert = $('#voterscert').prop('files')[0];
         var idv = $('#idv').prop('files')[0];
         var pic = $('#pic').prop('files')[0];
-    // Disable button to prevent multiple submissions
+        var checkboxes = [];
+    $('input[type="checkbox"]:checked').each(function() {
+        checkboxes.push($(this).val());
+    });
+
+    // Add checked checkboxes to the form data
     var formData = new FormData();
-    // Append file data to the FormData object
     formData.append('voterscert', voterscert);
     formData.append('idv', idv);
     formData.append('pic', pic);
-
-    // Append other data as needed
-   /* formData.append('lname_member', $('#lname_member').val());
-    formData.append('fname_member', $('#fname_member').val());
-    formData.append('mname_member', $('#mname_member').val());
-    formData.append('ext_member', $('#ext_member').val());
-    formData.append('household_member', $('#household_member').val());
-    formData.append('birth_member', $('#birth_member').val());
-    formData.append('bday_member', $('#bday_member').val());
-    formData.append('age_member', $('#age_member').val());
-    formData.append('cnum_member', $('#cnum_member').val());
-    formData.append('gender_member', $('#gender_member').val());
-    formData.append('civil_member', $('#civil_member').val());*/
+    formData.append('checkboxes', JSON.stringify(checkboxes));
 
     $.ajax({
         url: "{{ route('register.laststep') }}",
@@ -964,6 +748,7 @@ if (result.status === 'Complete') {
         $(this).parent().find('.invalid-feedback').remove(); // Remove previous error message
         $(this).parent().append('<div class="valid-feedback">Good.</div>');
         $("#exampleModal").modal('show');
+        $('#controlNumber').html(result.reg_number);
     });
 }
         },
@@ -984,7 +769,6 @@ if (result.status === 'Complete') {
         console.error('Unexpected error occurred:', xhr.responseText);
         // You can display a generic error message here, or perform other actions
     }
-
     // Check specific fields for validation and mark them as valid if no error is returned
     $('input, select, textarea').each(function() {
         var input = $(this);
@@ -1024,7 +808,6 @@ if (result.status === 'Complete') {
 });
 
 });
-
 function nextStep(step) {
     var currentStep = document.getElementById('step' + step);
     currentStep.style.display = 'block';
@@ -1040,10 +823,6 @@ function prevStep(step) {
     var nextStep = document.getElementById('step' + (step + 1));
     nextStep.style.display = 'none';
 }
-
-
-
-
 </script>
 
 </body>

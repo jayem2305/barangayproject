@@ -46,7 +46,6 @@
                 <p class="mb-4">If you want assistance, you can contact barangay authorities or community leaders. I wish you a happy, productive, and fulfilling stay in Barangay 781, Zone 85.</p>
             </div>
             <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
-            <form method="post" action="{{route("login.post")}}">
                 @csrf
                 <h2 class="mb-4">Login</h2>
                 @if(session()->has("success"))
@@ -64,11 +63,9 @@
                     <div class="col-sm-12">
                         <div class="input-group mb-3">
                             <input type="email" class="form-control form-control-lg" id="email" placeholder="Email" name="email" required autofocus>
-                            @if($errors->has('email'))
-                            <span class="text-danger">
-                                {{$errors->first('email')}}
-                            </span>
-                            @endif
+                            @error('email')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
                     <div class="col-sm-12">
@@ -77,11 +74,9 @@
                             <span class="input-group-text" id="basic-addon2">
                                 <a id="togglePassword" type="button"><i class="bi bi-eye-slash" id="eyeIcon"></i></a>
                             </span>
-                            @if($errors->has('password'))
-                            <span class="text-danger">
-                                {{$errors->first('password')}}
-                            </span>
-                            @endif
+                            @error('password')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
                     <div class="col-10">
@@ -95,10 +90,9 @@
                     </div>
                     <hr>
                     <div class="col-12 text-center">
-                       <a href="registration.php" class="btn btn-success btn-lg">Create An Account</a>
+                       <a href="register" class="btn btn-success btn-lg">Create An Account</a>
                    </div>
                </div>
-            </form>
            </div>
        </div>
    </div>

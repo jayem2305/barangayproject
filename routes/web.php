@@ -16,5 +16,5 @@ Route::get("/register",[AuthController::class,"register"])
 ->name("register");
 Route::post('/register/step1', [AuthController::class, 'step1'])->name('register.step1');
 Route::post('/register/step2', [AuthController::class, 'step2'])->name('register.step2');
-Route::post('/register/storeMember',  [AuthController::class, 'storeMember'])->name('store.member');
+//Route::post('/register/storeMember',  [AuthController::class, 'storeMember'])->name('store.member');
 Route::post('/register/laststep', [AuthController::class, 'laststep'])->name('register.laststep');

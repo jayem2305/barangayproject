@@ -3,6 +3,7 @@
 namespace App\Rules;
 
 use App\Models\Resident;
+use App\Models\Member;
 use Illuminate\Contracts\Validation\Rule;
 
 class UniqueNameCombination implements Rule
@@ -16,7 +17,6 @@ class UniqueNameCombination implements Rule
 
         $query = Resident::where('lname', $lname)
             ->where('fname', $fname);
-
         // Check if mname is not empty, then add it to the query
         if ($mname !== null) {
             $query->where('mname', $mname);

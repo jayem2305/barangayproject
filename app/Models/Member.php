@@ -10,7 +10,6 @@ class Member extends Model
     use HasFactory;
 
     protected $fillable = [
-        'resident_id',
         'lname_member',
         'fname_member',
         'mname_member',
@@ -21,6 +20,7 @@ class Member extends Model
         'age_member',
         'gender_member',
         'civil_member',
+        'citizenship_member',
         'occupation_member',
         'indicate_if_member',
         'valid_id_member',
