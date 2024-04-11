@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as AuthenticatableUser;
+use Illuminate\Notifications\Notifiable;
 
-class Resident extends Model
+class Resident extends AuthenticatableUser implements Authenticatable
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     protected $primaryKey = 'reg_number'; // Define the custom primary key
 
@@ -42,6 +44,44 @@ class Resident extends Model
         'status' => 'pending',
         // Add other fillable fields here as needed
     ];
-
+    protected $hidden = [
+        'password',
+    ];
+    public function getAuthPassword()
+    {
+        return $this->password;
+    }
     // Other model code...
+    public function isResident()
+{
+    // Implement your logic to check if the user is a resident
+    // For example, if residents have a specific role in your system
+    return $this->role === 'resident';
+}
+
+public function getAuthIdentifierName()
+{
+    return 'email';
+}
+
+public function getAuthIdentifier()
+{
+    return $this->getKey();
+}
+
+
+public function getRememberToken()
+{
+    return null; // not needed for your case
+}
+
+public function setRememberToken($value)
+{
+    // not needed for your case
+}
+
+public function getRememberTokenName()
+{
+    return null; // not needed for your case
+}
 }

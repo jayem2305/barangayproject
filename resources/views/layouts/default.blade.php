@@ -110,45 +110,60 @@
 
                     <!-- Template Javascript -->
                     <script src="../js/main.js"></script>
-   
+   <script>
+    // JavaScript to show the modal on page load
+                        $(document).ready(function(){
+                          $('#autoShowModal').modal('show');
+                      });
+                  </script>
    <script type="text/javascript">
-    $(document).ready(function(){
+$(document).ready(function () {
     $(document).on('click', '.login-btn', function () {
+        var button = $(this); // Get the clicked button
+        var spinner = button.find('.spinner-border'); // Find the spinner inside the button
+        var loginText = button.find('.login_text'); // Find the login_text element
+        spinner.removeClass('d-none'); // Show the spinner when the button is clicked
+        loginText.addClass('d-none'); // Hide the login_text when the spinner appears
         var email = $('#email').val();
         var password = $('#password').val();
         var formData = new FormData();
-        formData.append('_token', '{{ csrf_token() }}'); // Add CSRF token for Laravel
+        formData.append('_token', '{{ csrf_token() }}');
         formData.append('email', email);
         formData.append('password', password);
-
+        
         console.log('Sending AJAX request...');
         $.ajax({
-            url: "{{ route('login.post') }}", // Use the named route for login
             type: "POST",
+            url: "{{ route('login.post') }}",
             data: formData,
             contentType: false,
             processData: false,
-            success: function (result) {
-                console.log('AJAX request successful:', result);
-
-                // Redirect based on the response
-                if (result.includes("resident")) {
-                    console.log('AJAX successful:', result);
-                    window.location.href = '{{ route("home") }}';
-               // } else if (result.includes("admin")) {
-                 //   window.location.href = route("admin.dashboard") }}';
-              //  } else {
-                    console.log('AJAX successful:', result);
-                    $('#opTag').html(result);
-                }
+            success: function (response) {
+                // Hide the spinner and show login_text when AJAX request is successful
+                spinner.addClass('d-none');
+                loginText.removeClass('d-none');
+                window.location.href = response.redirect;
             },
             error: function (xhr, status, error) {
+                // Hide the spinner and show login_text when AJAX request encounters an error
+                spinner.addClass('d-none');
+                loginText.removeClass('d-none');
+                
                 console.error('AJAX request failed:', xhr, status, error);
-                $('#opTag').html("AJAX request failed: " + xhr.statusText);
+                var response = xhr.responseJSON;
+                if (response && response.error) {
+                    $('#opTag').html('<div class="alert alert-danger d-flex align-items-center" role="alert"><svg class="bi flex-shrink-0 me-2" role="img" width="24" height="24" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg><div>'+response.error+'</div></div>');
+                } else {
+                    $('#opTag').html('<div class="alert alert-danger d-flex align-items-center" role="alert"><svg class="bi flex-shrink-0 me-2" role="img" width="24" height="24" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg><div>'+response.error+'</div></div>');
+                }
+                $('#email').addClass('is-invalid');
+                $('#password').addClass('is-invalid');
             }
         });
     });
 });
+
+
 
                      const passwordInput = document.getElementById('password');
                      const toggleButton = document.getElementById('togglePassword');

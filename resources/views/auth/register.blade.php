@@ -9,15 +9,15 @@
             </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav text">
-                     <a class="navbar-brand" href="index.php">
+                     <a class="navbar-brand" href="/">
                      <img src="../pic/nav.png" alt="Logo" width="400" height="70" class="d-inline-block align-text-top">
                      </a>
                     </div> 
                     <div class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <a href="onlineservice.php" class="nav-item nav-link text-white"><i class="bi bi-newspaper"></i> Online Services </a>
+                    <a href="onlineservices" class="nav-item nav-link text-white"><i class="bi bi-newspaper"></i> Online Services </a>
                     <a href="register" class="nav-item nav-link text-primary"><i class="bi bi-person-fill"></i> Create an Account</a>
-                    <a href="aboutus.php" class="nav-item nav-link text-white"><i class="bi bi-info-circle"></i> About us </i></a>
-                    <a href="login" class="nav-item nav-link text-white">Login <i class="bi bi-door-open-fill"></i></a>
+                    <a href="aboutus" class="nav-item nav-link text-white"><i class="bi bi-info-circle"></i> About us </i></a>
+                    <a href="login" class="nav-item nav-link text-white"><i class="bi bi-door-open-fill"></i> Login</a>
                 </div>
             </div>
         </nav>
@@ -634,7 +634,7 @@ data-password="password" name="firststep"> <span class="next-text ">Next</span>
          <p class="text-success">Your patience is greatly appreciated, as we process your account within 3-5 business days. Will subsequently email it to your provided email address. We regret any cause of inconvenience this might cause to you, but we assure that care will be implemented while under queue. Thank you</p>
          <div class="modal-content bg-transparent" style="border: none;">
            <div style="margin-left:31rem">
-            <a href="index.php" class="btn btn-success">Close</a>
+            <a href="login" class="btn btn-success">Close</a>
         </div>
     </div>
 </div>

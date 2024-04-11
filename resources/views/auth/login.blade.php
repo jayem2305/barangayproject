@@ -8,19 +8,18 @@
             </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav text">
-                     <a class="navbar-brand" href="home">
+                     <a class="navbar-brand" href="/">
                      <img src="../pic/nav.png" alt="Logo" width="400" height="70" class="d-inline-block align-text-top">
                      </a>
                     </div> 
                     <div class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <a href="onlineservice.php" class="nav-item nav-link text-white"><i class="bi bi-newspaper"></i> Online Services </a>
+                    <a href="onlineservices" class="nav-item nav-link text-white"><i class="bi bi-newspaper"></i> Online Services </a>
                     <a href="register" class="nav-item nav-link text-white"><i class="bi bi-person-fill"></i> Create an Account</a>
-                    <a href="aboutus.php" class="nav-item nav-link text-white"><i class="bi bi-info-circle"></i> About us </i></a>
-                    <a href="login" class="nav-item nav-link text-primary">Login <i class="bi bi-door-open-fill"></i></a>
+                    <a href="aboutus" class="nav-item nav-link text-white"><i class="bi bi-info-circle"></i> About us </i></a>
+                    <a href="login" class="nav-item nav-link text-primary"><i class="bi bi-door-open-fill"></i> Login </a>
                 </div>
             </div>
         </nav>
-       
     </div>
     <div class="container-fluid px-0 mb-5">
     <section id="hero" class="d-flex align-items-center" style=" max-width: 100%;
@@ -47,7 +46,7 @@
             </div>
             <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
                 @csrf
-                <h2 class="mb-4">Login</h2>
+                <h2 class="mb-4"> <i class="bi bi-door-open-fill"></i> Login </h2>
                 @if(session()->has("success"))
          <div class="alert alert-success">
             {{session()->get("success")}}
@@ -59,7 +58,7 @@
          </div>
          @endif
                 <div class="row g-3">
-                    <div role="alert" id="opTag"></div>
+                    <div id="opTag"></div>
                     <div class="col-sm-12">
                         <div class="input-group mb-3">
                             <input type="email" class="form-control form-control-lg" id="email" placeholder="Email" name="email" required autofocus>
@@ -85,8 +84,9 @@
                         </div>
                     </div>
                     <div class="col-2 text-center">
-                        <button class="btn btn-primary login-btn" type="submit" name="login" data-email="#email"
-                        data-password="password">Login</button>
+                        <button class="btn btn-primary login-btn" type="submit" name="login" data-email="email"
+                        data-password="password"> <span><div class="spinner-border text-light d-none" role="status">
+  <span class="visually-hidden">Loading...</div></span><span class="login_text">Login</span></button>
                     </div>
                     <hr>
                     <div class="col-12 text-center">

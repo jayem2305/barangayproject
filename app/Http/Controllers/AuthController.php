@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use App\Rules\AgeMatchesBirthday;
 use App\Rules\agematchesbirthdaymember;
 use App\Rules\CheckAtLeastOneCheckbox;
@@ -19,31 +20,80 @@ use App\Models\Member;
 
 class AuthController extends Controller
 {
+    public function index()
+    {
+        return view('welcome');
+        //return "Hello, this is the welcome page!";
+    }
+    
 public function login(){
     return view("auth.login");
 }
-public function loginPost(Request $request){
-    $request->validate([
-        "email" => "required|email",
-        "password" => "required",
-    ]);
-
-    $credentials = $request->only("email", "password");
-
-    if(Auth::attempt($credentials)){
-        $user = Auth::user();
-      /*  if ($user->isAdmin()) {
-            // Return "admin" for admin user
-            return response()->json("admin");
-        } else { }*/
-            // Return "resident" for regular user
-            return response()->json("resident");
-       
-    } else {
-        // Return error message for invalid credentials
-        return response()->json("Invalid credentials");
-    }
+public function onlineservices(){
+    return view("auth.onlineservices");
 }
+public function aboutus(){
+    return view("auth.aboutus");
+}
+public function loginPost(Request $request)
+{
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
+    // Retrieve the resident by email
+    $resident = Resident::where('email', $request->email)->first();
+
+    // Check if resident exists
+    if (!$resident) {
+        return response()->json(['error' => 'User not found'], 422);
+    }
+
+    // Retrieve the email and hashed password from the resident
+    $email = $resident->email;
+    $status = $resident->status;
+    $hashedPassword = $resident->password;
+
+    // Log retrieved resident, email, and hashed password for debugging
+    Log::info('Retrieved Resident:', ['resident' => $resident]);
+    Log::info('Request Email:', ['email' => $request->email]);
+    Log::info('Hashed Password:', ['hashed_password' => $hashedPassword]);
+    
+    // Check if the provided email matches
+    if ($request->email !== $email) {
+        return response()->json(['error' => 'Email does not match'], 422);
+    }
+    Log::info('Trimmed Password:', ['trimmed_password' => trim($request->password)]);
+    Log::info('Retrieved Hashed Password:', ['hashed_password' => $hashedPassword]);
+
+    // Check if the provided password matches the hashed password in the database
+    if ($hashedPassword === $request->password) {
+        if($status == "pending"){
+            return response()->json(['error' => 'Your Account are Still Inprocess'], 422);
+        }else if($status == "resident"){
+        // If passwords match, log the user in
+        Auth::login($resident);
+            
+        // Redirect to the desired location after login
+        return response()->json(['success' => 'Login successful', 'redirect' => route('userresident.index')]);
+        }else{
+            return response()->json(['error' => 'User not found'], 422);
+        }
+        
+    } else {
+        // If passwords do not match, return error
+        return response()->json(['error' => 'Invalid credentials: Password incorrect'], 422);
+    }
+    
+    
+}
+
+
+
+
+
+
+
 function register(){
     return view("auth.register");
 }
@@ -338,7 +388,7 @@ return response()->json(['status' => 'success']);
     $resident->valid_id_filename = $request->session()->get('valid_id_filename');
     $resident->image_filename = $request->session()->get('image_filename');
     $resident->email = $request->session()->get('step1.email');
-    $resident->password = Hash::make($request->input('password'));
+    $resident->password = $request->session()->get('step1.password');
     $resident->save();
 
     // Clear the session data if needed
