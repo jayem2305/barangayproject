@@ -115,6 +115,9 @@
                         $(document).ready(function(){
                           $('#autoShowModal').modal('show');
                       });
+                      $(document).ready(function(){
+                          $('#termscondition').modal('show');
+                      });
                   </script>
    <script type="text/javascript">
 $(document).ready(function () {

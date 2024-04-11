@@ -640,5 +640,56 @@ data-password="password" name="firststep"> <span class="next-text ">Next</span>
 </div>
 </div>
 </div>
-
+<div class="modal fade" tabindex="-1" id="termscondition" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Terms and Conditions</h5>
+      </div>
+      <div class="modal-body " data-bs-spy="scroll" style="max-height: 400px; overflow-y: auto;">
+      <b>These Terms and Conditions ("Terms") govern your use of the Barangay 781 Zone 85 website www.barangay781zone85.com ("the Website") and the services provided therein. By accessing or using the Website, you agree to be bound by these Terms. If you do not agree to these Terms, please refrain from using the Website.
+</b>
+<br>
+<br>
+<br>
+        <h4>1. Privacy</h4>
+        <p>Your privacy is important to us. By using the Website, you consent to the collection, use, and disclosure of your personal information as described in our Privacy Policy. Please review our Privacy Policy to understand how we collect, use, and protect your personal information.</p>
+        <h4>2. Collection of Personal Information</h4>
+        <p>In order to access certain features or services on the Website, you may be required to provide personal information such as your name, birthdate, address, and identification documents. By providing such information, you represent and warrant that it is accurate, complete, and current. You also consent to the collection and processing of this information in accordance with our Privacy Policy.
+</p>
+        <h4>3. Use of Personal Information</h4>
+        <p>We may use the personal information collected from you for the following purposes:<br>To provide you with the services offered on the Website.<br>To verify your identity.<br>To communicate with you regarding your account or the services.<br>To comply with legal and regulatory requirements.<br>To improve and personalize your experience on the Website.
+</p>
+        <h4>4. Security</h4>
+        <p>We are committed to protecting the security of your personal information. We employ industry-standard security measures to safeguard your information from unauthorized access, disclosure, alteration, or destruction. However, no method of transmission over the Internet or electronic storage is 100% secure, and we cannot guarantee absolute security.</p>
+        <h4>5. Third-Party Links</h4>
+        <p>The Website may contain links to third-party websites or services that are not owned or controlled by us. We are not responsible for the content, privacy policies, or practices of any third-party websites or services. We encourage you to review the terms and privacy policies of any third-party websites or services that you visit.
+</p>
+        <h4>6. Changes to Terms and Conditions</h4>
+        <p>We reserve the right to update or modify these Terms at any time without prior notice. Any changes to these Terms will be effective immediately upon posting on the Website. Your continued use of the Website after the posting of revised Terms constitutes your acceptance of such changes.
+</p>
+        <h4>7. Governing Law</h4>
+        <p>These Terms shall be governed by and construed in accordance with the laws of the Philippines, without regard to its conflict of law provisions.
+</p>
+        <h4>8. Contact Us</h4>
+        <p>If you have any questions or concerns about these Terms or the Website, please contact us at 88569560.</p>
+    </div>
+      <div class="modal-footer">
+        <div class="row">
+            <div class="col-lg-12 col-xs-12 col-md-12">
+                <div class="row">
+                    <div class="col-lg-12">
+                    <h6>By using the Website, you acknowledge that you have read, understood, and agree to be bound by these Terms and our Privacy Policy.</h6>
+                    </div>
+                    <div class="col-lg-12 d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="/" type="button" class="btn btn-secondary" >Decline</a>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Accept</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 @endsection
