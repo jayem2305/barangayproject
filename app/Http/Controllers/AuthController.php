@@ -25,7 +25,7 @@ class AuthController extends Controller
         return view('welcome');
         //return "Hello, this is the welcome page!";
     }
-    
+
 public function login(){
     return view("auth.login");
 }
@@ -75,8 +75,14 @@ public function loginPost(Request $request)
         Auth::login($resident);
             
         // Redirect to the desired location after login
-        return response()->json(['success' => 'Login successful', 'redirect' => route('userresident.index')]);
-        }else{
+        return response()->json(['success' => 'Login successful', 'redirect' => route('Admin.statisticalreport')]);
+        }else if($status == "Admin"){
+            // If passwords match, log the user in
+            Auth::login($resident);
+                
+            // Redirect to the desired location after login
+            return response()->json(['success' => 'Login successful', 'redirect' => route('Admin.statisticalreport')]);
+            }else{
             return response()->json(['error' => 'User not found'], 422);
         }
         
@@ -87,12 +93,6 @@ public function loginPost(Request $request)
     
     
 }
-
-
-
-
-
-
 
 function register(){
     return view("auth.register");

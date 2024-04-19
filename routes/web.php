@@ -3,9 +3,18 @@
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Http\Controllers\AdminController;
+
+Route::get('/Admin', [AdminController::class, 'statisticalreport'])->name('admin.statisticalreport');
+
+Route::get('/Admin/forum', [AdminController::class, 'forum'])->name('Admin.forum');
+Route::post('/Admin/forum',  [AdminController::class, 'forumpost'])->name('Admin.forumpost');
+Route::get('/admin/forum/data', [AdminController::class, 'getForumData'])->name('admin.forum.data');
+Route::post('/admin/forum/{forum}',[AdminController::class,'store'])->name('forums.comments.store');
 
 //Route::middleware("auth")->group(function(){
-    Route::view('/userresident/index', 'userresident.index')->name('userresident.index');
+Route::view('/userresident/index', 'userresident.index')->name('userresident.index');
+
 //});
 
 Route::middleware([RedirectIfAuthenticated::class])->group(function () {
