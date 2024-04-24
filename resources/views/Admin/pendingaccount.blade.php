@@ -1,8 +1,8 @@
-@extends('layouts.header')
+@extends('layouts.residentapproval')
 
 @section('title', 'Barangay 781 Zone 85')
 
-@section('contentAdmin')
+@section('contentresidentAdmin')
 <body>
     <!-- Spinner Start -->
     <div id="spinner"
@@ -21,19 +21,19 @@
                      <img src="../pic/nav.png" alt="Logo" width="300" height="70" class="d-inline-block align-text-top">
                     </div> 
                     <div class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <a href="statisticalreport" class="nav-item nav-link text-primary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
+                    <a href="statisticalreport" class="nav-item nav-link text-white"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M0 0h1v15h15v1H0zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07"/>
 </svg> Statistical Report </a>
                     <a href="register" class="nav-item nav-link text-white"><i class="bi bi-menu-button-wide"></i> Content Manager</a>
                     <a href="certificae" class="nav-item nav-link text-white"><i class="bi bi-file-earmark-richtext-fill"></i> Certificates</i></a>
                     <li class="dropdown">
-                    <a class="nav-link  dropdown-toggle text-white" href="#" role="button"data-bs-toggle="dropdown"  aria-expanded="false">
+                    <a class="nav-link  dropdown-toggle text-primary " href="#" role="button"data-bs-toggle="dropdown"  aria-expanded="false">
                     <i class="bi bi-person-square"></i> Residences
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="residence"><i class="bi bi-card-checklist"></i> List of Residents</a></li>
-                        <li><a class="dropdown-item" href="pendingaccount"><i class="bi bi-person-fill"></i> Pending Account of Residence</a></li>
-                        <li><a class="dropdown-item" href="forum" class="nav-item nav-link text-white"><i class="bi bi-info-circle"></i> Forum</i></a></li>
+                        <li><a class="dropdown-item bg-primary text-white" href="pendingaccount"><i class="bi bi-person-fill"></i> Pending Account of Residence</a></li>
+                        <li><a class="dropdown-item " href="forum" class="nav-item nav-link text-white"><i class="bi bi-info-circle"></i> Forum</i></a></li>
                     </ul>
                 </li>
                     <a href="logout" class="nav-item nav-link text-white"><i class="bi bi-door-closed-fill"></i> Logout</a>
@@ -53,7 +53,7 @@
     opacity: .8;
     position: relative;">
     <div class="container position-relative" data-aos="fade-up" data-aos-delay="500">
-    <h1 class="text-center text-white text-uppercase"style="font-size: 5rem;">StatisTical Reports</h1>
+    <h1 class="text-center text-white text-uppercase"style="font-size: 5rem;">Pending Account</h1>
     </div>
 </section>
 </div>
@@ -61,42 +61,29 @@
 <!-- Features Start -->
 <!-- statistic start -->
 <div class="container-fluid col-lg-12" style="margin-top:-2rem;" >
-    <div class="row"style="margin-left:1.5rem;" >
-        <div class="card col-lg-2" style="width: 15rem;">
-          <div class="card-body">
-                <b><h3 style="text-align:center; font-size:7rem;">0</h3>
-                    <h3 style="text-align:center; ">Total Numbers of Residences</h3></b>
-                    <p style="text-align:center;">Includes all Registered that lives in the community</p>
-                </div>
+    <div class="row" >
+        <div class="col-lg-12 col-xs-12 col-md-12">
+        <h3>List of Pending Account of Residence </h3>
+        <div class="table-responsive">
+                    <table class="table table-hover" id="myTable">
+  <thead>
+    <tr>
+      <th >ID</th>
+      <th >Profile</th>
+      <th >Name</th>
+      <th >Age</th>
+      <th >Address</th>
+      <th >Gender</th>
+      <th >Phone Number</th>
+      <th >Status</th>
+      <th >Action</th>
+    </tr>
+  </thead>
+  <tbody id="tbody">
+  </tbody>
+</table>
             </div>
-            <div class="card col-lg-2" style="width: 15rem;">
-              <div class="card-body">
-                <b><h3 style="text-align:center; font-size:7rem;">0</h3>
-                    <h3 style="text-align:center; ">Total Numbers of Seniors</h3></b>
-                    <p style="text-align:center;">Includes all Registered that lives in the community</p>
-                </div>
-            </div>
-            <div class="card col-lg-2" style="width: 15rem;">
-                  <div class="card-body">
-                        <b><h3 style="text-align:center; font-size:7rem;">0</h3>
-                            <h3 style="text-align:center; ">Total Numbers of Minors</h3></b>
-                            <p style="text-align:center;">Includes all Registered that lives in the community</p>
-                        </div>
-                    </div>
-            <div class="card col-lg-2" style="width: 15rem;">
-              <div class="card-body">
-                    <b><h3 style="text-align:center; font-size:7rem;">0</h3>
-                        <h3 style="text-align:center; ">Total Numbers of Males</h3></b>
-                        <p style="text-align:center;">Includes all Registered that lives in the community</p>
-                    </div>
-                </div>
-                <div class="card col-lg-2" style="width: 15rem;">
-                  <div class="card-body">
-                        <b><h3 style="text-align:center; font-size:7rem;">0</h3>
-                            <h3 style="text-align:center; ">Total Numbers of Females</h3></b>
-                            <p style="text-align:center;">Includes all Registered that lives in the community</p>
-                        </div>
-                    </div>
+        </div>
     </div>
 </div>
 <br>

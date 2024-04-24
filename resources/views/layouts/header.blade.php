@@ -101,6 +101,7 @@
 
    @yield("contentAdmin")
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
    <script src="../lib/wow/wow.min.js"></script>
                     <script src="../lib/easing/easing.min.js"></script>
@@ -141,11 +142,26 @@ $(document).ready(function(){
             success: function(result) {
                 console.log('AJAX request successful:', result);
                 fetchForumData();
+            //updateForumButtons();
+
+                $('#topic').removeClass('is-invalid');
+                $('#valid').removeClass('invalid-feedback');
+                $('#valid').text(" ");
                 // Handle success response here
             },
             error: function(xhr, status, errorThrown) {
                 console.error('AJAX request failed:', xhr, status, errorThrown);
                 // Handle error response here
+                if(xhr.status == 422) {
+                var errors = xhr.responseJSON.errors;
+                    $('#topic').addClass('is-invalid');
+                    $('#valid').addClass('invalid-feedback');
+                    $('#valid').text(errors.topic[0]);
+            }else{
+                $('#topic').removeClass('is-invalid');
+                $('#valid').removeClass('invalid-feedback');
+                $('#valid').text(" ");
+            }
             }
         });
     });
@@ -163,10 +179,19 @@ function fetchForumData(forumId) {
         type: "GET",
         data: { id: forumId },
         success: function(response) {
+            //updateForumButtons();
+           
             if (response.hasOwnProperty('topic') && response.hasOwnProperty('name')) {
+                var description = "";
+            if(response.description == null){
+                description = " ";
+            }else{
+                description = response.description;
+            }
                 $('#forumTopic').html('<h1 class="text-capitalize">' + response.topic + '</h1>');
-                $('#forumDescription').html('<p class="text-capitalize">' + response.description + '</p>');
+                $('#forumDescription').html('<p class="text-capitalize">' + description + '</p>');
                 $('#labelname').html('<p class="text-capitalize">' + response.name + '</p>');
+                $('#inputform').html('<input type="hidden" value=' + response.id + ' id="id_form" name="id_form">');
                 $('#forumModal').modal('show'); // Show the modal
             } else if (response.hasOwnProperty('forums')) {
                 displayForumData(response.forums); // Display forum data
@@ -179,6 +204,103 @@ function fetchForumData(forumId) {
     
 }
 
+// Click event handler for the "Trash" button
+// Click event handler for the "Trash" button
+$(document).on('click', '.trash-button', function(){
+    var button = $(this);
+    var forumId = button.data('forum-id');
+
+    // Send Ajax request to update forum status
+    $.ajax({
+        url: "/forums/" + forumId + "/archive",
+        type: "POST",
+        data: {_token: '{{ csrf_token() }}'}, // CSRF protection
+        success: function(response){
+            // Handle success response
+            console.log(response.message);
+            location.reload();
+        },
+        error: function(xhr, status, error){
+            // Handle error
+            console.error(xhr.responseText);
+        }
+    });
+});
+var buttonsUpdated = false;
+function updateForumButtons() {
+    // Send Ajax request to fetch forum statuses
+    $.ajax({
+        url: "{{ route('forums.statuses') }}",
+        type: "GET",
+        dataType: "json",
+        success: function(response){
+            // Loop through each forum status
+            $.each(response, function(forumId, status) {
+                // Check if the forum is archived
+                if (status === 'archived') {
+                    // Remove the "View" button
+                    $('.forum-view[data-id="' + forumId + '"]').remove();
+                    
+                    // Remove the "Trash" button
+                    $('.trash-button[data-forum-id="' + forumId + '"]').remove();
+
+                    // Create the "Restore" button
+                    var restoreButton = '<button type="button" class="btn btn-warning btn-lg restore-button" data-forum-id="' + forumId + '"><i class="bi bi-arrow-clockwise"></i> Restore</button>';
+                    
+                    // Append the "Restore" button to the container
+                    $('#restore-button-container' + forumId + '').append(restoreButton);
+                }
+            });
+            buttonsUpdated = true;
+
+        },
+        error: function(xhr, status, error){
+            // Handle error
+            console.error(xhr.responseText);
+        }
+    });
+}
+
+// Call the function when the document is ready
+$(document).ready(function() {
+    updateForumButtons();
+});
+if (!buttonsUpdated) {
+    updateForumButtons();
+}
+
+$(document).on('click', '.restore-button', function(){
+    var button = $(this);
+    var forumId = button.data('forum-id');
+
+    // Send Ajax request to restore forum
+    $.ajax({
+        url: "/forums/" + forumId + "/restore",
+        type: "POST",
+        data: {_token: '{{ csrf_token() }}'}, // CSRF protection
+        success: function(response){
+            // Handle success response
+            console.log(response.message);
+            
+            // Hide the "Restore" button
+            button.remove();
+
+            // Show the "View" button
+            $('.forum-view[data-id="' + forumId + '"]').show();
+            
+            // Show the "Trash" button
+            $('.trash-button[data-forum-id="' + forumId + '"]').show();
+
+            // Update the status in the UI
+            $('#status' + forumId).text('active');
+            location.reload();
+        },
+        error: function(xhr, status, error){
+            // Handle error
+            console.error(xhr.responseText);
+        }
+    });
+});
 
 
 
@@ -190,7 +312,7 @@ function fetchForumData(forumId) {
             var currentTime = new Date();
             var timeDifference = currentTime - createdDate;
             var timeAgo = "";
-
+            var description = "";
             if (timeDifference < 60000) {
                 timeAgo = "just now";
             } else if (timeDifference < 3600000) {
@@ -205,13 +327,19 @@ function fetchForumData(forumId) {
             } else {
                 timeAgo = createdDate.toLocaleDateString();
             }
-            forumHTML += '<div class="card">';
+
+            if(forum.description == null){
+                description = " ";
+            }else{
+                description = forum.description;
+            }
+            forumHTML += '<div class="card" id="card' + forum.id + '">';
         forumHTML += '<div class="row card-body">';
         forumHTML += '<div class="col-lg-10"><h1 class="card-title">' + forum.topic + '</h1>';
-        forumHTML += '<p class="card-text">' + forum.description + '</p></div>';
+        forumHTML += '<p class="card-text">' + description + '</p></div>';
         forumHTML += '<div class="col-lg-2 " style="margin-top: .5rem;margin-right:-5rem;">';
-        forumHTML += '<button type="button" class="btn btn-warning btn-lg forum-view" data-id="' + forum.id + '" data-bs-toggle="modal" data-bs-target="#forumModal"><i class="bi bi-eye-fill"></i></button>';
-        forumHTML += '<button type="button" class="btn btn-danger btn-lg"><i class="bi bi-trash-fill"></i></button>';
+        forumHTML += '<div id="restore-button-container' + forum.id + '"></div><button type="button" class="btn btn-warning btn-lg forum-view" data-id="' + forum.id + '" data-bs-toggle="modal" data-bs-target="#forumModal"><i class="bi bi-eye-fill"></i></button>';
+        forumHTML += '<button type="button" class="btn btn-danger btn-lg trash-button" data-forum-id="' + forum.id + '"><i class="bi bi-trash-fill"></i></button>';
         forumHTML += '<p class="card-text" style="margin-top:.5rem;"><small class="text-muted">' + timeAgo + '</small></p></div>';
         forumHTML += '</div>';
         forumHTML += '</div>';
@@ -224,6 +352,8 @@ function fetchForumData(forumId) {
     $('.forum-view').click(function() {
         var forumId = $(this).data('id');
         fetchForumData(forumId);
+        displayComments(forumId);
+        console.log("Forum ID:", forumId);
     });
     }
 
@@ -231,29 +361,169 @@ function fetchForumData(forumId) {
     fetchForumData();
 
 
-    $(document).on('click', '.btn-comment', function () {
+  $(document).on('click', '.btn-comment', function () {
     var comment = $('#comment').val();
-    var forumId = $(this).data('forum-id');
+    var id_form = $('#id_form').val();
+    var adminname = $('#adminname').val();
+    var profile = "../pic/brgy_logo.png";
 
     $.ajax({
-        url: '/admin/forum/' + forumId ,
+        url: "{{ route('admin.forum.store') }}",
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content'),
-            'content': comment
+            'comment': comment,
+            'id_form': id_form,
+            'adminname': adminname,
+            'profile': profile,
         },
         success: function(response) {
             console.log('Comment posted successfully:', response);
+            // Assuming fetchForumData() function fetches forum data asynchronously
             fetchForumData(); // Update forum data after posting comment
+            displayComments(id_form);
+
         },
         error: function(xhr, status, errorThrown) {
             console.error('Error posting comment:', errorThrown);
         }
     });
 });
+// Function to fetch and display comments
+function displayComments(forumId) {
+    $.ajax({
+        url: "/comments/" + forumId,
+        type: 'GET',
+        success: function(response) {
+            var comments = response.comments;
+            var commentsHtml = '';
+            
+            if (comments) {
+                comments.forEach(function(comment) {
+                    commentsHtml += '<div class="row">';
+                    commentsHtml += '<input type="hidden" value="' + comment.id + '" class="idcomments">';
+                    commentsHtml += '<div class="profiles col-lg-1 col-sm-1 col-xs-1 col-md-1"><img src='+ comment.profile + ' class="rounded-circle me-3" alt="Profile Picture" width="50" height="50"></div>';
+                    commentsHtml +=  '<div class="profiles col-lg-11 col-sm-11 col-xs-11 md-lg-11"><div class="card" style="background-color:#D9D9D9;"> <div class="card-body"><b>'+ comment.name + "</b><br>" + comment.comment + '<br><br><button type="button" class="btn btn-success btn-sm reply-btn" data-comment-id="' + comment.id + '">Reply</button><hr>';
+                    commentsHtml += '<div style="width: 58rem; height: 20rem;overflow-y: auto;overflow-x: hidden;"><div class="replydisplay" data-comment-id="' + comment.id + '"><br></div></div></div></div></div>'; // Create a placeholder for replies
+                    commentsHtml += '<div class="time col-lg-12 text-xl-end text-body-secondary fw-lighter">' + formatTime(comment.created_at) + '</div>';
+                    commentsHtml += '</div>';
 
+                    // Fetch and display replies for the current comment
+                    displayReplies(comment.id);
+                });
+                $('#displayComments').html(commentsHtml);
+            } else {
+                commentsHtml = '<div class="no-comments">No comments found.</div>';
+                $('#displayComments').html(commentsHtml);
+            }
+        },
+        error: function(xhr, status, errorThrown) {
+            console.error('Error fetching comments:', errorThrown);
+        }
+    });
+}
+
+$(document).ready(function() {
+    var forumId = $('#id_form').val(); // Assuming you have a hidden input field with forum ID
+    displayComments(forumId);
+    
+});
+function formatTime(timestamp) {
+    return moment(timestamp).fromNow();
+}
+
+$(document).ready(function() {
+    var forumId = $('#id_form').val(); // Assuming you have a hidden input field with forum ID
+    displayComments(forumId);
+    
+    // Event listener for the "Reply" button
+    $(document).on('click', '.reply-btn', function() {
+        // Remove any existing reply forms
+        $('.reply-form').remove();
+
+        // Get the comment ID
+        var commentId = $(this).data('comment-id');
+
+        // Create and append the input tag and submit button
+        var replyFormHtml = '<div class="row"><div class="reply-form mb-3 d-grid gap-2 d-md-flex justify-content-md-end col-lg-12">';
+        replyFormHtml += '<input type="text" class="form-control reply-input" placeholder="Type your reply" autofocus>';
+        replyFormHtml += '<button type="button" class="btn btn-primary submit-reply" data-comment-id="' + commentId + '">Submit</button>';
+        replyFormHtml += '</div></div>';
+
+        // Append the reply form below the clicked "Reply" button's parent element
+        $(this).parent().append(replyFormHtml);
+        $(this).parent().siblings('.replydisplay').before(replyFormHtml);
+    });
+
+    // Event listener for the submit button within the reply form
+    $(document).on('click', '.submit-reply', function() {
+        // Get the reply text and comment ID
+        var replyText = $(this).siblings('.reply-input').val();
+        var commentId = $(this).data('comment-id');
+        var replyname = "Barangay 781 Zone 85 (Admin)";
+        var replyimage = "../pic/brgy_logo.png";
+
+        // Make an AJAX request to save the reply
+        $.ajax({
+            url: "{{ route('admin.saveReply.store') }}",
+            type: 'POST',
+            data: {
+                '_token': $('meta[name="csrf-token"]').attr('content'),
+                'comment_id': commentId,
+                'replyname': replyname,
+                'replyimage': replyimage,
+                'reply_text': replyText
+            },
+            success: function(response) {
+                // Handle the response (e.g., display a success message)
+                console.log(response);
+                displayReplies(commentId);
+            },
+            error: function(xhr, status, error) {
+                // Handle errors
+                console.error(error);
+            }
+        });
+        
+        // Optionally, you can remove the reply form after submission
+        $(this).closest('.reply-form').remove();
+    });
+});
+function displayReplies(commentid) {
+    $.ajax({
+        url: "/reply/" + commentid,
+        type: 'GET',
+        success: function(response) {
+            var replies = response.reply;
+            var repliesHtml = '';
+            
+            if (replies && replies.length > 0) {
+                replies.forEach(function(reply) {
+                    // If the reply was successfully saved, display it
+                    repliesHtml += '<div class="row">';
+                    repliesHtml += '<div class="profiles col-lg-1 col-sm-1 col-xs-1 col-md-1"><img src='+ reply.replyimage + ' class="rounded-circle me-3" alt="Profile Picture" width="50" height="50"></div>';
+                    repliesHtml +=  '<div class="profiles col-lg-11 col-sm-11 col-xs-11 md-lg-11"><div class="card" style="background-color:#D9D9D9;"> <div class="card-body"><b>'+ reply.replyname + "</b><br>" + reply.reply_text + '</div></div></div>';
+                    repliesHtml += '<div class="time col-lg-12 text-xl-end text-body-secondary fw-lighter">' + formatTime(reply.created_at) + '</div>';
+                    repliesHtml += '</div>';
+
+                });
+
+                // Append the new replies to the appropriate comment's replydisplay container
+                $('.replydisplay[data-comment-id="' + commentid + '"]').html(repliesHtml);
+            } else {
+                // Handle case where no replies are found
+                repliesHtml = '<div class="no-comments">No Replies found.</div>';
+                $('.replydisplay[data-comment-id="' + commentid + '"]').html(repliesHtml);
+            }
+        },
+        error: function(xhr, status, errorThrown) {
+            console.error('Error fetching replies:', errorThrown);
+        }
+    });
+}
 
 });
+
 
 </script>
 </body>

@@ -7,9 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
-    use HasFactory;
+    protected $fillable = ['content', 'id_form', 'name','profile'];
 
-    protected $fillable = ['content', 'forum_id', 'user_id'];
+    public function forum()
+    {
+        return $this->belongsTo(Forum::class, 'id');
+    }
 
     // Define relationships if any
 }
