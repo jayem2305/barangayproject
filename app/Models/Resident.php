@@ -1,13 +1,13 @@
 <?php
 
 namespace App\Models;
-
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as AuthenticatableUser;
 use Illuminate\Notifications\Notifiable;
 
-class Resident extends AuthenticatableUser implements Authenticatable
+class Resident extends AuthenticatableUser implements Authenticatable 
 {
     use HasFactory, Notifiable;
 
@@ -16,6 +16,7 @@ class Resident extends AuthenticatableUser implements Authenticatable
     public $incrementing = false; // Disable auto-incrementing
 
     protected $fillable = [
+        'id',
         'reg_number',
         'lname',
         'fname',

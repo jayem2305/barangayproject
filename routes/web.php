@@ -20,6 +20,9 @@ Route::post('/forums/{id}/archive',  [AdminController::class, 'archiveForum'])->
 Route::get('/forums/statuses', [AdminController::class, 'getForumStatuses'])->name('forums.statuses');
 Route::post('/forums/{id}/restore', [AdminController::class, 'restore'])->name('forums.restore');
 Route::get('/pendingaccount', [ResidentController:: class, 'pendingaccount'])->name('residents.pendingaccount');
+Route::get('/accountview', [ResidentController:: class, 'accountview'])->name('residents.accountview');
+Route::post('/sendEmailNotification', [ResidentController::class, 'sendEmailNotification'])->name('send.email.notification');
+
 
 
 

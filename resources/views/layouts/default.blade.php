@@ -40,7 +40,7 @@
    <style type="text/css">
 #hero {
  background-repeat: no-repeat;
- animation: carousel 1000s linear infinite;
+ animation: carousel 100s linear infinite;
 }
 @keyframes carousel {
  0%, 100% {

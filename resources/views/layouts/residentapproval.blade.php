@@ -40,7 +40,7 @@
    <style type="text/css">
 #hero {
  background-repeat: no-repeat;
- animation: carousel 1000s linear infinite;
+ animation: carousel 100s linear infinite;
 }
 @keyframes carousel {
  0%, 100% {
@@ -120,6 +120,80 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
+    // Function to populate modal with resident details
+    function populateModal(resident) {
+        console.log("Resident Object:", resident.reg_number);
+        var ext;
+
+        if(resident.ext == null){
+            ext = "";
+        }else{
+            ext = resident.ext+".";
+        }
+        if(resident.proof_of_owner == null){
+            proof_of_owner = "empty.png";
+        }else{
+            proof_of_owner = resident.proof_of_owner;
+        }
+        if(resident.voters_filename == null){
+            voters_filename = "empty.png";
+        }else{
+            voters_filename = resident.voters_filename;
+        }
+        // Populate modal content with resident details
+        $('#residentDetailsModal .modal-body').html(`
+        <div class="row">
+            <div class="col-lg-4">
+            <img src="../residentprofile/${resident.image_filename}"class="rounded-circle mx-auto d-block" alt="Profile pic" width="200" height="200" >
+            <br>
+            </div>
+            <div class="col-lg-8">
+                <div class="row">
+                    <div class="col-lg-6 text-start"><p><strong>Contoll #:</strong> ${resident.reg_number}</p></div>
+                    <div class="col-lg-6 text-end"><p><strong>Status:</strong> ${resident.status}</p></div>
+                    <h1 class="text-center"> ${resident.lname}, ${resident.fname} ${resident.mname} ${ext}</h1>
+                    <h3 class="text-center text-primary text-decoration-underline"> ${resident.email}</h3>
+                    <h3 class="text-center"><strong> ${resident.household}</strong></h3>
+                </div>    
+            </div>
+            <div class="col-lg-3">  <p><strong>Birthday:</strong> ${resident.birthday}</p> </div>
+            <div class="col-lg-3">  <p><strong>Age:</strong> ${resident.age} Years old</p> </div>
+            <div class="col-lg-3">  <p><strong>Birt Place:</strong> ${resident.Birth}</p></div>
+            <div class="col-lg-3">  <p><strong>Gender:</strong> ${resident.gender}</p></div>
+            <div class="col-lg-4">  <p><strong>Occupation:</strong> ${resident.occupation}</p></div>
+            <div class="col-lg-4">  <p><strong>Civil Status:</strong> ${resident.civil}</p></div>
+            <div class="col-lg-4">  <p><strong>Citizenship:</strong> ${resident.citizenship}</p></div>
+            <div class="col-lg-4">  <p><strong>Contact Number:</strong>0${resident.cnum}</p></div>
+            <div class="col-lg-4">  <p><strong>Uri ng Pag-Pagmamayari:</strong> ${resident.owner_type}</p></div>
+            <div class="col-lg-4">  <p><strong>Pangalan ng May-Ari:</strong> ${resident.owner_name}</p></div>
+            <div class="col-lg-6">  <p><strong>Personal Status:</strong> ${resident.indicate_if}</p></div>
+            <div class="col-lg-6">  <p><strong>Number of Members of Family:</strong> ${resident.number_of_family}</p></div>
+            <hr><div class="col-lg-12">  <p><strong>Valid ID:<br></strong>
+            <img src="../residentprofile/${resident.valid_id_filename}"class="rounded mx-auto d-block" alt="Profile pic" width="700" height="300" ></p>
+            </div>
+            <div class="col-lg-6">  <p><strong>Proof of Owner:</strong> <div class="valid-secondary text-primary" style="margin-top: -1rem;">
+                            If applicable
+                            </div><img src="../residentprofile/${proof_of_owner}"class="rounded float-start mx-auto d-block" alt="Profile pic" width="300" height="300" ></p>
+            </div>
+        <div class="col-lg-6">  <p><strong>Voters Certificate:</strong> <div class="valid-secondary text-primary" style="margin-top: -1rem;">
+                            If applicable
+                            </div><img src="../residentprofile/${voters_filename}"class="rounded float-start mx-auto d-block" alt="Profile pic" width="300" height="300" ></p>
+            </div>
+        </div>
+        <br>
+        <div class="modal-footer">
+                <button type="button" class="btn btn-success btn-accept"data-id="${resident.reg_number}" ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+  <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
+</svg> Accept</button>
+                <button type="button" class="btn btn-danger" ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+  <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+</svg> Decline</button>
+                <!-- Additional buttons or actions can be added here if needed -->
+            </div>
+        `);
+    }
+
+    // AJAX request to fetch resident data
     $.ajax({
         url: "{{ route('residents.pendingaccount') }}",
         type: "GET",
@@ -128,8 +202,13 @@ $(document).ready(function () {
             console.log("Data received:", data);
             $.each(data, function (index, resident) {
                 var ext = (resident.ext == null) ? " " : resident.ext;
-                $('#myTable tbody').append('<tr><td>' + resident.reg_number + '</td> <td><img src="../residentprofile/' + resident.image_filename + '"class="rounded-circle" alt="Cinque Terre" width="45" height="45"></td><td>' + resident.lname + ', ' + resident.fname + ' ' + resident.mname + ' ' + ext + '</td><td>' + resident.age + '</td><td>' + resident.address + '</td><td>' + resident.gender + '</td><td>' + resident.cnum + '</td><td>' + resident.status + '</td><td>' + '<div class="btn-group" role="group" aria-label="Basic example"><button class="btn btn-view btn-warning" type="button" data-id="' + resident.id + '">View</button>' +
-                    '<button class="btn btn-disapprove btn-danger" type="button" data-id="' + resident.id + '">Disapprove</button></div>' +
+                $('#myTable tbody').append('<tr ><td>' + resident.reg_number + '</td> <td><img src="../residentprofile/'
+                    + resident.image_filename + '"class="rounded-circle mx-auto d-block" alt="Cinque Terre" width="45" height="45" ></td><td>'
+                    + resident.lname + ', ' + resident.fname + ' ' + resident.mname + ' ' + ext + '</td><td >'
+                    + resident.age + '</td><td>' + resident.address + '</td><td>' + resident.gender +
+                    '</td><td>' + resident.cnum + '</td><td>' + resident.status + '</td><td>' +
+                    '<div class="btn-group" role="group" aria-label="Basic example"><button class="btn btn-view btn-warning btn-lg" type="button" data-id="' + resident.id + '"><i class="bi bi-eye-fill"></i></button>' +
+                    '</div>' +
                     '</td></tr>');
             });
         },
@@ -138,16 +217,76 @@ $(document).ready(function () {
         }
     });
 
-    $(document).on('click', '.btn-view', function () {
-        var residentId = $(this).data('id');
-        // Add logic to handle view action
-        // Example: Redirect to resident details page
+    // Click event handler for the "View" button
+  // Click event handler for the "View" button
+$(document).on('click', '.btn-view', function () {
+    var residentId = $(this).data('id');
+    
+    // AJAX request to fetch resident details
+    $.ajax({
+        url: "{{ route('residents.accountview') }}", // Replace with the actual URL to fetch resident details
+        type: "GET",
+        dataType: "json",
+        data: { residentId: residentId }, // Pass residentId as data
+        success: function (resident) {
+        console.log("Resident id:", resident);
+            // Populate modal with resident details
+            populateModal(resident);
+            // Show the modal
+            $('#residentDetailsModal').modal('show');
+        },
+        error: function (xhr, status, error) {
+        console.log("Resident Object:", residentId);
+            console.error("Error fetching resident details:", error);
+            // Handle error
+        }
     });
+});
 
+
+    // Click event handler for the "Disapprove" button
     $(document).on('click', '.btn-disapprove', function () {
         var residentId = $(this).data('id');
         // Add logic to handle disapprove action
         // Example: Send Ajax request to mark resident as disapproved
     });
+
+
+
+    $(document).on('click', '.btn-accept', function () {
+    var residentId = $(this).data('id');
+   // alert(residentId);
+    console.log("Resident ID:", residentId);
+
+   // var csrfToken = $('meta[name="csrf-token"]').attr('content');
+    // AJAX request to send email notification
+    $.ajax({
+        url: "{{ route('send.email.notification') }}",
+        type: "POST",
+        dataType: "json",
+        headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+},
+        data: {
+            residentId: residentId
+        },
+        success: function (response) {
+            if (response.success) {
+                // Email notification sent successfully
+                // You can perform additional actions here if needed
+                console.log("Email notification sent successfully");
+            } else {
+                console.error("Error sending email notification:", response.error);
+                // Handle error
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("Error sending email notification:", error);
+            // Handle error
+        }
+    });
 });
+
+});
+
 </script>
