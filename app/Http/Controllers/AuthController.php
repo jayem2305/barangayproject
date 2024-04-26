@@ -41,6 +41,7 @@ public function loginPost(Request $request)
         'email' => 'required|email',
         'password' => 'required',
     ]);
+    
     // Retrieve the resident by email
     $resident = Resident::where('email', $request->email)->first();
 
@@ -49,49 +50,38 @@ public function loginPost(Request $request)
         return response()->json(['error' => 'User not found'], 422);
     }
 
-    // Retrieve the email and hashed password from the resident
+    // Retrieve the email and status from the resident
     $email = $resident->email;
     $status = $resident->status;
-    $hashedPassword = $resident->password;
+    $password = $resident->password;
 
-    // Log retrieved resident, email, and hashed password for debugging
+    // Log retrieved resident, email, and password for debugging
     Log::info('Retrieved Resident:', ['resident' => $resident]);
     Log::info('Request Email:', ['email' => $request->email]);
-    Log::info('Hashed Password:', ['hashed_password' => $hashedPassword]);
-    
+    Log::info('Password:', ['password' => $password]);
+
     // Check if the provided email matches
     if ($request->email !== $email) {
         return response()->json(['error' => 'Email does not match'], 422);
     }
-    Log::info('Trimmed Password:', ['trimmed_password' => trim($request->password)]);
-    Log::info('Retrieved Hashed Password:', ['hashed_password' => $hashedPassword]);
 
-    // Check if the provided password matches the hashed password in the database
-    if ($hashedPassword === $request->password) {
-        if($status == "pending"){
-            return response()->json(['error' => 'Your Account are Still Inprocess'], 422);
-        }else if($status == "resident"){
-        // If passwords match, log the user in
-        Auth::login($resident);
-            
-        // Redirect to the desired location after login
-        return response()->json(['success' => 'Login successful', 'redirect' => route('Admin.statisticalreport')]);
-        }else if($status == "Admin"){
+    // Check if the provided password matches the stored password
+    if ($request->password === $password) {
+        if ($status == "pending") {
+            return response()->json(['error' => 'Your Account is still in process'], 422);
+        } else if ($status == "resident" || $status == "Admin") {
             // If passwords match, log the user in
             Auth::login($resident);
-                
+
             // Redirect to the desired location after login
-            return response()->json(['success' => 'Login successful', 'redirect' => route('Admin.statisticalreport')]);
-            }else{
-            return response()->json(['error' => 'User not found'], 422);
+            return response()->json(['success' => 'Login successful', 'redirect' => route('admin.statisticalreport')]);
+        } else {
+            return response()->json(['error' => 'Invalid user status'], 422);
         }
-        
     } else {
         // If passwords do not match, return error
         return response()->json(['error' => 'Invalid credentials: Password incorrect'], 422);
     }
-    
-    
 }
 
 function register(){

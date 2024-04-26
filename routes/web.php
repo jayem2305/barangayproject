@@ -8,7 +8,6 @@ use App\Http\Controllers\ResidentController;
 
 Route::get('/Admin', [AdminController::class, 'statisticalreport'])->name('admin.statisticalreport');
 Route::get('/Admin/pendingaccount', [AdminController::class, 'pendingaccount'])->name('admin.pendingaccount');
-
 Route::get('/Admin/forum', [AdminController::class, 'forum'])->name('Admin.forum');
 Route::post('/Admin/forum',  [AdminController::class, 'forumpost'])->name('Admin.forumpost');
 Route::get('/admin/forum/data', [AdminController::class, 'getForumData'])->name('admin.forum.data');
