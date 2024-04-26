@@ -11,7 +11,7 @@ class AdminController extends Controller
 {
     public function statisticalreport()
     {
-        return view('Admin.statisticalreport');
+        return view('admin.statisticalreport');
         //return "Hello, this is the welcome page!";
     }
     public function forum()
