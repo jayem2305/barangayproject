@@ -182,14 +182,20 @@ $(document).ready(function () {
         </div>
         <br>
         <div class="modal-footer">
-                <button type="button" class="btn btn-success btn-accept"data-id="${resident.reg_number}" ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                <button type="button" class="btn btn-success btn-accept"data-id="${resident.reg_number}" id="liveToastBtn" ><span class="accepbtn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
   <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
-</svg> Accept</button>
-                <button type="button" class="btn btn-danger" ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-  <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-</svg> Decline</button>
+</svg> Accept</span><div class="spinner-border" role="status" style="display: none;">
+  <span class="visually-hidden">Loading...</span>
+</div>
+</button>
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#declineModal" data-resident-id="${resident.reg_number}", data-name="${resident.lname}, ${resident.fname} ${resident.mname} ${ext}">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+    </svg> Decline 
+</button>
                 <!-- Additional buttons or actions can be added here if needed -->
             </div>
+
         `);
     }
 
@@ -242,39 +248,169 @@ $(document).on('click', '.btn-view', function () {
         }
     });
 });
-
+$('#declineModal').on('show.bs.modal', function (event) {
+    // Get the button that triggered the modal
+    var button = $(event.relatedTarget);
+    var residentId = button.data('resident-id');
+    // Extract resident name from data attributes
+    var residentName = button.data('name');
+    
+    // Update the content of the span element with the resident name
+    $('#nameaddress').text(residentName);
+    $('#nametag').val(residentName);
+    $('#idtag').val(residentId);
+    $('.btn-confirm-decline').data('resident-id', residentId);
+});
+ // Event handler for button click
+ $('.btn-decline').click(function() {
+        // Retrieve resident ID from data attribute
+        var residentId = $(this).data('resident-id');
+        var name = $('#nametag').val();
+        $('#nameaddress').text(name);
+        // Set the resident ID as a data attribute of the confirm decline button
+        $('.btn-confirm-decline').data('resident-id', residentId);
+    });
 
     // Click event handler for the "Disapprove" button
-    $(document).on('click', '.btn-disapprove', function () {
-        var residentId = $(this).data('id');
-        // Add logic to handle disapprove action
-        // Example: Send Ajax request to mark resident as disapproved
+    $(document).on('click', '.btn-confirm-decline', function () {
+    // Retrieve resident ID and name from data attributes of the button
+    var residentId = $(this).data('resident-id');
+    var residentName = $('#nametag').val();
+    var residentcomment =  $('#declineReason').val();
+    $(this).find('.decinepbtn').hide();
+    $(this).find('.spinner-border').show();
+    // Add logic to handle disapprove action
+    // Example: Send Ajax request to mark resident as disapproved
+    $.ajax({
+        url: "{{ route('send.declined.notification') }}",
+        type: "POST",
+        dataType: "json",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        data: {
+            residentId: residentId,
+            residentName: residentName, // Pass resident name to the server
+            residentcomment: residentcomment // Pass resident name to the server
+        },
+        success: function(response) {
+            // Handle success response if needed
+             // Email notification sent successfully
+             console.log("Email notification sent successfully");
+
+// Show toast notification
+var toast = `
+<div class="toast-container position-fixed bottom-0 end-0 p-3 ">
+    <div id="liveToast" class="toast text-bg-danger" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <img src="../pic/brgy_logo.png" class="rounded me-2" alt="..." width="20" height="20">
+            <strong class="me-auto">Account Approval</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            The account has been Declined
+        </div>
+    </div>
+</div>`;
+$('body').append(toast);
+$('.toast').toast('show');
+$('.btn-accept').find('.button-text').show();
+            $('.btn-accept').find('#spinner').hide();
+$('#declineModal').modal('hide');
+        },
+        error: function(xhr, status, error) {
+            // Handle error response if needed
+            $('.btn-accept').find('.button-text').show();
+            $('.btn-accept').find('#spinner').hide();
+        }
     });
+});
+
 
 
 
     $(document).on('click', '.btn-accept', function () {
     var residentId = $(this).data('id');
-   // alert(residentId);
-    console.log("Resident ID:", residentId);
-
-   // var csrfToken = $('meta[name="csrf-token"]').attr('content');
+   // Hide button text and show spinner
+        $(this).find('.accepbtn').hide();
+    $(this).find('.spinner-border').show();
     // AJAX request to send email notification
     $.ajax({
         url: "{{ route('send.email.notification') }}",
         type: "POST",
         dataType: "json",
         headers: {
-    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-},
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
         data: {
             residentId: residentId
         },
         success: function (response) {
             if (response.success) {
                 // Email notification sent successfully
-                // You can perform additional actions here if needed
                 console.log("Email notification sent successfully");
+
+                // Show toast notification
+                var toast = `
+                <div class="toast-container position-fixed bottom-0 end-0 p-3 ">
+                    <div id="liveToast" class="toast text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <img src="../pic/brgy_logo.png" class="rounded me-2" alt="..." width="20" height="20">
+                            <strong class="me-auto">Account Approval</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">
+                            The account has been approved
+                        </div>
+                    </div>
+                </div>`;
+                $('body').append(toast);
+                $('.toast').toast('show');
+                // Hide spinner
+                $('.btn-accept').find('.button-text').show();
+            $('.btn-accept').find('#spinner').hide();
+            $('#residentDetailsModal').modal('hide');
+                // Destroy DataTable
+                var table = $('#myTable').DataTable();
+                table.destroy();
+
+                // Empty table body
+                $('#myTable tbody').empty();
+
+                // Reinitialize the DataTable
+                $('#myTable').DataTable({
+                    ajax: {
+                        url: "{{ route('residents.pendingaccount') }}",
+                        type: "GET",
+                        dataType: "json",
+                        dataSrc: ""
+                    },
+                    columns: [
+                        { data: "reg_number" },
+                        { 
+                            data: "image_filename",
+                            render: function (data, type, row) {
+                                return '<img src="../residentprofile/' + data + '" class="rounded-circle mx-auto d-block" alt="Cinque Terre" width="45" height="45" >';
+                            }
+                        },
+                        { 
+                            data: function (row) {
+                                return row.lname + ', ' + row.fname + ' ' + row.mname + ' ' + (row.ext ? row.ext : '');
+                            }
+                        },
+                        { data: "age" },
+                        { data: "address" },
+                        { data: "gender" },
+                        { data: "cnum" },
+                        { data: "status" },
+                        { 
+                            data: null,
+                            render: function (data, type, row) {
+                                return '<div class="btn-group" role="group" aria-label="Basic example"><button class="btn btn-view btn-warning btn-lg" type="button" data-id="' + row.id + '"><i class="bi bi-eye-fill"></i></button></div>';
+                            }
+                        }
+                    ]
+                });
             } else {
                 console.error("Error sending email notification:", response.error);
                 // Handle error
@@ -283,9 +419,18 @@ $(document).on('click', '.btn-view', function () {
         error: function (xhr, status, error) {
             console.error("Error sending email notification:", error);
             // Handle error
+            $('.btn-accept').find('.button-text').show();
+            $('.btn-accept').find('#spinner').hide();
+        },
+        complete: function () {
+            // Show button text and hide spinner
+            $('.btn-accept').find('.button-text').show();
+            $('.btn-accept').find('#spinner').hide();
         }
+
     });
 });
+
 
 });
 

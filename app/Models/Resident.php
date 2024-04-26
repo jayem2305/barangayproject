@@ -85,4 +85,8 @@ public function getRememberTokenName()
 {
     return null; // not needed for your case
 }
+public function declinedNotifications()
+    {
+        return $this->hasMany(DeclinedNotification::class);
+    }
 }

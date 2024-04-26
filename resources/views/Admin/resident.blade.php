@@ -1,8 +1,8 @@
-@extends('layouts.residentapproval')
+@extends('layouts.residentstatus')
 
 @section('title', 'Barangay 781 Zone 85')
 
-@section('contentresidentAdmin')
+@section('contentresidentlistAdmin')
 <body>
     <!-- Spinner Start -->
     <div id="spinner"
@@ -27,13 +27,13 @@
                     <a href="register" class="nav-item nav-link text-white"><i class="bi bi-menu-button-wide"></i> Content Manager</a>
                     <a href="certificae" class="nav-item nav-link text-white"><i class="bi bi-file-earmark-richtext-fill"></i> Certificates</i></a>
                     <li class="dropdown">
-                    <a class="nav-link  dropdown-toggle text-primary " href="#" role="button"data-bs-toggle="dropdown"  aria-expanded="false">
+                    <a class="nav-link  dropdown-toggle text-primary" href="#" role="button"data-bs-toggle="dropdown"  aria-expanded="false">
                     <i class="bi bi-person-square"></i> Residences
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="../Admin/resident"><i class="bi bi-card-checklist"></i> List of Residents</a></li>
-                        <li><a class="dropdown-item bg-primary text-white" href="../Admin/pendingaccount"><i class="bi bi-person-fill"></i> Pending Account of Residence</a></li>
-                        <li><a class="dropdown-item " href="../Admin/forum" class="nav-item nav-link text-white"><i class="bi bi-info-circle"></i> Forum</i></a></li>
+                        <li><a class="dropdown-item text-bg-primary" href="../Admin/resident"><i class="bi bi-card-checklist"></i> List of Residents</a></li>
+                        <li><a class="dropdown-item" href="../Admin/pendingaccount"><i class="bi bi-person-fill"></i> Pending Account of Residence</a></li>
+                        <li><a class="dropdown-item" href="../Admin/forum" class="nav-item nav-link text-white"><i class="bi bi-info-circle"></i> Forum</i></a></li>
                     </ul>
                 </li>
                     <a href="logout" class="nav-item nav-link text-white"><i class="bi bi-door-closed-fill"></i> Logout</a>
@@ -53,7 +53,7 @@
     opacity: .8;
     position: relative;">
     <div class="container position-relative" data-aos="fade-up" data-aos-delay="500">
-    <h1 class="text-center text-white text-uppercase"style="font-size: 5rem;">Pending Account</h1>
+    <h1 class="text-center text-white text-uppercase"style="font-size: 5rem;">LIST OF RESIDENTS</h1>
     </div>
 </section>
 </div>
@@ -61,33 +61,66 @@
 <!-- Features Start -->
 <!-- statistic start -->
 <div class="container-fluid col-lg-12" style="margin-top:-2rem;" >
-    <div class="row" >
-        <div class="col-lg-12 col-xs-12 col-md-12">
-        <h3>List of Pending Account of Residence </h3>
-        <div class="table-responsive">
-                    <table class="table table-hover" id="myTable">
-  <thead>
-    <tr>
-      <th >ID</th>
-      <th >Profile</th>
-      <th >Name</th>
-      <th >Age</th>
-      <th >Address</th>
-      <th >Gender</th>
-      <th >Phone Number</th>
-      <th >Status</th>
-      <th >Action</th>
-    </tr>
-  </thead>
-  <tbody id="tbody">
-  </tbody>
-</table>
+    <div class="row"style="margin-left:1.5rem;" >
+        <div class="card col-lg-2" style="width: 15rem;">
+          <div class="card-body">
+            <b><h3 style="text-align:center; font-size:7rem;"><span id="residences_num"></h3>
+                <h3 style="text-align:center; ">Total Numbers of Residences</h3></b>
+                <p style="text-align:center;">Includes all Registered that lives in the community</p>
+            </div>
+        </div>
+        <div class="card col-lg-2" style="width: 15rem;">
+          <div class="card-body">
+            <b><h3 style="text-align:center; font-size:7rem;"><span id="senior_num"></span></h3>
+                <h3 style="text-align:center; ">Total Numbers of Seniors</h3></b>
+                <p style="text-align:center;">Includes all Registered that lives in the community</p>
+            </div>
+        </div>
+        <div class="card col-lg-2" style="width: 15rem;">
+          <div class="card-body">
+            <b><h3 style="text-align:center; font-size:7rem;"><span id="minor_num"></span></h3>
+                <h3 style="text-align:center; ">Total Numbers of Minors</h3></b>
+                <p style="text-align:center;">Includes all Registered that lives in the community</p>
+            </div>
+        </div>
+        <div class="card col-lg-2" style="width: 15rem;">
+          <div class="card-body">
+            <b><h3 style="text-align:center; font-size:7rem;"><span id="male_num"></span></h3>
+                <h3 style="text-align:center; ">Total Numbers of Males</h3></b>
+                <p style="text-align:center;">Includes all Registered that lives in the community</p>
+            </div>
+        </div>
+        <div class="card col-lg-2" style="width: 15rem;">
+          <div class="card-body">
+            <b><h3 style="text-align:center; font-size:7rem;"><span id="female_num"></span></h3>
+                <h3 style="text-align:center; ">Total Numbers of Females</h3></b>
+                <p style="text-align:center;">Includes all Registered that lives in the community</p>
             </div>
         </div>
     </div>
 </div>
 <br>
+<div class="container-fluid col-lg-12">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>List of Residences </h3>
+            <table class="table table-hover" id="myTable">
+                <thead>
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">HouseHold</th>
+                      <th scope="col">Address</th>
+                      <th scope="col">Gender</th>
+                      <th scope="col">Action</th>
+                  </tr>
+              </thead>
+              <tbody id="retrievetable">
 
+              </tbody>
+          </table>
+      </div>
+  </div>
+</div>
 
  <!-- Copyright Start -->
                 <div class="container-fluid copyright py-4">
@@ -129,43 +162,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="declineModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-    <div class="modal-header">
-                <h5 class="modal-title" id="declineModalLabel">Why is it declined?</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="nametag">
-                <input type="text" id="idtag">
-                <h6>To Mr./Ms. <span id="nameaddress"></span></h6>
-                <textarea id="declineReason" class="form-control" rows="3" placeholder="Enter reason for decline"></textarea>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger btn-confirm-decline" data-name="#nametag" data-resident-id="#idtag" data-comment="#declineReason"><span class="decinepbtn">Confirm Decline</span> <div class="spinner-border" role="status" style="display: none;">
-  <span class="visually-hidden">Loading...</span>
-</div></button>
-            </div>
-    </div>
-  </div>
-</div>
 
-<!-- Modal -->
-<div class="modal fade" id="residentDetailsModal" tabindex="-1" aria-labelledby="residentDetailsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="residentDetailsModalLabel">Resident Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Resident details will be populated here dynamically -->
-            </div>
-            
-        </div>
-    </div>
-</div>
+
 
 @endsection

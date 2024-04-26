@@ -5,8 +5,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ResidentController;
+use App\Http\Controllers\ResidentListController;
 
 Route::get('/Admin', [AdminController::class, 'statisticalreport'])->name('admin.statisticalreport');
+Route::get('/Admin/resident', [AdminController::class, 'resident'])->name('admin.resident');
 Route::get('/Admin/pendingaccount', [AdminController::class, 'pendingaccount'])->name('admin.pendingaccount');
 Route::get('/Admin/forum', [AdminController::class, 'forum'])->name('Admin.forum');
 Route::post('/Admin/forum',  [AdminController::class, 'forumpost'])->name('Admin.forumpost');
@@ -21,7 +23,9 @@ Route::post('/forums/{id}/restore', [AdminController::class, 'restore'])->name('
 Route::get('/pendingaccount', [ResidentController:: class, 'pendingaccount'])->name('residents.pendingaccount');
 Route::get('/accountview', [ResidentController:: class, 'accountview'])->name('residents.accountview');
 Route::post('/sendEmailNotification', [ResidentController::class, 'sendEmailNotification'])->name('send.email.notification');
-
+Route::post('/sendEmailDeclineNotification', [ResidentController::class, 'sendEmailDeclineNotification'])->name('send.declined.notification');
+Route::get('/admin/resident', [ResidentListController::class, 'index'])->name('admin.resident');
+Route::get('/admin/residents', [ResidentListController::class, 'getResidents'])->name('admin.getresident');
 
 
 
