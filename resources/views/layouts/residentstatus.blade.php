@@ -174,6 +174,108 @@ $(document).ready(function () {
     });
 });
 
+$(document).ready(function() {
+    $('.btn-confirm-primary').click(function() {
+        var name = $('#name').val();
+        var position = $('#position').val();
+        var profile = $('#profile')[0].files[0];
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+        var formData = new FormData();
+        formData.append('_token', csrfToken);
+        formData.append('name', name);
+        formData.append('position', position);
+        formData.append('profile', profile);
+
+        $.ajax({
+            url: "{{ route('official.add') }}", // Update this to match your route URL
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                // Handle success response
+                console.log('Data added successfully');
+                // Clear any previous error messages
+                $('#liveToast').removeClass('text-bg-danger').addClass('text-bg-success');
+                $('#liveToast strong').removeClass('text-danger').addClass('text-success').html('<i class="bi bi-check-circle"></i> Valid Official');
+                $('.toast-body').text("Data added successfully");
+                    var toast = new bootstrap.Toast($('#liveToast'));
+                    toast.show();
+                    fetchAndPopulateOfficials();
+            },
+            error: function(xhr, status, error) {
+                console.error('An error occurred:', error);
+                // Display error message to the user
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    var errors = xhr.responseJSON.errors;
+                    $.each(errors, function(key, value) {
+                        var errorElement = $('#error-' + key);
+                        errorElement.text(value[0]).show(); // Display error message
+                    });
+                } else {
+                    // If condition is not followed, display toast message
+                    var errorMessage = xhr.responseJSON && xhr.responseJSON.error ? xhr.responseJSON.error : 'An error occurred while processing the request';
+                    $('.toast-body').text(errorMessage);
+                    var toast = new bootstrap.Toast($('#liveToast'));
+                    toast.show();
+                }
+            }
+        });
+    });
+    // Function to fetch officials and populate the table
+function fetchAndPopulateOfficials() {
+    $.ajax({
+        url: "{{ route('officials.index') }}", // Update with your route to fetch officials
+        type: 'GET',
+        success: function(response) {
+            // Clear existing rows
+            $('#officialslist').empty();
+
+            // Append rows for each official
+            response.forEach(function(official) {
+                var newRow = '<tr>' +
+                    '<td><img src="../residentprofile/' + official.profile_path + '" alt="' + official.profile_path + '" width="50" class="rounded-circle mx-auto d-block"></td>' +
+                    '<td>' + official.name + '</td>' +
+                    '<td>' + official.position + '</td>' +
+                    '<td>' +
+                    '<button class="btn btn-sm btn-danger delete-official" data-id="' + official.id + '">Delete</button>' +
+                    '</td>' +
+                    '</tr>';
+                $('#officialslist').append(newRow);
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('An error occurred while fetching officials:', error);
+        }
+    });
+}
+
+// Call the function when the page loads
+$(document).ready(function() {
+    fetchAndPopulateOfficials();
+});
+
+// Assuming you have an AJAX call to add a new official
+$.ajax({
+    url: "{{ route('official.add') }}",
+    type: 'POST',
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function(response) {
+        // Handle success response
+        console.log('Data added successfully');
+
+        // Call the function to fetch and populate officials again
+        fetchAndPopulateOfficials();
+    },
+    error: function(xhr, status, error) {
+        console.error('An error occurred:', error);
+    }
+});
+
+});
+
 
 
     

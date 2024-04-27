@@ -34,4 +34,6 @@ public function getResidents()
         
         return response()->json($residents);
     }
+
+    
 }

@@ -6,6 +6,7 @@ use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\ResidentListController;
+use App\Http\Controllers\OfficialController;
 
 Route::get('/Admin', [AdminController::class, 'statisticalreport'])->name('admin.statisticalreport');
 Route::get('/Admin/resident', [AdminController::class, 'resident'])->name('admin.resident');
@@ -26,7 +27,10 @@ Route::post('/sendEmailNotification', [ResidentController::class, 'sendEmailNoti
 Route::post('/sendEmailDeclineNotification', [ResidentController::class, 'sendEmailDeclineNotification'])->name('send.declined.notification');
 Route::get('/admin/resident', [ResidentListController::class, 'index'])->name('admin.resident');
 Route::get('/admin/residents', [ResidentListController::class, 'getResidents'])->name('admin.getresident');
+Route::post('/admin/resident', [OfficialController::class, 'addOfficial'])->name('official.add');
 Route::get('/admin/contentmanager', [AdminController::class, 'contentmanager'])->name('admin.contentmanager');
+Route::get('/admin/resident', [OfficialController::class, 'index'])->name('officials.index');
+
 
 
 

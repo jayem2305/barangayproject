@@ -137,7 +137,7 @@
                   </tr>
               </thead>
               <tbody id="officialslist">
-
+            
               </tbody>
           </table>
         </div>
@@ -171,34 +171,49 @@
 
 
 
-
-<div class="modal fade" id="Addofficials" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="Addofficials" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-    <div class="modal-header">
-                <h5 class="modal-title" id="declineModalLabel">Add Official Members</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-            <div class="mb-3">
-    <label for="members" class="form-label">Official Name <span class="text-danger">*</span></label>
-    <input type="text" class="form-control" id="name" Placeholder="Name of the Official Member">
-  </div>
-  <div class="mb-3">
-    <label for="position" class="form-label">Position <span class="text-danger">*</span></label>
-    <input type="text" class="form-control" id="position" Placeholder="Position of the Member" >
-  </div>
-  <div class="mb-3">
-    <label for="profile" class="form-label">Profile Picture <span class="text-danger">*</span></label>
-    <input type="file" class="form-control" id="profile" >
-  </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary btn-confirm-primary"><span class="decinepbtn">Submit</span> <div class="spinner-border" role="status" style="display: none;">
-  <span class="visually-hidden">Loading...</span>
-</div></button>
-            </div>
+      <div class="modal-header">
+        <h5 class="modal-title" id="declineModalLabel">Add Official Members</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="members" class="form-label">Official Name <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="name" placeholder="Name of the Official Member">
+          <div class="form-text" id="error-name" style="display: none;"></div>
+        </div>
+        <div class="mb-3">
+          <label for="position" class="form-label">Official Position <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="position" placeholder="Position of the Member">
+        </div>
+        <div class="mb-3">
+          <label for="profile" class="form-label">Profile Picture <span class="text-danger">*</span></label>
+          <input type="file" class="form-control" id="profile">
+          <div class="form-text" id="error-profile" style="display: none;"></div>
+          <div class="form-text" id="basic-addon4">Maximum file size: 50 MB, maximum number of files: 1<br>Accepted file types: .pdf .png .jpg .jpeg</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary btn-confirm-primary" id="liveToastBtn"><span class="decinepbtn">Submit</span> <div class="spinner-border" role="status" style="display: none;">
+            <span class="visually-hidden">Loading...</span>
+          </div></button>
+      </div>
     </div>
   </div>
 </div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="liveToast" class="toast text-bg-danger" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+    
+      <strong class="me-auto text-danger"><i class="bi bi-exclamation-triangle-fill"></i> Invalid Input !</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+    </div>
+  </div>
+</div>
+
 @endsection
