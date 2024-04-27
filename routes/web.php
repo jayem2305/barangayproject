@@ -26,6 +26,7 @@ Route::post('/sendEmailNotification', [ResidentController::class, 'sendEmailNoti
 Route::post('/sendEmailDeclineNotification', [ResidentController::class, 'sendEmailDeclineNotification'])->name('send.declined.notification');
 Route::get('/admin/resident', [ResidentListController::class, 'index'])->name('admin.resident');
 Route::get('/admin/residents', [ResidentListController::class, 'getResidents'])->name('admin.getresident');
+Route::get('/admin/contentmanager', [AdminController::class, 'contentmanager'])->name('admin.contentmanager');
 
 
 

@@ -22,7 +22,7 @@
      <link href="../lib/animate/animate.min.css" rel="stylesheet">
     <link href="../lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
     <link href="../lib/lightbox/css/lightbox.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.css" />
+
 
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
       <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
@@ -99,9 +99,8 @@
   <body>
    
 
-   @yield("contentresidentlistAdmin")
+   @yield("contentmanager")
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-   <script src="https://cdn.datatables.net/2.0.5/js/dataTables.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
    <script src="../lib/wow/wow.min.js"></script>
@@ -109,72 +108,11 @@
                     <script src="../lib/waypoints/waypoints.min.js"></script>
                     <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
                     <script src="../lib/lightbox/js/lightbox.min.js"></script>
+                 
+             
+
+
                     <!-- Template Javascript -->
                     <script src="../js/main.js"></script>
-                    <script>
-                        $(document).ready(function () {
-                            $(document).ajaxComplete(function () {
-        $('#myTable').DataTable();
-    });
-});
-$(document).ready(function () {
-                            $(document).ajaxComplete(function () {
-        $('#myOfficials').DataTable();
-    });
-});
-    $(document).ready(function() {
-        $.ajax({
-            url:"{{ route('admin.resident') }}",
-            type: 'GET',
-            dataType: 'json',
-            success: function(data) {
-                $('#residences_num').text(data.totalResidences);
-                $('#senior_num').text(data.totalSeniors);
-                $('#minor_num').text(data.totalMinors);
-                $('#male_num').text(data.totalMales);
-                $('#female_num').text(data.totalFemales);
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText);
-            }
-        });
-    });
 
-    $(document).ready(function() {
-    var table = $('#myTable').DataTable();
-    var ext;
-    // Make AJAX request to fetch resident data
-    $.ajax({
-        url: "{{ route('admin.getresident') }}",
-        type: 'GET',
-        dataType: 'json',
-        success: function(data) {
-            // Clear existing table rows
-            table.clear().draw();
-            // Populate table body with resident data
-            $.each(data, function(index, resident) {
-                if(resident.ext == null){
-                ext = "";
-            }else{
-                ext = resident.ext;
-            }
-
-                table.row.add([
-                    resident.lname + ", " + resident.fname + " "+ resident.mname + " " +ext,
-                    resident.household,
-                    resident.address,
-                    resident.gender,
-                    '<button type="button" class="btn btn-warning btn-lg"><i class="bi bi-eye-fill"></i></button> <button type="button" class="btn btn-danger btn-lg"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-ban" viewBox="0 0 16 16"><path d="M15 8a6.97 6.97 0 0 0-1.71-4.584l-9.874 9.875A7 7 0 0 0 15 8M2.71 12.584l9.874-9.875a7 7 0 0 0-9.874 9.874ZM16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0"/></svg> Restrict </button>'
-                ]).draw();
-            });
-        },
-        error: function(xhr, status, error) {
-            console.error(xhr.responseText);
-        }
-    });
-});
-
-
-
-    
-</script>
+<script>

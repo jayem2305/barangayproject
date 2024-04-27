@@ -14,6 +14,11 @@ class AdminController extends Controller
         return view('admin.statisticalreport');
         //return "Hello, this is the welcome page!";
     }
+    public function contentmanager()
+    {
+        return view('admin.contentmanager');
+        //return "Hello, this is the welcome page!";
+    }
     public function resident()
     {
         return view('admin.resident');

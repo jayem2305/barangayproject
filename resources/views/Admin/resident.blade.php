@@ -21,10 +21,10 @@
                      <img src="../pic/nav.png" alt="Logo" width="300" height="70" class="d-inline-block align-text-top">
                     </div> 
                     <div class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <a href="../Admin" class="nav-item nav-link text-white"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
+                    <a href="../admin" class="nav-item nav-link text-white"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M0 0h1v15h15v1H0zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07"/>
 </svg> Statistical Report </a>
-                    <a href="register" class="nav-item nav-link text-white"><i class="bi bi-menu-button-wide"></i> Content Manager</a>
+                    <a href="../admin/contentmanager" class="nav-item nav-link text-white"><i class="bi bi-menu-button-wide"></i> Content Manager</a>
                     <a href="certificae" class="nav-item nav-link text-white"><i class="bi bi-file-earmark-richtext-fill"></i> Certificates</i></a>
                     <li class="dropdown">
                     <a class="nav-link  dropdown-toggle text-primary" href="#" role="button"data-bs-toggle="dropdown"  aria-expanded="false">
@@ -121,6 +121,28 @@
       </div>
   </div>
 </div>
+<div class="container-fluid col-lg-12">
+    <div class="row">
+        <div class="col-lg-12">
+            <h3>Update Barangay Officials</h3>
+            <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#Addofficials">Add Official Members</button>
+            <button class="btn btn-danger" type="button">Archive all official Members</button>
+            <table class="table table-hover" id="myOfficials">
+                <thead>
+                    <tr>
+                      <th scope="col">Profile</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Position</th>
+                      <th scope="col">Action</th>
+                  </tr>
+              </thead>
+              <tbody id="officialslist">
+
+              </tbody>
+          </table>
+        </div>
+    </div>
+</div>
 
  <!-- Copyright Start -->
                 <div class="container-fluid copyright py-4">
@@ -147,22 +169,36 @@
                     <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i
                         class="bi bi-arrow-up"></i></a>
 
-                       <div class="modal fade" tabindex="-1" role="dialog" id="autoShowModal" >
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-body" style="background-image: url('../pic/popup.png'); background-size: cover; height: auto; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                <button type="button" class="btn-close custom-close-button" data-bs-dismiss="modal" aria-label="Close" style="margin-left: 48rem; margin-bottom: 23rem; z-index: 1;"></button>
 
-                <!-- Background Image -->
-                <div >
-                    <a href="onlineservices" class="btn btn-primary btn-lg" role="button" style="margin-left: -22rem;margin-top: -6rem; z-index: 1; position: absolute;">CLICK HERE TO APPLY</a>
-                </div>
-                <!-- End Background Image -->
+
+
+<div class="modal fade" id="Addofficials" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+    <div class="modal-header">
+                <h5 class="modal-title" id="declineModalLabel">Add Official Members</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        </div>
+            <div class="modal-body">
+            <div class="mb-3">
+    <label for="members" class="form-label">Official Name <span class="text-danger">*</span></label>
+    <input type="text" class="form-control" id="name" Placeholder="Name of the Official Member">
+  </div>
+  <div class="mb-3">
+    <label for="position" class="form-label">Position <span class="text-danger">*</span></label>
+    <input type="text" class="form-control" id="position" Placeholder="Position of the Member" >
+  </div>
+  <div class="mb-3">
+    <label for="profile" class="form-label">Profile Picture <span class="text-danger">*</span></label>
+    <input type="file" class="form-control" id="profile" >
+  </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-confirm-primary"><span class="decinepbtn">Submit</span> <div class="spinner-border" role="status" style="display: none;">
+  <span class="visually-hidden">Loading...</span>
+</div></button>
+            </div>
     </div>
+  </div>
 </div>
-
-
-
 @endsection
