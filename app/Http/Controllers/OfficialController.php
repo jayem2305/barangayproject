@@ -35,12 +35,15 @@ class OfficialController extends Controller
             $query->where('name', $request->name)
                 ->orWhere('position', $request->position);
         })
-        ->where('status', 'active')
+        ->where(function ($query) {
+            $query->whereIn('status', ['active', 'Archive']);
+        })
         ->first();
     
-        if ($existingOfficial) {
-            return response()->json(['error' => 'An active official with the same name or position already exists.'], 422);
-        }
+    if ($existingOfficial) {
+        return response()->json(['error' => 'An official with the same name or position already exists.'], 422);
+    }
+    
         // Process the file upload
         //$profilePath = $request->file('profile')->store('residentprofile');
         if ($request->hasFile('profile')) {
@@ -68,4 +71,30 @@ class OfficialController extends Controller
         $officials = Official::all();
         return response()->json($officials);
     }
+    public function updateStatus(Request $request)
+{
+    $officialId = $request->input('id');
+    $status = $request->input('status');
+
+    // Update the status of the official
+    $official = Official::find($officialId);
+    $official->status = $status;
+    $official->save();
+
+    // You can return a success response if needed
+    return response()->json(['message' => 'Official status updated successfully']);
+}
+public function archiveAll()
+{
+    try {
+        // Archive all officials
+        Official::where('status', 'active')->update(['status' => 'Archive']);
+        
+        // Return success response
+        return response()->json(['message' => 'All official members archived successfully'], 200);
+    } catch (\Exception $e) {
+        // Return error response if an exception occurs
+        return response()->json(['error' => 'Failed to archive all official members'], 500);
+    }
+}
 }

@@ -5,8 +5,7 @@
 @section('contentresidentlistAdmin')
 <body>
     <!-- Spinner Start -->
-    <div id="spinner"
-    class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div id="spinner"class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
     <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
 </div>
 <!-- Spinner End -->
@@ -107,6 +106,7 @@
             <table class="table table-hover" id="myTable">
                 <thead>
                     <tr>
+                      <th scope="col">Profile</th>
                       <th scope="col">Name</th>
                       <th scope="col">HouseHold</th>
                       <th scope="col">Address</th>
@@ -126,13 +126,14 @@
         <div class="col-lg-12">
             <h3>Update Barangay Officials</h3>
             <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#Addofficials">Add Official Members</button>
-            <button class="btn btn-danger" type="button">Archive all official Members</button>
+            <button class="btn btn-danger archive-all-officials" type="submit">Archive all official Members</button>
             <table class="table table-hover" id="myOfficials">
                 <thead>
                     <tr>
                       <th scope="col">Profile</th>
                       <th scope="col">Name</th>
                       <th scope="col">Position</th>
+                      <th scope="col">Time Stamp</th>
                       <th scope="col">Action</th>
                   </tr>
               </thead>
@@ -215,5 +216,53 @@
     </div>
   </div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="restrictionModal" tabindex="-1" role="dialog" aria-labelledby="restrictionModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="restrictionModalLabel">Restrict Resident</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="regid">
+        <p>Reason for restriction:</p>
+        <textarea id="restrictionReason" class="form-control" rows="3" placeholder="This Account is Restricted Due to: "></textarea>
+      </div>
+      <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" id="btnRestrict" class="btn btn-danger"><span id="restrict">Restrict</span> <div class="spinner-border" role="status" style="display: none;">
+  <span class="visually-hidden">Loading...</span>
+</div></button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="liveToast" class="toast text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header text-success">
+      <strong class="me-auto">Account Restriction</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      Hello, world! This is a toast message.
+    </div>
+  </div>
+</div>
 
+
+<div class="modal fade" id="residentDetailsModal" tabindex="-1" aria-labelledby="residentDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="residentDetailsModalLabel">Resident Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Resident details will be populated here dynamically -->
+            </div>
+            
+        </div>
+    </div>
+</div>
 @endsection

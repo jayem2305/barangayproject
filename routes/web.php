@@ -25,11 +25,17 @@ Route::get('/pendingaccount', [ResidentController:: class, 'pendingaccount'])->n
 Route::get('/accountview', [ResidentController:: class, 'accountview'])->name('residents.accountview');
 Route::post('/sendEmailNotification', [ResidentController::class, 'sendEmailNotification'])->name('send.email.notification');
 Route::post('/sendEmailDeclineNotification', [ResidentController::class, 'sendEmailDeclineNotification'])->name('send.declined.notification');
-Route::get('/admin/resident', [ResidentListController::class, 'index'])->name('admin.resident');
+Route::get('/admin/resident/index', [ResidentListController::class, 'index'])->name('admin.residents');
 Route::get('/admin/residents', [ResidentListController::class, 'getResidents'])->name('admin.getresident');
+Route::post('/save-restriction', [ResidentListController::class, 'store'])->name('save.restriction');
+Route::post('/updateStatus', [ResidentListController::class, 'updateStatus'])->name('admin.updatestatus');
+Route::post('/getresidentview', [ResidentListController::class, 'getResidentsview'])->name('admin.getResidentsview');
 Route::post('/admin/resident', [OfficialController::class, 'addOfficial'])->name('official.add');
 Route::get('/admin/contentmanager', [AdminController::class, 'contentmanager'])->name('admin.contentmanager');
 Route::get('/admin/resident', [OfficialController::class, 'index'])->name('officials.index');
+Route::post('/update-official-status', [OfficialController::class, 'updateStatus'])->name('official.updateStatus');
+Route::post('/archiveAll', [OfficialController::class, 'archiveAll'])->name('officials.archiveAll');
+
 
 
 

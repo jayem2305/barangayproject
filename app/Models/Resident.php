@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notifiable;
 class Resident extends AuthenticatableUser implements Authenticatable 
 {
     use HasFactory, Notifiable;
-
+    protected $table = 'residents';
     protected $primaryKey = 'reg_number'; // Define the custom primary key
 
     public $incrementing = false; // Disable auto-incrementing

@@ -112,19 +112,9 @@
                     <!-- Template Javascript -->
                     <script src="../js/main.js"></script>
                     <script>
-                        $(document).ready(function () {
-                            $(document).ajaxComplete(function () {
-        $('#myTable').DataTable();
-    });
-});
-$(document).ready(function () {
-                            $(document).ajaxComplete(function () {
-        $('#myOfficials').DataTable();
-    });
-});
-    $(document).ready(function() {
+ $(document).ready(function() {
         $.ajax({
-            url:"{{ route('admin.resident') }}",
+            url:"{{ route('admin.residents') }}",
             type: 'GET',
             dataType: 'json',
             success: function(data) {
@@ -140,10 +130,36 @@ $(document).ready(function () {
         });
     });
 
+
+                        $(document).ready(function () {
+                            $(document).ajaxComplete(function () {
+                                $('#myTable').DataTable();
+                            });
+                        });
+                        $(document).ready(function () {
+                            $(document).ajaxComplete(function () {
+                                $('#myOfficials').DataTable();
+                            });
+                        });
+
+
+                      
     $(document).ready(function() {
+        function showToast(message) {
+    // Set the message content
+    $('#liveToast .toast-body').text(message);
+    // Show the toast
+    $('.toast').toast('show');
+}
     var table = $('#myTable').DataTable();
     var ext;
+   
+    function showModal(residentName) {
+        $('#restrictionModal').modal('show');
+        $('#residentName').text(residentName);
+    }
     // Make AJAX request to fetch resident data
+    function updateTableData() {
     $.ajax({
         url: "{{ route('admin.getresident') }}",
         type: 'GET',
@@ -158,20 +174,201 @@ $(document).ready(function () {
             }else{
                 ext = resident.ext;
             }
+            var restrictBtn = '<button type="button" class="btn btn-danger btn-lg btn-restrict"data-toggle="modal" data-target="#restrictionModal" data-reg='+resident.reg_number +'>Restrict</button>';
+            var viewBtn = '<input type="hidden" value="'+resident.reg_number +'" id="viewbtnid"><button type="button" class="btn btn-warning btn-lg btn-view"><i class="bi bi-eye-fill"></i></button>'+ restrictBtn;
+            // Check if status is "Restricted", if yes, render different buttons
+            if (resident.status === 'Restricted') {
+                viewBtn = '<input type="hidden" value="'+resident.reg_number +
+                '" id="unrestricted"><button type="button" class="btn btn-warning btn-lg btn-unrestrict" ><span id="unrestrictbtn">Unrestrict</span><div class="spinner-border"style="display: none;" role="status"><span class="visually-hidden" >Loading...</span></div></button>';
+            }
 
-                table.row.add([
+            table.row.add([
+                   "<img src=../residentprofile/" + resident.image_filename + " class='rounded-circle mx-auto d-block' alt='...' width=50 heght=50>",
                     resident.lname + ", " + resident.fname + " "+ resident.mname + " " +ext,
                     resident.household,
                     resident.address,
                     resident.gender,
-                    '<button type="button" class="btn btn-warning btn-lg"><i class="bi bi-eye-fill"></i></button> <button type="button" class="btn btn-danger btn-lg"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-ban" viewBox="0 0 16 16"><path d="M15 8a6.97 6.97 0 0 0-1.71-4.584l-9.874 9.875A7 7 0 0 0 15 8M2.71 12.584l9.874-9.875a7 7 0 0 0-9.874 9.874ZM16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0"/></svg> Restrict </button>'
+                    viewBtn
                 ]).draw();
+            });
+            
+            // Add click event listener to the "Restrict" button
+            $('#myTable tbody').on('click', '.btn-restrict', function() {
+                var rowData = table.row($(this).parents('tr')).data();
+                var residentName = rowData[0]; // Get resident name from the clicked row
+                var regNumber = $(this).data('reg');
+                 $('#regid').val(regNumber);
+                showModal(residentName);
             });
         },
         error: function(xhr, status, error) {
             console.error(xhr.responseText);
         }
     });
+}
+$('#myTable tbody').on('click', '.btn-unrestrict', function() {
+    var regNumbers = $('#unrestricted').val();
+    $(this).find('#unrestrictbtn').hide();
+    $(this).find('.spinner-border').show();
+     // Assuming registration number is in the second column
+
+    // Perform AJAX request to update the status
+    $.ajax({
+        url: '{{ route("admin.updatestatus") }}',
+        type: 'POST',
+        data: {
+            regNumbers: regNumbers,
+            status: 'Unrestricted'
+        },
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            // Handle success response
+            console.log("Status updated successfully:", response);
+            $('#restrictionModal').modal('hide');
+            $('#restrict').find('#spinner').hide();
+            // Refresh table data
+            updateTableData();
+            showToast('Account Unrestrict successfully');
+        },
+        error: function(xhr, status, error) {
+            // Handle error response
+            console.error("Error updating status:", error);
+        }
+    });
+});
+    //fetchResidentData();
+    // Handle click event for the "Restrict" button in the modal
+$('#btnRestrict').click(function() {
+    var reason = $('#restrictionReason').val();
+    var regNumber  = $('#regid').val(); // Assuming you have a hidden input for registration number
+    // Perform AJAX request to send data to Laravel route
+    $(this).find('#restrict').hide();
+    $(this).find('.spinner-border').show();
+    $.ajax({
+        url: '{{ route("save.restriction") }}',
+        type: 'POST',
+        data: {
+            name: "Barangay 781 Zone 85",
+            regNumber: regNumber,
+            reason: reason
+        },
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            // Handle success response
+            console.log("Data saved successfully:", response);
+            // Close the modal
+            $('#restrictionModal').modal('hide');
+            $('#restrict').find('#spinner').hide();
+            $('#residentDetailsModal').modal('hide');
+            updateTableData();
+            showToast('Account Restricted successfully');
+        },
+        error: function(xhr, status, error) {
+            // Handle error response
+            console.error("Error saving data:", error);
+            // Close the modal
+            $('#restrict').find('#spinner').hide();
+            $('#residentDetailsModal').modal('hide');
+            $('#restrictionModal').modal('hide');
+        }
+    });
+});
+// Add click event listener to the "View" button
+$('#myTable tbody').on('click', '.btn-view', function() {
+    var rowData = table.row($(this).parents('tr')).data(); // Assuming resident data is in the first column
+    var regNumber = $('#viewbtnid').val();
+    $.ajax({
+        url: '{{ route("admin.getResidentsview") }}',
+        type: 'POST',
+        data: {
+            regNumber: regNumber
+        },
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(resident) {
+            // Populate modal with resident details
+            populateModal(resident);
+            // Show the modal
+            $('#residentDetailsModal').modal('show');
+        },
+        error: function(xhr, status, error) {
+            console.error("Error fetching resident details:", error);
+        }
+    });
+});
+
+
+// Function to populate modal with resident details
+function populateModal(resident) {
+    var regNumber = $('#viewbtnid').val();
+    console.log("Resident Object:", resident.reg_number);
+    var ext;
+
+    if (resident.ext == null) {
+        ext = "";
+    } else {
+        ext = resident.ext + ".";
+    }
+    if (resident.proof_of_owner == null) {
+        proof_of_owner = "empty.png";
+    } else {
+        proof_of_owner = resident.proof_of_owner;
+    }
+    if (resident.voters_filename == null) {
+        voters_filename = "empty.png";
+    } else {
+        voters_filename = resident.voters_filename;
+    }
+    // Populate modal content with resident details
+    $('#residentDetailsModal .modal-body').html(`
+        <div class="row">
+            <div class="col-lg-4">
+            <img src="../residentprofile/${resident.image_filename}"class="rounded-circle mx-auto d-block" alt="Profile pic" width="200" height="200" >
+            <br>
+            </div>
+            <div class="col-lg-8">
+                <div class="row">
+                    <div class="col-lg-6 text-start"><p><strong>Contoll #:</strong> ${resident.reg_number}</p></div>
+                    <div class="col-lg-6 text-end"><p><strong>Status:</strong> ${resident.status}</p></div>
+                    <h1 class="text-center"> ${resident.lname}, ${resident.fname} ${resident.mname} ${ext}</h1>
+                    <h3 class="text-center text-primary text-decoration-underline"> ${resident.email}</h3>
+                    <h3 class="text-center"><strong> ${resident.household}</strong></h3>
+                </div>    
+            </div>
+            <div class="col-lg-3">  <p><strong>Birthday:</strong> ${resident.birthday}</p> </div>
+            <div class="col-lg-3">  <p><strong>Age:</strong> ${resident.age} Years old</p> </div>
+            <div class="col-lg-3">  <p><strong>Birt Place:</strong> ${resident.Birth}</p></div>
+            <div class="col-lg-3">  <p><strong>Gender:</strong> ${resident.gender}</p></div>
+            <div class="col-lg-4">  <p><strong>Occupation:</strong> ${resident.occupation}</p></div>
+            <div class="col-lg-4">  <p><strong>Civil Status:</strong> ${resident.civil}</p></div>
+            <div class="col-lg-4">  <p><strong>Citizenship:</strong> ${resident.citizenship}</p></div>
+            <div class="col-lg-4">  <p><strong>Contact Number:</strong>0${resident.cnum}</p></div>
+            <div class="col-lg-4">  <p><strong>Uri ng Pag-Pagmamayari:</strong> ${resident.owner_type}</p></div>
+            <div class="col-lg-4">  <p><strong>Pangalan ng May-Ari:</strong> ${resident.owner_name}</p></div>
+            <div class="col-lg-6">  <p><strong>Personal Status:</strong> ${resident.indicate_if}</p></div>
+            <div class="col-lg-6">  <p><strong>Number of Members of Family:</strong> ${resident.number_of_family}</p></div>
+            <hr><div class="col-lg-12">  <p><strong>Valid ID:<br></strong>
+            <img src="../residentprofile/${resident.valid_id_filename}"class="rounded mx-auto d-block" alt="Profile pic" width="700" height="300" ></p>
+            </div>
+            <div class="col-lg-6">  <p><strong>Proof of Owner:</strong> <div class="valid-secondary text-primary" style="margin-top: -1rem;">
+                            If applicable
+                            </div><img src="../residentprofile/${proof_of_owner}"class="rounded float-start mx-auto d-block" alt="Profile pic" width="300" height="300" ></p>
+            </div>
+        <div class="col-lg-6">  <p><strong>Voters Certificate:</strong> <div class="valid-secondary text-primary" style="margin-top: -1rem;">
+                            If applicable
+                            </div><img src="../residentprofile/${voters_filename}"class="rounded float-start mx-auto d-block" alt="Profile pic" width="300" height="300" ></p>
+            </div>
+        </div>
+        <br>
+        `);
+}
+
+updateTableData();
 });
 
 $(document).ready(function() {
@@ -216,6 +413,8 @@ $(document).ready(function() {
                     // If condition is not followed, display toast message
                     var errorMessage = xhr.responseJSON && xhr.responseJSON.error ? xhr.responseJSON.error : 'An error occurred while processing the request';
                     $('.toast-body').text(errorMessage);
+                    $('#liveToast').removeClass('text-bg-success').addClass('text-bg-danger');
+                    $('#liveToast strong').removeClass('text-success').addClass('text-danger').html('<i class="bi bi-check-circle"></i> Invalid Official');
                     var toast = new bootstrap.Toast($('#liveToast'));
                     toast.show();
                 }
@@ -223,25 +422,55 @@ $(document).ready(function() {
         });
     });
     // Function to fetch officials and populate the table
-function fetchAndPopulateOfficials() {
+    function fetchAndPopulateOfficials() {
     $.ajax({
         url: "{{ route('officials.index') }}", // Update with your route to fetch officials
         type: 'GET',
         success: function(response) {
             // Clear existing rows
-            $('#officialslist').empty();
+            $('#myOfficials').DataTable().clear().draw();
 
             // Append rows for each official
             response.forEach(function(official) {
-                var newRow = '<tr>' +
-                    '<td><img src="../residentprofile/' + official.profile_path + '" alt="' + official.profile_path + '" width="50" class="rounded-circle mx-auto d-block"></td>' +
-                    '<td>' + official.name + '</td>' +
-                    '<td>' + official.position + '</td>' +
-                    '<td>' +
-                    '<button class="btn btn-sm btn-danger delete-official" data-id="' + official.id + '">Delete</button>' +
-                    '</td>' +
-                    '</tr>';
-                $('#officialslist').append(newRow);
+                var createdAtString = official.created_at;
+                var createdAtDate = new Date(createdAtString);
+
+                // Format the date and time
+                var formattedDate = formatDate(createdAtDate);
+
+                // Function to format date
+                function formatDate(date) {
+                    var options = {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        second: 'numeric',
+                        hour12: true // Use 12-hour clock
+                    };
+                    return date.toLocaleDateString('en-US', options);
+                }
+
+                // Set the button text and class based on the official's status
+                var viewBtn;
+                if (official.status === 'Archive') {
+                    viewBtn = '<button class="btn btn-lg btn-warning restore-official" data-id="' + official.id + '">Restore</button>';
+                } else {
+                    viewBtn = '<button class="btn btn-lg btn-danger delete-official" data-id="' + official.id + '">Archive</button>';
+                }
+
+                // Construct the new row data
+                var rowData = [
+                    '<img src="../residentprofile/' + official.profile_path + '" alt="' + official.profile_path + '" width="50" class="rounded-circle mx-auto d-block">',
+                    official.name,
+                    official.position,
+                    formattedDate,
+                    viewBtn
+                ];
+
+                // Add the new row to the DataTable instance
+                $('#myOfficials').DataTable().row.add(rowData).draw();
             });
         },
         error: function(xhr, status, error) {
@@ -250,33 +479,96 @@ function fetchAndPopulateOfficials() {
     });
 }
 
-// Call the function when the page loads
-$(document).ready(function() {
-    fetchAndPopulateOfficials();
+
+
+// Call fetchAndPopulateOfficials initially to populate the list
+fetchAndPopulateOfficials();
+
+// Add click event listener to the "Archive" button
+$(document).on('click', '.restore-official', function() {
+    var officialId = $(this).data('id');
+    var button = $(this);
+        // Perform AJAX request to update the status to "Archive"
+        $.ajax({
+            url: "{{ route('official.updateStatus') }}", // Update the URL with your route
+            type: 'POST',
+            data: {
+                id: officialId,
+                status: 'active'
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                // Handle success response
+                fetchAndPopulateOfficials();
+                console.log("Official Member Restore successfully!");
+                //alert("Official Member Archived successfully!");
+                // You may need to reload the page or update the UI accordingly
+                //fetchAndPopulateOfficials();
+            },
+            error: function(xhr, status, error) {
+                // Handle error response
+                console.error("Error Restoring official:", error);
+                alert("Error Restoring official. Please try again later.");
+            }
+        });
+    
 });
-
-// Assuming you have an AJAX call to add a new official
-$.ajax({
-    url: "{{ route('official.add') }}",
-    type: 'POST',
-    data: formData,
-    processData: false,
-    contentType: false,
-    success: function(response) {
-        // Handle success response
-        console.log('Data added successfully');
-
-        // Call the function to fetch and populate officials again
-        fetchAndPopulateOfficials();
-    },
-    error: function(xhr, status, error) {
-        console.error('An error occurred:', error);
+$(document).on('click', '.delete-official', function() {
+    var officialId = $(this).data('id');
+    var button = $(this);
+    // Confirm if user wants to archive the official
+    if (confirm("Are you sure you want to archive this official?")) {
+        // Perform AJAX request to update the status to "Archive"
+        $.ajax({
+            url: "{{ route('official.updateStatus') }}", // Update the URL with your route
+            type: 'POST',
+            data: {
+                id: officialId,
+                status: 'Archive'
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                // Handle success response
+                console.log("Official Member Archived successfully!");
+                // You may need to reload the page or update the UI accordingly
+                fetchAndPopulateOfficials(response);
+            },
+            error: function(xhr, status, error) {
+                // Handle error response
+                console.error("Error archiving official:", error);
+                alert("Error archiving official. Please try again later.");
+            }
+        });
     }
+    
+});
+$(document).on('click', '.archive-all-officials', function() {
+    if (confirm("Are you sure you want to archive All the officials?")) {
+    $.ajax({
+        url: "{{ route('officials.archiveAll') }}",
+        type: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            // Success message or any other action after archiving all officials
+            console.log('All official members archived successfully');
+            // Update the officials list after archiving all officials
+            fetchAndPopulateOfficials();
+        },
+        error: function(xhr, status, error) {
+            console.error('An error occurred while archiving all officials:', error);
+            // Handle error scenario
+        }
+    });
+}
 });
 
 });
-
-
 
     
 </script>
