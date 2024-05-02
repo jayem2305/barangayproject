@@ -114,7 +114,7 @@
 
                     <!-- Template Javascript -->
                     <script src="../js/main.js"></script>
-
+    
 <script>
 $(document).ready(function(){
     $(document).on('click', '.btn-forum', function () {
