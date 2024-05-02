@@ -69,7 +69,12 @@ public function loginPost(Request $request)
     if ($request->password === $password) {
         if ($status == "pending") {
             return response()->json(['error' => 'Your Account is still in process'], 422);
-        } else if ($status == "resident" || $status == "Admin") {
+        } else if ($status == "Resident") {
+            // If passwords match, log the user in
+            Auth::login($resident);
+            // Redirect to the desired location after login
+            return response()->json(['success' => 'Login successful', 'redirect' => route('user.index')]);
+        }else if ( $status == "Admin") {
             // If passwords match, log the user in
             Auth::login($resident);
 
