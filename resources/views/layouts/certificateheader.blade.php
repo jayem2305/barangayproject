@@ -119,3 +119,130 @@ $(document).ready(function(){
  $('#ClaimTable').DataTable();
 });
 </script>
+<script>
+    // JavaScript to handle certificate search
+            $(document).ready(function () {
+                $('#Searchbar').on('input', function () {
+                    var searchValue = $(this).val().toLowerCase();
+
+            // Move matched cards to the top and set the layout class
+                    $('#certificateCards .card').each(function () {
+                        var certificateName = $(this).find('.card-title').text().toLowerCase();
+                        if (certificateName.includes(searchValue)) {
+                            $(this).prependTo('#certificateCards');
+                    $(this).addClass('col-lg-4 mb-3 mb-sm-0') // Change the layout class as needed
+                } else {
+                    $(this).addClass('col-lg-4 mb-3 mb-sm-0'); // Reset the layout class
+                }
+            });
+
+            // Hide non-matching cards
+                    $('#certificateCards .card').each(function () {
+                        var certificateName = $(this).find('.card-title').text().toLowerCase();
+                        if (certificateName.includes(searchValue)) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+
+            // Show all cards if search is empty
+                    if (searchValue === '') {
+                $('#certificateCards .card').show().addClass('col-lg-4 mb-3 mb-sm-0');  // Reset the layout class
+            }
+
+            // Handle case when no matching certificates are found
+            var visibleCards = $('#certificateCards .card:visible').length;
+            if (visibleCards === 0) {
+                alert('No matching certificates found.');
+                // You can also add logic to display a message or perform other actions.
+            }
+        });
+            });
+
+// Assuming you're using jQuery
+// Ajax Call
+var selectedValue; // Define selectedValue outside of event handlers
+
+$('#names_display').change(function() {
+    // Get the selected option's value and text
+    selectedValue = $(this).val(); // Update the value of selectedValue
+    var selectedText = $(this).find('option:selected').text();
+    
+    // Update the text of a separate element to display the selected option
+    $('#selected_option_display').text(selectedText);
+});
+
+$('#names_display').click(function() {
+    $.ajax({
+        url: '{{ route("related-data") }}',
+        type: 'GET',
+        success: function(data) {
+            // Clear existing options before populating new ones
+            $('#names_display').empty();
+            // Add a default option
+           
+            // Check if data is not empty
+            if (data.length > 0) {
+                // Loop through fetched data and append options
+                $.each(data, function(index, fullName) {
+                    $('#names_display').append($('<option>', {
+                        value: fullName,
+                        text: fullName
+                    }));
+                });
+            } else {
+                console.log('No data found');
+            }
+            // If there's a selected value, set it as selected
+            if (selectedValue) {
+                $('#names_display').val(selectedValue);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+        }
+    });
+});
+
+
+
+
+
+$('.upload-indigency').click(function (e) {
+    e.preventDefault();
+    var voters = $('#voters').val();
+    var name = $('#names_display').val();
+    var copy = $('#copy').val();
+    var purpose = $('#purpose').val();
+    var otherpurpose = $('#otherpurpose').val();
+    var fileInput = $('#requirements')[0].files[0];
+    var formData = new FormData(); // Assuming your form is within the #exampleModal modal
+    formData.append('voters', voters);
+    formData.append('name', name);
+    formData.append('copy', copy);
+    formData.append('requirements', fileInput);
+    formData.append('purpose', purpose);
+    formData.append('otherpurpose', otherpurpose);
+    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: '{{ route("submit.indigency.request") }}',
+        type: 'POST',
+        data: formData,
+        headers: {
+        'X-CSRF-TOKEN': csrfToken
+    },
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            console.log(response);
+            // Handle success response
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr.responseJSON);
+            // Handle error response
+        }
+    });
+});
+
+        </script>

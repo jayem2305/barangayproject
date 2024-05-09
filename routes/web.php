@@ -10,8 +10,31 @@ use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\ResidentListController;
 use App\Http\Controllers\OfficialController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CertificatesController;
 
-Route::get('/User', [UserController::class, 'index'])->name('user.index');
+
+Route::middleware(['web'])->group(function () {
+    // Routes that render HTML views
+    Route::get('/User', [UserController::class, 'index'])->name('user.index');
+    Route::get('/User/events', [UserController::class, 'event'])->name('user.events');
+    Route::get('/User/profile', [UserController::class, 'profile'])->name('user.profile');
+    Route::get('/User/profile/display', [UserController::class, 'profile_user'])->name('user.profile_user');
+    Route::post('/User/profile/update', [UserController::class, 'updateProfile'])->name('user.update_profile');
+    Route::post('/User/save-member-data', [UserController::class, 'store'])->name('user.store');
+    Route::get('/User/members', [UserController::class, 'displayMembers'])->name('user.display');
+    Route::delete('/User/members/{id}', [UserController::class, 'destroy'])->name('user.destroy');
+    Route::get('/User/edit/{id}', [UserController::class, 'edit'])->name('members.edit');
+    Route::post('/User/update', [UserController::class, 'update'])->name('members.update');
+    Route::get('/User/certificate', [UserController::class, 'certificate'])->name('user.certificate');
+    Route::post('User/certificate/indigency', [UserController::class, 'submitRequestindignecy'])->name('submit.indigency.request');
+    Route::get('/User/certificate/get', [UserController::class, 'getRelatedData'])->name('related-data');
+
+
+
+
+    // Routes that handle form submissions
+    Route::post('/login', [AuthController::class, 'loginPost'])->name('login.post');
+});
 Route::get('/Admin', [AdminController::class, 'statisticalreport'])->name('admin.statisticalreport');
 Route::get('/Admin/resident', [AdminController::class, 'resident'])->name('admin.resident');
 Route::get('/Admin/certificate', [AdminController::class, 'certificate'])->name('admin.certificate');
@@ -53,6 +76,11 @@ Route::post('/update_Project', [EventsController::class, 'update_project'])->nam
 Route::post('/update_info', [EventsController::class, 'update_info'])->name('info.update');
 Route::get('/info/fetch', [EventsController::class, 'fetchInfo'])->name('info.fetch');
 Route::get('/export',  [ExportController::class, 'export'])->name('export');
+Route::get('/get-image', [UserController::class, 'getImage'])->name('get.image');
+Route::get('/get-projects', [UserController::class, 'getProjects'])->name('get.project');
+Route::get('/get-news-events', [UserController::class, 'getNewsAndEvents'])->name('get.events');
+
+
 
 
 
@@ -68,16 +96,15 @@ Route::view('/userresident/index', 'userresident.index')->name('userresident.ind
 
 //});
 
-Route::middleware([RedirectIfAuthenticated::class])->group(function () {
+
 Route::get('/',[AuthController::class,"index"])->name('home');
 Route::get("/onlineservices",[AuthController::class,"onlineservices"])->name("onlineservices");
 Route::get("/aboutus",[AuthController::class,"aboutus"])->name("aboutus");
 Route::get("/login",[AuthController::class,"login"])->name("login");
-Route::post("/login",[AuthController::class,"loginPost"])->name("login.post");
+
 Route::get("/register",[AuthController::class,"register"])
 ->name("register");
 Route::post('/register/step1', [AuthController::class, 'step1'])->name('register.step1');
 Route::post('/register/step2', [AuthController::class, 'step2'])->name('register.step2');
 //Route::post('/register/storeMember',  [AuthController::class, 'storeMember'])->name('store.member');
 Route::post('/register/laststep', [AuthController::class, 'laststep'])->name('register.laststep');
-});

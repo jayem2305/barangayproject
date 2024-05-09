@@ -50,35 +50,27 @@ public function loginPost(Request $request)
         return response()->json(['error' => 'User not found'], 422);
     }
 
-    // Retrieve the email and status from the resident
-    $email = $resident->email;
-    $status = $resident->status;
-    $password = $resident->password;
-
-    // Log retrieved resident, email, and password for debugging
-    Log::info('Retrieved Resident:', ['resident' => $resident]);
-    Log::info('Request Email:', ['email' => $request->email]);
-    Log::info('Password:', ['password' => $password]);
-
-    // Check if the provided email matches
-    if ($request->email !== $email) {
-        return response()->json(['error' => 'Email does not match'], 422);
-    }
-
     // Check if the provided password matches the stored password
-    if ($request->password === $password) {
+    if ($request->password === $resident->password) {
+        $status = $resident->status;
+        $residentId = $resident->reg_number;
+
         if ($status == "pending") {
             return response()->json(['error' => 'Your Account is still in process'], 422);
-        } else if ($status == "Resident") {
-            // If passwords match, log the user in
+        } elseif ($status == "Resident") {
+            // Log the resident in
             Auth::login($resident);
-            // Redirect to the desired location after login
-            return response()->json(['success' => 'Login successful', 'redirect' => route('user.index')]);
-        }else if ( $status == "Admin") {
-            // If passwords match, log the user in
+            
+            // Set the userId in the session
+            $request->session()->put('userId', $residentId);
+
+            // Redirect to the user index page
+            return response()->json(['redirect' => route('user.index', ['userId' => $residentId])]);
+        } elseif ($status == "Admin") {
+            // Log the user in as admin
             Auth::login($resident);
 
-            // Redirect to the desired location after login
+            // Redirect to the admin dashboard
             return response()->json(['success' => 'Login successful', 'redirect' => route('admin.statisticalreport')]);
         } else {
             return response()->json(['error' => 'Invalid user status'], 422);
@@ -88,6 +80,8 @@ public function loginPost(Request $request)
         return response()->json(['error' => 'Invalid credentials: Password incorrect'], 422);
     }
 }
+
+
 
 function register(){
     return view("auth.register");
