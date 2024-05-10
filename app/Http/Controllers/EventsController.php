@@ -301,7 +301,7 @@ public function update_info(Request $request)
         // Handle logo upload if a new logo file has been provided
         if ($request->hasFile('logo')) {
             $logo = $request->file('logo');
-            $logoName = time().'.'.$logo->extension();
+            $logoName = 'logo.'.$logo->extension();
             $logo->move(public_path('uploads'), $logoName);
             $info->logo = $logoName;
         }
@@ -320,7 +320,7 @@ public function update_info(Request $request)
         // Handle logo upload if a new logo file has been provided
         if ($request->hasFile('logo')) {
             $logo = $request->file('logo');
-            $logoName = time().'.'.$logo->extension();
+            $logoName = 'logo.'.$logo->extension();
             $logo->move(public_path('uploads'), $logoName);
             $info->logo = $logoName;
         }

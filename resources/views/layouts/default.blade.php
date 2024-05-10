@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <linkhref="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&family=Roboto:wght@500;700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&family=Roboto:wght@500;700&display=swap"
     rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
@@ -111,6 +111,7 @@
                     <!-- Template Javascript -->
                     <script src="../js/main.js"></script>
    <script>
+    
     // JavaScript to show the modal on page load
                         $(document).ready(function(){
                           $('#autoShowModal').modal('show');
@@ -122,11 +123,11 @@
    <script type="text/javascript">
 $(document).ready(function () {
     $(document).on('click', '.login-btn', function () {
-        var button = $(this); // Get the clicked button
-        var spinner = button.find('.spinner-border'); // Find the spinner inside the button
-        var loginText = button.find('.login_text'); // Find the login_text element
-        spinner.removeClass('d-none'); // Show the spinner when the button is clicked
-        loginText.addClass('d-none'); // Hide the login_text when the spinner appears
+        var button = $(this);
+        var spinner = button.find('.spinner-border');
+        var loginText = button.find('.login_text');
+        spinner.removeClass('d-none');
+        loginText.addClass('d-none');
         var email = $('#email').val();
         var password = $('#password').val();
         var formData = new FormData();
@@ -142,13 +143,15 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function (response) {
-                // Hide the spinner and show login_text when AJAX request is successful
                 spinner.addClass('d-none');
                 loginText.removeClass('d-none');
-                window.location.href = response.redirect;
+                if (response.redirect) {
+                    window.location.href = response.redirect;
+                } else {
+                    console.log('User data is undefined');
+                }
             },
             error: function (xhr, status, error) {
-                // Hide the spinner and show login_text when AJAX request encounters an error
                 spinner.addClass('d-none');
                 loginText.removeClass('d-none');
                 
@@ -165,6 +168,7 @@ $(document).ready(function () {
         });
     });
 });
+
 
 
 
