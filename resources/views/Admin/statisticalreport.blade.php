@@ -30,7 +30,7 @@
         <a class="nav-link  dropdown-toggle text-white" href="#" role="button"data-bs-toggle="dropdown"  aria-expanded="false">
             <i class="bi bi-person-square"></i> Residences
         </a>
-        <ul class="dropdown-menu">
+        <ul class="dropdown-menu" >
             <li><a class="dropdown-item" href="../Admin/resident"><i class="bi bi-card-checklist"></i> List of Residents</a></li>
             <li><a class="dropdown-item" href="../Admin/pendingaccount"><i class="bi bi-person-fill"></i> Pending Account of Residence</a></li>
             <li><a class="dropdown-item" href="../Admin/forum" class="nav-item nav-link text-white"><i class="bi bi-info-circle"></i> Forum</i></a></li>
