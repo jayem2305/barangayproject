@@ -114,10 +114,9 @@
                     <script src="../js/main.js"></script>
                     <script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
                     <script type="text/javascript">
-$(document).ready(function(){
- $('#ApprovalTable').DataTable();
- $('#ClaimTable').DataTable();
-});
+$(document).ready( function () {
+    $('#myTable').DataTable();
+} );
 </script>
 <script>
     // JavaScript to handle certificate search
@@ -163,41 +162,87 @@ $(document).ready(function(){
 // Assuming you're using jQuery
 // Ajax Call
 var selectedValue; // Define selectedValue outside of event handlers
-
-$('#names_display').change(function() {
+var selectedAge = null;
+var selectedImageFilename = null;
+$('.names_display').change(function() {
     // Get the selected option's value and text
     selectedValue = $(this).val(); // Update the value of selectedValue
     var selectedText = $(this).find('option:selected').text();
     
     // Update the text of a separate element to display the selected option
-    $('#selected_option_display').text(selectedText);
+    $('.selected_option_display').text(selectedText);
 });
 
-$('#names_display').click(function() {
+
+
+
+$('.names_display').click(function() {
     $.ajax({
         url: '{{ route("related-data") }}',
         type: 'GET',
         success: function(data) {
             // Clear existing options before populating new ones
-            $('#names_display').empty();
+            $('.names_display').empty();
             // Add a default option
-           
             // Check if data is not empty
             if (data.length > 0) {
                 // Loop through fetched data and append options
                 $.each(data, function(index, fullName) {
-                    $('#names_display').append($('<option>', {
-                        value: fullName,
-                        text: fullName
+                    $('.names_display').append($('<option>', {
+                        value: fullName.name,
+                        text: fullName.name
                     }));
+                    if (fullName.name === selectedValue) {
+                        selectedAge = fullName.age;
+                        
+                    }
+                    selectedImageFilename = fullName.profile2x2;
+                    
                 });
             } else {
                 console.log('No data found');
             }
             // If there's a selected value, set it as selected
             if (selectedValue) {
-                $('#names_display').val(selectedValue);
+                $('.names_display').val(selectedValue);
             }
+           
+            if (selectedAge && selectedAge < 18) {
+                document.getElementById("minordisplay").style.display = "block";
+            } else {
+                document.getElementById("minordisplay").style.display = "none";
+            }
+            $('#childdisplay').empty();
+            if (selectedImageFilename) {
+                $.each(data, function(index, fullName) {
+            if (fullName.profile2x2) {
+                var imageUrl = '../uploads/' + fullName.profile2x2; // Update the path to your image directory
+                var imageElement = $('<img>', {
+                    src: imageUrl,
+                    alt: fullName.name + ' Image',
+                    class: 'img-thumbnail mx-auto d-block',
+                    height: '150', // Set the height here (e.g., '100px', '50%', etc.)
+                    width: '150' // Set the width here (e.g., '100px', '50%', etc.)
+                });
+                var labelElement = fullName.name;
+                var checkboxElement = $('<input>', {
+                    type: 'checkbox',
+                    text: fullName.name,
+                    value: fullName.name,
+                    class: 'form-check-input mt-0'
+                });
+                var colDiv = $('<div>', {
+                    class: 'col-3 text-center'
+                }).append(imageElement,checkboxElement,labelElement);
+                $('#childdisplay').append(colDiv);
+            }
+        });
+            } else {
+                // If no image filename is available, clear the childdisplay div
+                $('#childdisplay').empty();
+            }
+        
+
         },
         error: function(xhr, status, error) {
             console.error(xhr.responseText);
@@ -205,11 +250,32 @@ $('#names_display').click(function() {
     });
 });
 
+document.addEventListener("DOMContentLoaded", function() {
+        var purposeSelect = document.getElementById("purpose");
+        var purposecertSelect = document.getElementById("purposecert");
+        var otherPurposeInput = document.getElementById("otherpurpose");
+        var otherPurposecertInput = document.getElementById("otherpurposecert");
+
+        purposeSelect.addEventListener("change", function() {
+            if (purposeSelect.value === "Others") {
+                otherPurposeInput.style.display = "block";
+            } else {
+                otherPurposeInput.style.display = "none";
+            }
+        });
+        purposecertSelect.addEventListener("change", function() {
+            if (purposecertSelect.value === "Others") {
+                otherPurposecertInput.style.display = "block";
+            } else {
+                otherPurposecertInput.style.display = "none";
+            }
+        });
+    });
 
 
-
-
-$('.upload-indigency').click(function (e) {
+    $(document).ready(function() {
+        displaytable();
+    $('.upload-indigency').click(function (e) {
     e.preventDefault();
     var voters = $('#voters').val();
     var name = $('#names_display').val();
@@ -230,19 +296,470 @@ $('.upload-indigency').click(function (e) {
         type: 'POST',
         data: formData,
         headers: {
-        'X-CSRF-TOKEN': csrfToken
-    },
+            'X-CSRF-TOKEN': csrfToken
+        },
         contentType: false,
         processData: false,
         success: function (response) {
             console.log(response);
-            // Handle success response
+            displaytable();
+            // Show success toast message
+            $('#display').text('successfully Requested');
+            $('.toast').removeClass('text-bg-danger').addClass('text-bg-success');
+            $('.toast-body').text('Request submitted successfully.');
+            $('.toast').toast('show');
+            
         },
         error: function (xhr, status, error) {
             console.error(xhr.responseJSON);
-            // Handle error response
+            var errorMessage = xhr.responseJSON.message;
+            // Show error toast message
+            $('#display').text('Please try again.');
+            $('.toast').removeClass('text-bg-success').addClass('text-bg-danger');
+            $('.toast-body').text(errorMessage);
+            $('.toast').toast('show');
+        }
+    });
+});
+$('.upload-bpermit').click(function (e) {
+    e.preventDefault();
+    var voters = $('.voters').val();
+    var name = $('#names_display_bpermit').val();
+    var copy = $('#copy_bpermit').val();
+    var bname = $('#bname').val();
+    var baddress = $('#baddress').val();
+    var fileInput = $('#requirements_bpermit')[0].files[0];
+    var formData = new FormData(); // Assuming your form is within the #modalBpermit modal
+    formData.append('voters', voters);
+    formData.append('name', name);
+    formData.append('copy', copy);
+    formData.append('bname', bname);
+    formData.append('baddress', baddress);
+    formData.append('requirements_bpermit', fileInput);
+    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: '{{ route("submit.business.permit") }}',
+        type: 'POST',
+        data: formData,
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        },
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            console.log(response);
+            displaytable();
+            $('#display').text('successfully Requested');
+            $('.toast').removeClass('text-bg-danger').addClass('text-bg-success');
+            $('.toast-body').text('Request submitted successfully.');
+            $('.toast').toast('show');
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr.responseJSON);
+            var errorMessage = xhr.responseJSON.message;
+            // Show error toast message
+            
+            $('#display').text('Please try again.');
+            $('.toast').removeClass('text-bg-success').addClass('text-bg-danger');
+            $('.toast-body').text(errorMessage);
+            $('.toast').toast('show');
+        }
+    });
+});
+$('.upload-cessation').click(function (e) {
+    e.preventDefault();
+    var voters = $('#voters_cessation').val();
+    var name = $('#names_display').val();
+    var copy = $('#copy_cessation').val();
+    var bname = $('#cbname').val();
+    var CEOname = $('#CEOname').val();
+    var cbaddress = $('#cbaddress').val();
+    var fileInput = $('#requirements_display')[0].files[0];
+    var formData = new FormData();
+    formData.append('voters', voters);
+    formData.append('name', name);
+    formData.append('copy_cessation', copy);
+    formData.append('bname', bname);
+    formData.append('CEOname', CEOname);
+    formData.append('cbaddress', cbaddress);
+    formData.append('requirements', fileInput);
+    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: '{{ route("submit.cessation") }}',
+        type: 'POST',
+        data: formData,
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        },
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            console.log(response);
+            displaytable();
+            $('#display').text('successfully Requested');
+            $('.toast').removeClass('text-bg-danger').addClass('text-bg-success');
+            $('.toast-body').text('Request submitted successfully.');
+            $('.toast').toast('show');
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr.responseJSON);
+            var errorMessage = xhr.responseJSON.message;
+            // Show error toast message
+            $('#display').text('Please try again.');
+            $('.toast').removeClass('text-bg-success').addClass('text-bg-danger');
+            $('.toast-body').text(errorMessage);
+            $('.toast').toast('show');
         }
     });
 });
 
+$('.upload-certifictae').click(function (e) {
+    e.preventDefault();
+    var voters = $('#voters_cert').val();
+    var name = $('#names_display_cert').val();
+    var copy = $('#copy_cert').val();
+    var purpose = $('#purposecert').val();
+    var otherpurpose = $('#otherpurposecert').val();
+    var fileInput = $('#requirements_cert')[0].files[0];
+    var formData = new FormData(); // Assuming your form is within the #exampleModal modal
+    formData.append('voters', voters);
+    formData.append('name', name);
+    formData.append('copy', copy);
+    formData.append('requirements', fileInput);
+    formData.append('purpose', purpose);
+    formData.append('otherpurpose', otherpurpose);
+    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: '{{ route("submit.certificate.request") }}',
+        type: 'POST',
+        data: formData,
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        },
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            console.log(response);
+            // Show success toast message
+            displaytable();
+            $('#display').text('successfully Requested');
+            $('.toast').removeClass('text-bg-danger').addClass('text-bg-success');
+            $('.toast-body').text('Request submitted successfully.');
+            $('.toast').toast('show');
+            $('#otherpurposecert').val('');
+
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr.responseJSON);
+            var errorMessage = xhr.responseJSON.message;
+            // Show error toast message
+            $('#display').text('Please try again.');
+            $('.toast').removeClass('text-bg-success').addClass('text-bg-danger');
+            $('.toast-body').text(errorMessage);
+            $('.toast').toast('show');
+        }
+    });
+});
+
+$('.upload-soloparent').click(function (e) {
+    e.preventDefault();
+    var voters = $('#voters_solo').val();
+    var name = $('#names_display_solo').val();
+    var copy = $('#copy_solo').val();
+    var fileInput = $('#requirements_solo')[0].files[0];
+    var selectedChildren = [];
+    $('#childdisplay input[type="checkbox"]').each(function() {
+        if ($(this).is(':checked')) {
+            selectedChildren.push($(this).val());
+        }
+    });
+    var formData = new FormData(); // Assuming your form is within the #exampleModal modal
+    formData.append('voters', voters);
+    formData.append('name', name);
+    formData.append('copy', copy);
+    formData.append('requirements', fileInput);
+    formData.append('selectedChildren', JSON.stringify(selectedChildren));
+
+    console.log(selectedChildren);
+    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: '{{ route("submit.soloparent.request") }}',
+        type: 'POST',
+        data: formData,
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        },
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            console.log(response);
+            // Show success toast message
+            displaytable();
+            $('#display').text('successfully Requested');
+            $('.toast').removeClass('text-bg-danger').addClass('text-bg-success');
+            $('.toast-body').text('Request submitted successfully.');
+            $('.toast').toast('show');
+            $('#otherpurposecert').val('');
+
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr.responseJSON);
+            var errorMessage = xhr.responseJSON.message;
+            // Show error toast message
+            $('#display').text('Please try again.');
+            $('.toast').removeClass('text-bg-success').addClass('text-bg-danger');
+            $('.toast-body').text(errorMessage);
+            $('.toast').toast('show');
+        }
+    });
+});
+
+$('.upload-ftj').click(function (e) {
+    e.preventDefault();
+    var voters = $('#voters_ftj').val();
+    var name = $('#names_display_ftj').val();
+    var copy = $('#copy_ftj').val();
+    var fileInput = $('#requirements_ftj')[0].files[0];
+    var type = $('#ftjtypes').val();
+    var pname = $('#pname').val();
+    var page = $('#page').val();
+    var paddress = $('#paddress').val();
+    var fileInputparent = $('#requirements_parents_ftj')[0].files[0];
+
+    var formData = new FormData(); // Assuming your form is within the #exampleModal modal
+    formData.append('voters', voters);
+    formData.append('name', name);
+    formData.append('copy', copy);
+    formData.append('requirements', fileInput);
+    formData.append('type', type);
+    formData.append('pname', pname);
+    formData.append('page', page);
+    formData.append('paddress', paddress);
+    formData.append('fileInputparent', fileInputparent);
+
+    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: '{{ route("submit.ftj.request") }}',
+        type: 'POST',
+        data: formData,
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        },
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            console.log(response);
+            // Show success toast message
+            displaytable();
+            $('#display').text('successfully Requested');
+            $('.toast').removeClass('text-bg-danger').addClass('text-bg-success');
+            $('.toast-body').text('Request submitted successfully.');
+            $('.toast').toast('show');
+            $('#otherpurposecert').val('');
+
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr.responseJSON);
+            var errorMessage = xhr.responseJSON.message;
+            // Show error toast message
+            $('#display').text('Please try again.');
+            $('.toast').removeClass('text-bg-success').addClass('text-bg-danger');
+            $('.toast-body').text(errorMessage);
+            $('.toast').toast('show');
+        }
+    });
+});
+
+
+var idInput;
+function displaytable(){
+    var dataTable = $('#myTable').DataTable();
+    $.ajax({
+        url: '{{ route("getData") }}',
+        type: 'GET',
+        success: function (response) {
+            console.log(response);
+            // Clear existing table data
+            dataTable.clear().draw();
+            var counter = 1;
+            var button;
+            
+            // Process the response and update the HTML table
+            $.each(response, function (key, value) {
+                if (Array.isArray(value)) {
+                    value.forEach(function (item) {
+                        
+                        if(item.status == "Cancelled"){
+                            button = $('<h4>').text('Cancelled').addClass('text-danger text-center'); 
+                        }else if(item.status == "Cancelled"){
+                            button = $('<h4>').text('Processing').addClass('text-warning text-center'); 
+                        }else if(item.status == "Ready To Claim"){
+                            button = $('<h4>').text('Ready To Claim').addClass('text-success text-center'); 
+                        }else if(item.status == "Claimed"){
+                            button = $('<h4>').text('Claimed').addClass('text-success text-center'); 
+                        }else if(item.status == "Declined"){
+                            button = $('<button>').text('Declined').addClass('btn btn-danger btn-lg d-grid gap-2 mx-auto'); 
+                        }
+                        else{
+                            var icon = $('<i>').addClass('bi bi-x-circle-fill'); // Create the icon element
+                            button = $('<button>').addClass('btn btn-danger btn-lg d-grid gap-2 mx-auto cancel-request').append(icon).attr('type', 'submit').click(function () {}); // Append the icon to the button
+                                                }   
+
+                       
+                        var formattedDate = formatDate(item.created_at);
+                        var formattedtimes = formattime(item.created_at);
+                        var formatDatecontrolls = formatDatecontroll(item.created_at);
+                        var controlNumber = getControlNumber(key, formatDatecontrolls, item.id);
+                        var buttonHtml = '<input type="hidden" class="row-id" value="' + item.id + '">' + '<input type="hidden" class="row-type" value="' + item.type + '">' + button.prop('outerHTML');
+                        var purpose = item.otherpurpose != null ? item.otherpurpose : item.purpose;
+                        idInput = item.id;
+                        if(key == "first_time_job_seeker"){
+                            purpose = item.type;
+                        }else if(key == "solo_parent"){
+                            purpose = item.type;
+                        }else if(key == "business_permit"){
+                            purpose = item.type;
+                        }else if(key == "business_cessation"){
+                            purpose = item.type;
+                        }
+                        dataTable.row.add([
+                            counter++, 
+                            controlNumber,
+                            formattedDate,
+                            formattedtimes,
+                            item.name,
+                            item.type,
+                            purpose,
+                            item.copy,
+                            buttonHtml
+                        ]).draw(false);
+                        
+                    });
+                    
+                }
+            });
+        },
+        error: function (xhr, status, error) {
+            console.error(error);
+        }
+    });
+}
+$(document).ready(function() {
+    // Attach click event handler to a parent element (e.g., #myTable)
+    $('#myTable').on('click', '.cancel-request', function (e) {
+        e.preventDefault();
+        var id = $(this).closest('tr').find('.row-id').val(); // Retrieve the ID from the hidden input field in the same row as the clicked button
+        var type= $(this).closest('tr').find('.row-type').val(); // Retrieve the ID from the hidden input field in the same row as the clicked button
+        console.log(id + " " + type);
+
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            url: '{{ route("cancel.request") }}',
+            type: 'POST',
+            data: { id: id,
+                    type: type
+             },
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            success: function (response) {
+                console.log(response);
+                // Reload table data after successful cancellation
+                displaytable();
+                // Show success toast message
+                $('#display').text('Request Cancelled');
+                $('.toast').removeClass('text-bg-danger').addClass('text-bg-success');
+                $('.toast-body').text('Request cancelled successfully.');
+                $('.toast').toast('show');
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseJSON);
+                var errorMessage = xhr.responseJSON.error;
+                // Show error toast message
+                $('#display').text('Please try again.');
+                $('.toast').removeClass('text-bg-success').addClass('text-bg-danger');
+                $('.toast-body').text(errorMessage);
+                $('.toast').toast('show');
+            }
+        });
+    });
+});
+
+// Function to generate control number based on table and date
+function getControlNumber(table, date, id) {
+    var prefix = '';
+    switch (table) {
+        case 'indigency_requests':
+            prefix = 'BI';
+            break;
+        case 'certificate':
+            prefix = 'CERT';
+            break;
+        case 'business_permit':
+            prefix = 'BP';
+            break;
+        case 'business_cessation':
+            prefix = 'BC';
+            break;
+        case 'first_time_job_seeker':
+            prefix = 'FTJ';
+            break;
+        case 'solo_parent':
+            prefix = 'SP';
+            break;
+        default:
+            prefix = 'UNKNOWN';
+            break;
+    }
+    return prefix + '_' + date + '_' + id;
+}
+
+});
+function formatDate(dateString) {
+    var date = new Date(dateString);
+    var options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+}
+function formattime(dateString) {
+    var date = new Date(dateString);
+    var hour = date.getHours().toString().padStart(2, '0'); // Adding leading zero
+    var minute = date.getMinutes().toString().padStart(2, '0'); // Adding leading zero
+    var second = date.getSeconds().toString().padStart(2, '0'); // Adding leading zero
+    var ampm = (hour >= 12) ? 'PM' : 'AM';
+    hour = (hour % 12 === 0) ? 12 : hour % 12; // Convert to 12-hour format
+    return hour + ':' + minute + ':' + second + ' ' + ampm;
+}
+
+function formatDatecontroll(dateString) {
+    var date = new Date(dateString);
+    var month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding leading zero
+    var day = date.getDate().toString().padStart(2, '0'); // Adding leading zero
+    var year = date.getFullYear();
+    return month + day + year;
+}
+$(document).ready(function() {
+    $('.logout-btn').click(function(e) {
+        e.preventDefault(); // Prevent default link behavior
+
+        // Make an AJAX request to the logout endpoint
+        $.ajax({
+            url: '/logout',
+            type: 'POST',
+            dataType: 'json',
+            success: function(response) {
+                // Handle success response
+                console.log(response.message);
+                // Redirect to homepage or do other actions if needed
+                window.location.href = '/';
+            },
+            error: function(xhr, status, error) {
+                // Handle error response
+                console.error(xhr.responseText);
+                // Redirect to homepage or do other actions if needed
+                window.location.href = '/';
+            }
+        });
+    });
+});
+    
         </script>

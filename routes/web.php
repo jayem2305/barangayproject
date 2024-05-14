@@ -16,6 +16,8 @@ use App\Http\Controllers\CertificatesController;
 Route::middleware(['web'])->group(function () {
     // Routes that render HTML views
     Route::get('/User', [UserController::class, 'index'])->name('user.index');
+    Route::get('/User/forum', [UserController::class, 'forum'])->name('user.forum');
+    Route::get('/User/aboutus', [UserController::class, 'aboutus'])->name('user.aboutus');
     Route::get('/User/events', [UserController::class, 'event'])->name('user.events');
     Route::get('/User/profile', [UserController::class, 'profile'])->name('user.profile');
     Route::get('/User/profile/display', [UserController::class, 'profile_user'])->name('user.profile_user');
@@ -28,6 +30,26 @@ Route::middleware(['web'])->group(function () {
     Route::get('/User/certificate', [UserController::class, 'certificate'])->name('user.certificate');
     Route::post('User/certificate/indigency', [UserController::class, 'submitRequestindignecy'])->name('submit.indigency.request');
     Route::get('/User/certificate/get', [UserController::class, 'getRelatedData'])->name('related-data');
+    Route::post('/User/certificate/businesspermit', [UserController::class, 'submitBusinessPermit'])->name('submit.business.permit');
+    Route::post('/submit-cessation', [UserController::class, 'submitCessation'])->name('submit.cessation');
+    Route::post('User/certificate/Cert', [UserController::class, 'submitRequestcertificate'])->name('submit.certificate.request');
+    Route::post('User/certificate/soloparent', [UserController::class, 'submitRequestsoloparent'])->name('submit.soloparent.request');
+    Route::post('User/certificate/FTJ', [UserController::class, 'submitRequestftj'])->name('submit.ftj.request');
+    Route::get('/User/getData', [UserController::class, 'getData'])->name('getData');
+    Route::post('/User/cancel-request', [UserController::class, 'cancelRequest'])->name('cancel.request');
+    Route::post('/User/forum/post',  [UserController::class, 'forumpost'])->name('Admin.forumpost.user');
+    Route::get('/User/forum/data', [UserController::class, 'getForumData'])->name('User.forum.data');
+    Route::get('/User/getInfos',  [UserController::class, 'getInfos'])->name('getInfos');
+    Route::get('/User/getActiveOfficials', [UserController::class, 'getActiveOfficials'])->name('getActiveOfficials');
+    Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+
+
+
+
+
+
+
+
 
 
 

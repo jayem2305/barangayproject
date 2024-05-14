@@ -1,49 +1,44 @@
-@extends('layouts.user')
+@extends('layouts.aboutusheader')
 
 @section('title', 'Barangay 781 Zone 85')
 
 @section('content')
-
 <body style="background-color: #E8E6E6;">
     <!-- Spinner Start -->
     <div id="spinner"
     class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
     <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
 </div>
-    <!-- Navbar Start -->
-    <div class=" bg-transparent sticky-top">
-        <nav class="navbar navbar-expand-lg p-lg-0"style="background-color: #1C2035;">
-            <button type="button" class="navbar-toggler me-0" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                 <span class="navbar-toggler-icon " ></span>
-            </button>
-                <div class="collapse navbar-collapse " id="navbarCollapse">
-                    <div class="navbar-nav text">
-                    <a href="../User" class="nav-item nav-link text-white"> 
-                     <img src="../pic/nav.png" alt="Logo" width="400" height="70" class="d-inline-block align-text-top">
+<!-- Navbar Start -->
+<div class=" bg-transparent sticky-top">
+    <nav class="navbar navbar-expand-lg p-lg-0"style="background-color: #1C2035;">
+        <button type="button" class="navbar-toggler me-0" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon " ></span>
+        </button>
+        <div class="collapse navbar-collapse " id="navbarCollapse">
+            <div class="navbar-nav text">
+                <a href="../User" class="nav-item nav-link text-white"> 
+                    <img src="../pic/nav.png" alt="Logo" width="400" height="70" class="d-inline-block align-text-top">
+                </a>
+            </div> 
+            <div class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <a href="../User/events" class="nav-item nav-link text-white"><i class="bi bi-calendar2-event-fill"></i> Events </a>
+                <a href="../User/certificate" class="nav-item nav-link text-white"><i class="bi bi-file-earmark-text-fill"></i> My Certificates</a>
+                <a href="../User/aboutus" class="nav-item nav-link text-primary"><i class="bi bi-info-circle-fill"></i> About us </i></a>
+                <li class="dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-gear-fill"></i> Settings
                     </a>
-                    </div> 
-                    <div class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <a href="../User/events" class="nav-item nav-link text-primary"><i class="bi bi-calendar2-event-fill"></i> Events </a>
-                    <a href="../User/certificate" class="nav-item nav-link text-white"><i class="bi bi-file-earmark-text-fill"></i> My Certificates</a>
-                    <a href="../User/aboutus" class="nav-item nav-link text-white"><i class="bi bi-info-circle-fill"></i> About us </i></a>
-                    <li class="dropdown">
-    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    <i class="bi bi-gear-fill"></i> Settings
-    </a>
-    <ul class="dropdown-menu" style="max-height: 300px; overflow-y: auto;">
-        <li><a class="dropdown-item" href="../User/forum"><i class="bi bi-info-circle-fill"></i> Forum</a></li>
-        <li><a class="dropdown-item" href="../User/profile"><i class="bi bi-person-circle"></i> Profile</a></li>
-        <li><a class="dropdown-item" href="/" class="nav-item nav-link text-white"><i class="bi bi-door-closed"></i> Logout</a></li>
-    </ul>
-</li>
-
-                   
-                </div>
+                    <ul class="dropdown-menu" style="max-height: 300px; overflow-y: auto;">
+                        <li><a class="dropdown-item text-bg-white" href="../User/forum"><i class="bi bi-info-circle-fill"></i> Forum</a></li>
+                        <li><a class="dropdown-item" href="../User/profile"><i class="bi bi-person-circle"></i> Profile</a></li>
+                        <li><a class="dropdown-item" href="/" class="nav-item nav-link text-white"><i class="bi bi-door-closed"></i> Logout</a></li>
+                    </ul>
+                </li>
             </div>
-        </nav>
-    </div>
-<!-- Navbar End -->
-
+        </div>
+    </nav>
+</div>
 <div class="container-fluid px-0 mb-5">
     <section id="hero" class="d-flex align-items-center" style=" max-width: 100%;
     height: auto;
@@ -53,41 +48,60 @@
     opacity: .8;
     position: relative;">
     <div class="container position-relative" data-aos="fade-up" data-aos-delay="500">
-        <h1 class="text-center text-white text-uppercase"style="font-size: 5rem;">Events</h1>
+        <h1 class="text-center text-white text-uppercase"style="font-size: 5rem;">About Us</h1>
     </div>
 </section>
 </div>
 
-    </div>
-</section>
-</div>
-<div class="container-fluid px-0 mb-5">
-    <div class="row">
-        <div class="col-lg-7">
-        <h4 class="text-primary">Project Accomplishments </h4>
-            <div class="card">
-                <div class="card-body">
-                    <div class="row" id="displayprojects">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-5">
-        <h4 class="text-primary">News and Events</h4>
-            <div class="card">
-                <div class="card-body">
-                    <div class="row" id="displayevent">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <!-- Features Start -->
+<!-- statistic start -->
+<div class="container-fluid col-lg-12" style="margin-top:-2rem;" >
+    <div class="row g-3" >
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <h3>Mission</h3>
+                    <div id="mission"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <h3>Vision</h3>
+                    <div id="vision"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="card mb-3" >
+                <div class="row g-0">
+                    <div class="col-md-4">
+                    <img src="..." class="img-fluid rounded-start" alt="..." id="logo">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h3>History</h3>
+                            <div id="history"></div> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center mx-auto wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+            <p class="fs-5 fw-medium text-primary">Our Barangay Officials</p>
+            <h1 class="display-5 mb-5">Our Expert People Ready to Help You</h1>
+        </div>
+        <div class="row g-4" id="display_officials">
+    
+        </div>
+    </div>
+</div> 
+    </div>
+</div>
 
-<!-- Footer Start -->
 <div class="container-fluid bg-dark footer mt-5 py-5 wow fadeIn" data-wow-delay="0.1s">
     <div class="container py-5">
         <div class="row g-5">
@@ -142,5 +156,4 @@
                     <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i
                         class="bi bi-arrow-up"></i></a>
 
-
-@endsection
+        @endsection

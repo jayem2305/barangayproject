@@ -4,35 +4,42 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateFtjRequestsTable extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * @return void
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('indigency_requests', function (Blueprint $table) {
+        Schema::create('ftj_requests', function (Blueprint $table) {
             $table->id();
             $table->string('email');
             $table->string('reg_num');
             $table->foreign('reg_num')->references('reg_number')->on('residents')->onDelete('cascade');
-            $table->string('type')->default('Barangay Indigency');
+            $table->string('type');
             $table->string('voters');
             $table->string('name');
             $table->string('copy');
             $table->string('requirements');
-            $table->string('purpose');
-            $table->string('otherpurpose')->nullable();
+            $table->string('parentrequirements')->nullable();
+            $table->string('pname')->nullable();
+            $table->string('paddress')->nullable();
+            $table->string('page')->nullable();
             $table->string('status')->default('Pending');
+
             $table->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('indigency_requests');
+        Schema::dropIfExists('ftj_requests');
     }
-};
+}

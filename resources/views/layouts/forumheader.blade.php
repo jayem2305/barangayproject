@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <linkhref="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&family=Roboto:wght@500;700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&family=Roboto:wght@500;700&display=swap"
     rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
@@ -56,36 +56,7 @@
    background-position: 300% 0;
 }
 }
-.toast-container {
-        z-index: 9999;
 
-    }
-    .circle-number-color {
-        display: inline-block;
-        width: 40px;
-        height: 40px;
-        line-height: 40px;
-        text-align: center;
-        border-radius: 50%;
-        background-color: #1C2035; /* Dark background color */
-        color: #fff; /* Text color */
-        margin-right: 10px; /* Adjust spacing */
-    }
-
-    .circle-number {
-        display: inline-block;
-        width: 40px;
-        height: 40px;
-        line-height: 40px;
-        text-align: center;
-        border-radius: 50%;
-        border: 1px solid #1C2035; /* Set border color */
-        color: #1C2035; /* Text color */
-        margin-right: 10px; /* Adjust spacing */
-    }
-    
-</style>
-<style>
     .valid-secondary::before {
         content: "\f05a"; /* Unicode for the Font Awesome info-circle icon */
         font-family: "Font Awesome 5 Free";
@@ -94,12 +65,11 @@
          /* Adjust spacing as needed */
     }
 </style>
-
 </head>
   <body>
    
 
-   @yield("contentAdmin")
+   @yield("content")
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -108,17 +78,136 @@
                     <script src="../lib/waypoints/waypoints.min.js"></script>
                     <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
                     <script src="../lib/lightbox/js/lightbox.min.js"></script>
-                 
-             
-
 
                     <!-- Template Javascript -->
                     <script src="../js/main.js"></script>
+                    <script>
+                        $(document).ready(function(){
+                            fetchForumData();
+                        var selectedValue; // Define selectedValue outside of event handlers
+var selectedAge = null;
+var selectedImageFilename = null;
+var household = null;
+$('.names_display').change(function() {
+    // Get the selected option's value and text
+    selectedValue = $(this).val(); // Update the value of selectedValue
+    var selectedText = $(this).find('option:selected').text();
     
-<script>
-$(document).ready(function(){
+    // Update the text of a separate element to display the selected option
+    $('.selected_option_display').text(selectedText);
+});
+
+                        $('.names_display').click(function() {
+    $.ajax({
+        url: '{{ route("related-data") }}',
+        type: 'GET',
+        success: function(data) {
+            // Clear existing options before populating new ones
+            $('.names_display').empty();
+            // Add a default option
+            // Check if data is not empty
+            if (data.length > 0) {
+                // Loop through fetched data and append options
+                $.each(data, function(index, fullName) {
+                    $('.names_display').append($('<option>', {
+                        value: fullName.name,
+                        text: fullName.name
+                    }));
+                    if (fullName.name === selectedValue) {
+                        selectedAge = fullName.age;
+                        selectedImageFilename = fullName.profile2x2;
+                    }
+                });
+            } else {
+                console.log('No data found');
+            }
+           
+            
+            // If there's a selected value, set it as selected
+            if (selectedValue) {
+                $('.names_display').val(selectedValue);
+                var imagePath = selectedImageFilename ? '../uploads/' : '../residentprofile/';
+           // console.log(selectedImageFilename);
+            $('#displayimage').attr('src', imagePath + selectedImageFilename);
+            household = selectedImageFilename;
+                $('#picid').val(household);
+            }
+           
+           
+            $('#childdisplay').empty();
+            if (selectedImageFilename) {
+                $.each(data, function(index, fullName) {
+            if (fullName.profile2x2) {
+                var imageUrl = '../uploads/' + fullName.profile2x2; // Update the path to your image directory
+                var imageElement = $('<img>', {
+                    src: imageUrl,
+                    alt: fullName.name + ' Image',
+                    class: 'img-thumbnail mx-auto d-block',
+                    height: '150', // Set the height here (e.g., '100px', '50%', etc.)
+                    width: '150' // Set the width here (e.g., '100px', '50%', etc.)
+                });
+                var labelElement = fullName.name;
+                var checkboxElement = $('<input>', {
+                    type: 'checkbox',
+                    text: fullName.name,
+                    value: fullName.name,
+                    class: 'form-check-input mt-0'
+                });
+                var colDiv = $('<div>', {
+                    class: 'col-3 text-center'
+                }).append(imageElement,checkboxElement,labelElement);
+                $('#childdisplay').append(colDiv);
+            }
+        });
+            } else {
+                // If no image filename is available, clear the childdisplay div
+                $('#childdisplay').empty();
+            }
+        
+
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+        }
+    });
+});
+function fetchForumData(forumId) {
+   // console.log(forumId);
+    $.ajax({
+        url: "{{ route('User.forum.data') }}",
+        type: "GET",
+        data: { id: forumId },
+        success: function(response) {
+            //console.log(response);
+            var description;
+                if(response.description == null){
+                description = " ";
+            }else{
+                description = response.forums.description;
+            }
+            if (response.hasOwnProperty('forums')) {
+                displayForumData(response.forums); // Display forum data
+                    var selectedForum = response.forums.find(function(forum) {
+                        return forum.id === forumId; // Assuming forumId is the ID of the selected forum
+                    });
+                    if (selectedForum) {
+                        $('#forumTopic').html('<h1 class="text-capitalize">' + selectedForum.topic+ '</h1>');
+                        $('#forumDescription').html('<p class="text-capitalize">' + selectedForum.description + '</p>');
+                        $('#labelname').html('<p class="text-capitalize">' + selectedForum.name + '</p>');
+                        $('#inputform').html('<input type="hidden" value="' + selectedForum.id + '" id="id_form" name="id_form">');
+                        $('#forumModal').modal('show'); // Show the modal
+                    } 
+            }
+        },
+        error: function(xhr, status, errorThrown) {
+            console.error('Error fetching forum data:', xhr, status, errorThrown);
+        }
+    });
+}
+
+
     $(document).on('click', '.btn-forum', function () {
-        var name = "Barangay 781 Zone 85 (Admin)";
+        var name = $('#names_display').val();
         var topic = $('#topic').val();
         var description = $('#description').val();
         var formData = new FormData();
@@ -131,7 +220,7 @@ $(document).ready(function(){
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
         $.ajax({
-            url: "{{ route('Admin.forumpost') }}",
+            url: "{{ route('Admin.forumpost.user') }}",
             type: "POST",
             headers: {
                 'X-CSRF-TOKEN': csrfToken
@@ -141,7 +230,7 @@ $(document).ready(function(){
             processData: false,
             success: function(result) {
                 console.log('AJAX request successful:', result);
-                fetchForumData();
+               fetchForumData();
             //updateForumButtons();
 
                 $('#topic').removeClass('is-invalid');
@@ -164,148 +253,9 @@ $(document).ready(function(){
             }
             }
         });
-    });
+   }); 
 
-// Add event listener for modal trigger
-$('.forum-view').click(function() {
-    var forumId = $(this).data('id');
-    fetchForumData(forumId); // Corrected function name
-});
-
-// Function to fetch forum details
-function fetchForumData(forumId) {
-    $.ajax({
-        url: "{{ route('admin.forum.data') }}",
-        type: "GET",
-        data: { id: forumId },
-        success: function(response) {
-            //updateForumButtons();
-           
-            if (response.hasOwnProperty('topic') && response.hasOwnProperty('name')) {
-                var description = "";
-            if(response.description == null){
-                description = " ";
-            }else{
-                description = response.description;
-            }
-                $('#forumTopic').html('<h1 class="text-capitalize">' + response.topic + '</h1>');
-                $('#forumDescription').html('<p class="text-capitalize">' + description + '</p>');
-                $('#labelname').html('<p class="text-capitalize">' + response.name + '</p>');
-                $('#inputform').html('<input type="hidden" value=' + response.id + ' id="id_form" name="id_form">');
-                $('#forumModal').modal('show'); // Show the modal
-            } else if (response.hasOwnProperty('forums')) {
-                displayForumData(response.forums); // Display forum data
-            }
-        },
-        error: function(xhr, status, errorThrown) {
-            console.error('Error fetching forum data:', xhr, status, errorThrown);
-        }
-    });
-    
-}
-
-// Click event handler for the "Trash" button
-// Click event handler for the "Trash" button
-$(document).on('click', '.trash-button', function(){
-    var button = $(this);
-    var forumId = button.data('forum-id');
-
-    // Send Ajax request to update forum status
-    $.ajax({
-        url: "/forums/" + forumId + "/archive",
-        type: "POST",
-        data: {_token: '{{ csrf_token() }}'}, // CSRF protection
-        success: function(response){
-            // Handle success response
-            console.log(response.message);
-            location.reload();
-        },
-        error: function(xhr, status, error){
-            // Handle error
-            console.error(xhr.responseText);
-        }
-    });
-});
-var buttonsUpdated = false;
-function updateForumButtons() {
-    // Send Ajax request to fetch forum statuses
-    $.ajax({
-        url: "{{ route('forums.statuses') }}",
-        type: "GET",
-        dataType: "json",
-        success: function(response){
-            // Loop through each forum status
-            $.each(response, function(forumId, status) {
-                // Check if the forum is archived
-                if (status === 'archived') {
-                    // Remove the "View" button
-                    $('.forum-view[data-id="' + forumId + '"]').remove();
-                    
-                    // Remove the "Trash" button
-                    $('.trash-button[data-forum-id="' + forumId + '"]').remove();
-
-                    // Create the "Restore" button
-                    var restoreButton = '<button type="button" class="btn btn-warning btn-lg restore-button" data-forum-id="' + forumId + '"><i class="bi bi-arrow-clockwise"></i> Restore</button>';
-                    
-                    // Append the "Restore" button to the container
-                    $('#restore-button-container' + forumId + '').append(restoreButton);
-                }
-            });
-            buttonsUpdated = true;
-
-        },
-        error: function(xhr, status, error){
-            // Handle error
-            console.error(xhr.responseText);
-        }
-    });
-}
-
-// Call the function when the document is ready
-$(document).ready(function() {
-    updateForumButtons();
-});
-if (!buttonsUpdated) {
-    updateForumButtons();
-}
-
-$(document).on('click', '.restore-button', function(){
-    var button = $(this);
-    var forumId = button.data('forum-id');
-
-    // Send Ajax request to restore forum
-    $.ajax({
-        url: "/forums/" + forumId + "/restore",
-        type: "POST",
-        data: {_token: '{{ csrf_token() }}'}, // CSRF protection
-        success: function(response){
-            // Handle success response
-            console.log(response.message);
-            
-            // Hide the "Restore" button
-            button.remove();
-
-            // Show the "View" button
-            $('.forum-view[data-id="' + forumId + '"]').show();
-            
-            // Show the "Trash" button
-            $('.trash-button[data-forum-id="' + forumId + '"]').show();
-
-            // Update the status in the UI
-            $('#status' + forumId).text('active');
-            location.reload();
-        },
-        error: function(xhr, status, error){
-            // Handle error
-            console.error(xhr.responseText);
-        }
-    });
-});
-
-
-
-    // Function to display forum data in the HTML
-    function displayForumData(forums) {
+   function displayForumData(forums) {
         var forumHTML = "";
         forums.forEach(function(forum) {
             var createdDate = new Date(forum.created_at);
@@ -333,12 +283,13 @@ $(document).on('click', '.restore-button', function(){
             }else{
                 description = forum.description;
             }
-            forumHTML += '<div class="col-lg-10"><h1 class="card-title">' + forum.topic + '</h1>';
+            forumHTML += '<div class="card" id="card' + forum.id + '">';
+        forumHTML += '<div class="row card-body">';
+        forumHTML += '<div class="col-lg-10"><h1 class="card-title">' + forum.topic + '</h1>';
         forumHTML += '<p class="card-text">' + description + '</p></div>';
         forumHTML += '<div class="col-lg-2 " >';
         forumHTML += '<div class="d-grid gap-2 d-md-flex justify-content-md-end" >';
         forumHTML += '<div id="restore-button-container' + forum.id + '"></div><button type="button" class="btn btn-warning btn-lg forum-view" data-id="' + forum.id + '" data-bs-toggle="modal" data-bs-target="#forumModal"><i class="bi bi-eye-fill"></i></button>';
-        forumHTML += '<button type="button" class="btn btn-danger btn-lg trash-button" data-forum-id="' + forum.id + '"><i class="bi bi-trash-fill"></i></button>';
         forumHTML += '</div>';
         forumHTML += '<p class="card-text" style="margin-top:.5rem;margin-left:4rem;"><small class="text-muted">' + timeAgo + '</small></p></div></div>';
         forumHTML += '</div>';
@@ -356,17 +307,13 @@ $(document).on('click', '.restore-button', function(){
         console.log("Forum ID:", forumId);
     });
     }
-
-    // Call fetchForumData when the page loads
     fetchForumData();
-
-
-  $(document).on('click', '.btn-comment', function () {
+    $(document).on('click', '.btn-comment', function () {
     var comment = $('#comment').val();
     var id_form = $('#id_form').val();
-    var adminname = $('#adminname').val();
-    var profile = "../pic/brgy_logo.png";
-
+    var adminname = $('#names_display').val();
+    var profile =  $('#picid').val();
+console.log(id_form);
     $.ajax({
         url: "{{ route('admin.forum.store') }}",
         type: 'POST',
@@ -388,8 +335,7 @@ $(document).on('click', '.restore-button', function(){
             console.error('Error posting comment:', errorThrown);
         }
     });
-});
-// Function to fetch and display comments
+}); 
 function displayComments(forumId) {
     $.ajax({
         url: "/comments/" + forumId,
@@ -400,10 +346,13 @@ function displayComments(forumId) {
             
             if (comments) {
                 comments.forEach(function(comment) {
+                    var imagePath = comment.profile ? '../uploads/' : '../residentprofile/';
+                    var imageUrl = imagePath + (comment.profile ? comment.profile : 'default-image.png'); // Replace 'default-image.png' with the default image path if needed
                     commentsHtml += '<div class="row">';
                     commentsHtml += '<input type="hidden" value="' + comment.id + '" class="idcomments">';
-                    commentsHtml += '<div class="profiles col-lg-1 col-sm-1 col-xs-1 col-md-1"><img src='+ comment.profile + ' class="rounded-circle me-3" alt="Profile Picture" width="50" height="50"></div>';
-                    commentsHtml +=  '<div class="profiles col-lg-11 col-sm-11 col-xs-11 md-lg-11"><div class="card" style="background-color:#D9D9D9;"> <div class="card-body"><b>'+ comment.name + "</b><br>" + comment.comment + '<br><br><button type="button" class="btn btn-success btn-sm reply-btn" data-comment-id="' + comment.id + '">Reply</button><hr>';
+                    commentsHtml += '<div class="profiles col-lg-1 col-sm-1 col-xs-1 col-md-1"><img src='+ imageUrl +' class="rounded-circle me-3" alt="Profile Picture" width="50" height="50"></div>';
+                    commentsHtml +=  '<div class="profiles col-lg-11 col-sm-11 col-xs-11 md-lg-11"><div class="card" style="background-color:#D9D9D9;"> <div class="card-body"><b>'+ comment.name + "</b><br>" + comment.comment + '<br><br>';
+                    commentsHtml += '<button type="button" class="btn btn-success btn-sm reply-btn" data-comment-id="' + comment.id + '" data-replyname="' + comment.name + '" data-replyimage="' + imageUrl + '">Reply</button>';
                     commentsHtml += '<div style="width: 58rem; height: 20rem;overflow-y: auto;overflow-x: hidden;"><div class="replydisplay" data-comment-id="' + comment.id + '"><br></div></div></div></div></div>'; // Create a placeholder for replies
                     commentsHtml += '<div class="time col-lg-12 text-xl-end text-body-secondary fw-lighter">' + formatTime(comment.created_at) + '</div>';
                     commentsHtml += '</div>';
@@ -422,17 +371,6 @@ function displayComments(forumId) {
         }
     });
 }
-
-$(document).ready(function() {
-    var forumId = $('#id_form').val(); // Assuming you have a hidden input field with forum ID
-    displayComments(forumId);
-    
-});
-function formatTime(timestamp) {
-    return moment(timestamp).fromNow();
-}
-
-$(document).ready(function() {
     var forumId = $('#id_form').val(); // Assuming you have a hidden input field with forum ID
     displayComments(forumId);
     
@@ -443,13 +381,13 @@ $(document).ready(function() {
 
         // Get the comment ID
         var commentId = $(this).data('comment-id');
-
+        var replyNames = $(this).data('replyname');
+        var replyImages = $(this).data('replyimage');
         // Create and append the input tag and submit button
         var replyFormHtml = '<div class="row"><div class="reply-form mb-3 d-grid gap-2 d-md-flex justify-content-md-end col-lg-12">';
         replyFormHtml += '<input type="text" class="form-control reply-input" placeholder="Type your reply" autofocus>';
-        replyFormHtml += '<button type="button" class="btn btn-primary submit-reply" data-comment-id="' + commentId + '">Submit</button>';
+        replyFormHtml += '<button type="button" class="btn btn-primary submit-reply" data-comment-id="' + commentId + '"data-name-id="' + replyNames + '"data-pic-id="' + replyImages + '">Submit</button>';
         replyFormHtml += '</div></div>';
-
         // Append the reply form below the clicked "Reply" button's parent element
         $(this).parent().append(replyFormHtml);
         $(this).parent().siblings('.replydisplay').before(replyFormHtml);
@@ -460,8 +398,9 @@ $(document).ready(function() {
         // Get the reply text and comment ID
         var replyText = $(this).siblings('.reply-input').val();
         var commentId = $(this).data('comment-id');
-        var replyname = "Barangay 781 Zone 85 (Admin)";
-        var replyimage = "../pic/brgy_logo.png";
+        var replyname = $(this).data('name-id');
+        var replyimage = $(this).data('pic-id');
+        //console.log(replyimage);
 
         // Make an AJAX request to save the reply
         $.ajax({
@@ -488,7 +427,9 @@ $(document).ready(function() {
         // Optionally, you can remove the reply form after submission
         $(this).closest('.reply-form').remove();
     });
-});
+    function formatTime(timestamp) {
+    return moment(timestamp).fromNow();
+}
 function displayReplies(commentid) {
     $.ajax({
         url: "/reply/" + commentid,
@@ -521,10 +462,6 @@ function displayReplies(commentid) {
         }
     });
 }
-
 });
 
-
-</script>
-</body>
-</html>
+              </script>

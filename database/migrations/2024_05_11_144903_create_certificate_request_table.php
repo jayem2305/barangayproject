@@ -11,14 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('forums', function (Blueprint $table) {
+        Schema::create('certificate_requests', function (Blueprint $table) {
             $table->id();
+            $table->string('email');
             $table->string('reg_num');
             $table->foreign('reg_num')->references('reg_number')->on('residents')->onDelete('cascade');
+            $table->string('type')->default('Barangay Certificate');
+            $table->string('voters');
             $table->string('name');
-            $table->string('topic');
-            $table->text('description')->nullable();
-            $table->string('status')->default('active');
+            $table->string('copy');
+            $table->string('requirements');
+            $table->string('purpose');
+            $table->string('otherpurpose')->nullable();
+            $table->string('status')->default('Pending');
             $table->timestamps();
         });
     }
@@ -28,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('forums');
+        Schema::dropIfExists('certificate_request');
     }
 };

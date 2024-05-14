@@ -17,8 +17,13 @@ use App\Rules\UniqueNameCombinationaddmember;
 use App\Rules\UniqueNameCombinationupdate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-
-
+use App\Models\BusinessPermit;
+use App\Models\BusinessCessation;
+use App\Models\CertificateRequest;
+use App\Models\SoloparentRequest;
+use App\Models\FTJRequest;
+use App\Models\Official;
+use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
     public function index(Request $request)
@@ -29,7 +34,8 @@ class UserController extends Controller
     Log::info('User ID retrieved:', ['userId' => $userId]);
     
     if (!$userId) {
-        return response()->json(['error' => 'User ID not provided'], 400);
+        // Redirect the user to the specified URL
+        return redirect('http://127.0.0.1:8000');
     }
 
     // Store user ID in session for future requests
@@ -39,7 +45,9 @@ class UserController extends Controller
     $user = Resident::where('reg_number', $userId)->first();
 
     if (!$user) {
-        return response()->json(['error' => 'User not found'], 404);
+        return redirect('http://127.0.0.1:8000');
+    }else{
+        return view('user.index');
     }
 
     // Return JSON or view based on request
@@ -53,12 +61,47 @@ class UserController extends Controller
 
     public function event(Request $request)
     {
-    return view('user.events');
+        $userId = $request->session()->get('userId');
+        if (!$userId) {
+            // Redirect the user to the specified URL
+            return redirect('http://127.0.0.1:8000');
+        }else{
+            return view('user.events');
+        }
+    //return view('user.events');
     }
-
-    public function profile()
+    public function forum(Request $request)
     {
-        return view('user.profile');
+        $userId = $request->session()->get('userId');
+        if (!$userId) {
+            // Redirect the user to the specified URL
+            return redirect('http://127.0.0.1:8000');
+        }else{
+            return view('user.forum');
+        }
+        
+    }
+    public function aboutus(Request $request)
+    {
+        $userId = $request->session()->get('userId');
+        if (!$userId) {
+            // Redirect the user to the specified URL
+            return redirect('http://127.0.0.1:8000');
+        }else{
+            return view('user.aboutus');
+        }
+    //return view('user.events');
+    }
+    public function profile(Request $request)
+    {
+        $userId = $request->session()->get('userId');
+        if (!$userId) {
+            // Redirect the user to the specified URL
+            return redirect('http://127.0.0.1:8000');
+        }else{
+            return view('user.profile');
+        }
+        //return view('user.profile');
     }
     public function profile_user(Request $request)
     {
@@ -492,9 +535,16 @@ public function update(Request $request) {
         return response()->json(['error' => 'User not found'], 404);
     }
 }
-public function certificate()
+public function certificate(Request $request)
 {
-return view('user.certificate');
+    $userId = $request->session()->get('userId');
+        if (!$userId) {
+            // Redirect the user to the specified URL
+            return redirect('http://127.0.0.1:8000');
+        }else{
+            return view('user.certificate');
+
+        }
 }
 
 public function submitRequestindignecy(Request $request)
@@ -511,11 +561,32 @@ public function submitRequestindignecy(Request $request)
     // Validate the incoming request data
     $validatedData = $request->validate([
         'voters' => 'required',
-        'name' => 'required',
-        'copy' => 'required|min:0|max:5',
-        'purpose' => 'required',
-        'otherpurpose' => 'nullable',
+        'name' => ['required', function ($attribute, $value, $fail) {
+            if ($value === 'undefined') {
+                $fail($attribute.' is invalid.');
+            }
+        }],
+    
+        'copy' => 'required|min:1|max:5',
+        'purpose' => ['required', function ($attribute, $value, $fail) {
+        if ($value === 'null') {
+            $fail($attribute.' is invalid.');
+        }
+    }],
+        'otherpurpose' => 'nullable|regex:/^[a-zA-Z\s\p{P}0-9]+$/u',
         'requirements' => $request->hasFile('requirements') ? 'required|mimes:pdf|max:50000' : ''
+    ], [
+        'voters.required' => 'Voters field is required.',
+        'name.required' => 'Name field is required.',
+        'copy.required' => 'Copy field is required.',
+        'copy.min' => 'Copy field must be at least 0.',
+        'copy.max' => 'Copy field must not exceed 5.',
+        'purpose.required' => 'Purpose field is required.',
+        'otherpurpose' => ' Purpose field is required.',
+        'otherpurpose.regex' => 'Other purpose field must contain only letters, spaces, special characters, and numbers.',
+        'requirements.required' => 'Requirements field is required.',
+        'requirements.mimes' => 'Requirements must be a PDF file.',
+        'requirements.max' => 'Requirements file size must not exceed 50MB.'
     ]);
 
     // Save the data to the database
@@ -548,7 +619,9 @@ public function getRelatedData(Request $request)
 
     // Assuming you have a relationship between Resident and Members
     // Assuming 'members' is the name of the relationship method
-    $members = Member::where('reg_num', $regNumber)->get();
+    $members = Member::where('reg_num', $regNumber)
+                            ->where('Status', 'Resident')
+                            ->get();
     Log::info('Members ID retrieved:', ['userId' => $members]);
 
 
@@ -556,18 +629,500 @@ public function getRelatedData(Request $request)
     $fullNames = [];
 
     // Add full name of resident
-    $fullNames[] = $resident->lname . ', ' . $resident->fname . ' ' . $resident->mname . ' ' . $resident->ext;
+    $fullNames[] = [
+    'name' =>  $resident->lname . ', ' . $resident->fname . ' ' . $resident->mname . ' ' . $resident->ext,
+    'age' => $resident->age,
+    'household' => $resident->household,
+    'profile2x2' => $resident->image_filename
+    ];
 
     // Add full names of members
     foreach ($members as $member) {
-        $fullNames[] = $member->lname . ', ' . $member->fname . ' ' . $member->mname . ' ' . $member->ext;
+        $fullNames[] = [
+            'name' => $member->lname . ', ' . $member->fname . ' ' . $member->mname . ' ' . $member->ext,
+            'age' => $member->age,
+            'profile2x2' => $member->profile2x2
+
+    ];
     }
 
     Log::info('Retrieved Names:', ['names' => $fullNames]);
 
     return response()->json($fullNames);
 }
+public function submitBusinessPermit(Request $request)
+{
+    $userId = $request->session()->get('userId');
+    
+    if (!$userId) {
+        return response()->json(['error' => 'User ID not found in session'], 400);
+    }
+    Log::info('User ID retrieved:', ['userId' => $userId]);
+    // Retrieve user data using the user ID
+    $user = Resident::where('reg_number', $userId)->first();
+    $email = $user->email;
+    // Validate the incoming request data
+    $validator = $request->validate ([
+        'voters' => 'required|in:Voters,Non-Voters',
+        'name' => ['required', function ($attribute, $value, $fail) {
+            if ($value === 'null') {
+                $fail($attribute.' is invalid.');
+            }
+        }],
+        'copy' => 'required|min:1|max:5',
+        'bname' => 'required|regex:/^[a-zA-Z\s\p{P}0-9]+$/u',
+        'baddress' => 'required|regex:/^[a-zA-Z\s\p{P}0-9]+$/u',
+        'requirements_bpermit' => 'required|mimes:pdf|max:50000'
+    ], [
+        'voters.required' => 'Voters field is required.',
+        'voters.in' => 'Voters field must be either "Voters" or "Non-Voters".',
+        'name.required' => 'Name field is required.',
+        'copy.required' => 'Number of copies field is required.',
+        'copy.min' => 'Number of copies field must be at least 0.',
+        'copy.max' => 'Number of copies field must not exceed 5.',
+        'bname.required' => 'Business Name field is required.',
+        'bname.regex' => 'Business Name field is invalid.',
+        'baddress.required' => 'Business Address field is required.',
+        'baddress.regex' => 'Business Address field is invalid.',
+        'requirements_bpermit.required' => 'Requirements field is required.',
+        'requirements_bpermit.mimes' => 'Requirements must be a PDF file.',
+        'requirements_bpermit.max' => 'Requirements file size must not exceed 50MB.'
+    ]);
 
+   
+
+    $businessPermit = new BusinessPermit();
+    $businessPermit->email = $user->email;
+    $businessPermit->reg_num = $user->reg_number;
+    $businessPermit->voters = $request->voters;
+    $businessPermit->name = $request->name;
+    $businessPermit->copy = $request->copy;
+    $businessPermit->bname = $request->bname;
+    $businessPermit->baddress = $request->baddress;
+    if ($request->hasFile('requirements_bpermit')) {
+        $file = $request->file('requirements_bpermit');
+        $originalFilename = $file->getClientOriginalName(); // Get the original filename
+        $filename = 'File_'. $file->getClientOriginalExtension();
+        $file->move(public_path('Files_Requirements'), $filename);
+        $businessPermit->requirements = $originalFilename; // Store the original filename
+    }
+    $businessPermit->save();
+
+    // Return a success response
+    return response()->json(['success' => 'Business permit request submitted successfully']);
+}
+public function submitCessation(Request $request)
+{
+    $userId = $request->session()->get('userId');
+    
+    if (!$userId) {
+        return response()->json(['error' => 'User ID not found in session'], 400);
+    }
+    Log::info('User ID retrieved:', ['userId' => $userId]);
+    // Retrieve user data using the user ID
+    $user = Resident::where('reg_number', $userId)->first();
+    $email = $user->email; // Retrieve email directly from the user object
+
+    $validator = $request->validate ([
+        'voters' => 'required|in:Voters,Non-Voters',
+        'name' => ['required', function ($attribute, $value, $fail) {
+            if ($value === 'null') {
+                $fail($attribute.' is invalid.');
+            }
+        }],
+        'copy_cessation' => 'required|min:1|max:5',
+        'bname' => 'required|regex:/^[a-zA-Z\s\p{P}0-9]+$/u',
+        'CEOname' => 'required|regex:/^[a-zA-Z\s\p{P}0-9]+$/u',
+        'cbaddress' => 'required|regex:/^[a-zA-Z\s\p{P}0-9]+$/u',
+        'requirements' => 'required|mimes:pdf|max:50000'
+    ],[
+        'voters.required' => 'Voters field is required.',
+        'voters.in' => 'Voters field must be either "Voters" or "Non-Voters".',
+        'name.required' => 'Name field is required.',
+        'copy_cessation.required' => 'Number of copies field is required.',
+        'copy_cessation.min' => 'Number of copies field must be at least 0.',
+        'copy_cessation.max' => 'Number of copies field must not exceed 5.',
+        'bname.required' => 'Business Name field is required.',
+        'CEOname.required' => 'CEO name field is required.',
+        'CEOname.regex' => 'CEO name field is Invalid.',
+        'bname.regex' => 'Business Name field is invalid.',
+        'baddress.required' => 'Business Address field is required.',
+        'baddress.regex' => 'Business Address field is invalid.',
+        'requirements_bpermit.required' => 'Requirements field is required.',
+        'requirements_bpermit.mimes' => 'Requirements must be a PDF file.',
+        'requirements_bpermit.max' => 'Requirements file size must not exceed 50MB.'
+    ]);
+    
+    $businessCessation = new BusinessCessation();
+    $businessCessation->email = $email;
+    $businessCessation->reg_num = $userId; // Using the retrieved user ID
+    $businessCessation->voters = $request->voters;
+    $businessCessation->name = $request->name;
+    $businessCessation->copy = $request->copy_cessation;
+    $businessCessation->bname = $request->bname;
+    $businessCessation->CEO = $request->CEOname;
+    $businessCessation->baddress = $request->cbaddress;
+
+    if ($request->hasFile('requirements')) {
+        $file = $request->file('requirements');
+        $originalFilename = $file->getClientOriginalName();
+        $filename = 'File_'. $file->getClientOriginalExtension();
+        $file->move(public_path('Files_Requirements'), $filename);
+        $businessCessation->requirements = $originalFilename;
+    }
+
+    $businessCessation->save();
+
+    return response()->json(['success' => 'Business cessation request submitted successfully']);
+}
+
+public function submitRequestcertificate(Request $request)
+{
+    $userId = $request->session()->get('userId');
+    
+    if (!$userId) {
+        return response()->json(['error' => 'User ID not found in session'], 400);
+    }
+    Log::info('User ID retrieved:', ['userId' => $userId]);
+    // Retrieve user data using the user ID
+    $user = Resident::where('reg_number', $userId)->first();
+    $email = $user->email;
+    // Validate the incoming request data
+    $validatedData = $request->validate([
+        'voters' => 'required|in:Voters,Non-Voters',
+        'name' => ['required', function ($attribute, $value, $fail) {
+            if ($value === 'undefined') {
+                $fail($attribute.' is invalid.');
+            }
+        }],
+    
+        'copy' => 'required|min:1|max:5',
+        'purpose' => ['required', function ($attribute, $value, $fail) {
+        if ($value === 'null') {
+            $fail($attribute.' is invalid.');
+        }
+    }],
+        'otherpurpose' => 'nullable|regex:/^[a-zA-Z\s\p{P}0-9]+$/u',
+        'requirements' => $request->hasFile('requirements') ? 'required|mimes:pdf|max:50000' : ''
+    ], [
+        'voters.required' => 'Voters field is required.',
+        'name.required' => 'Name field is required.',
+        'name.invalid' => 'Name field is invalid.',
+        'copy.required' => 'Copy field is required.',
+        'copy.min' => 'Copy field must be at least 0.',
+        'copy.max' => 'Copy field must not exceed 5.',
+        'purpose.required' => 'Purpose field is required.',
+        'otherpurpose' => ' Purpose field is required.',
+        'otherpurpose.regex' => 'Other purpose field must contain only letters, spaces, special characters, and numbers.',
+        'requirements.required' => 'Requirements field is required.',
+        'requirements.mimes' => 'Requirements must be a PDF file.',
+        'requirements.max' => 'Requirements file size must not exceed 50MB.'
+    ]);
+
+    // Save the data to the database
+    $requestModel = new CertificateRequest();
+    $requestModel->email = $email;
+    $requestModel->reg_num = $user->reg_number; // Assuming 'reg_number' is the correct field
+    $requestModel->voters = $validatedData['voters'];
+    $requestModel->name = $validatedData['name'];
+    $requestModel->copy = $validatedData['copy'];
+    $requestModel->purpose = $validatedData['purpose'];
+    $requestModel->otherpurpose = $validatedData['otherpurpose'];
+    if ($request->hasFile('requirements')) {
+        $file = $request->file('requirements');
+        $originalFilename = $file->getClientOriginalName(); // Get the original filename
+        $filename = 'File_'. $file->getClientOriginalExtension();
+        $file->move(public_path('Files_Requirements'), $filename);
+        $requestModel->requirements = $originalFilename; // Store the original filename
+    }
+    $requestModel->save();
+
+    // Return a response
+    return response()->json(['success' => 'Certificate request submitted successfully']);
+}
+
+public function submitRequestsoloparent(Request $request)
+{
+    $userId = $request->session()->get('userId');
+    
+    if (!$userId) {
+        return response()->json(['error' => 'User ID not found in session'], 400);
+    }
+    Log::info('User ID retrieved:', ['userId' => $userId]);
+    // Retrieve user data using the user ID
+    $user = Resident::where('reg_number', $userId)->first();
+    $email = $user->email;
+    // Validate the incoming request data
+    $validatedData = $request->validate([
+        'voters' => 'required|in:Voters,Non-Voters',
+        'name' => ['required', function ($attribute, $value, $fail) {
+            if ($value === 'undefined') {
+                $fail($attribute.' is invalid.');
+            }
+        }],
+        'copy' => 'required|min:1|max:5',
+        'requirements' => $request->hasFile('requirements') ? 'required|mimes:pdf|max:50000' : ''
+    ], [
+        'voters.required' => 'Voters field is required.',
+        'name.required' => 'Name field is required.',
+        'name.invalid' => 'Name field is invalid.',
+        'copy.required' => 'Copy field is required.',
+        'copy.min' => 'Copy field must be at least 0.',
+        'copy.max' => 'Copy field must not exceed 5.',
+        'requirements.required' => 'Requirements field is required.',
+        'requirements.mimes' => 'Requirements must be a PDF file.',
+        'requirements.max' => 'Requirements file size must not exceed 50MB.'
+    ]);
+    // Save the data to the database
+    $requestModel = new SoloparentRequest();
+    $requestModel->email = $email;
+    $requestModel->reg_num = $user->reg_number; // Assuming 'reg_number' is the correct field
+    $requestModel->voters = $validatedData['voters'];
+    $requestModel->name = $validatedData['name'];
+    $requestModel->copy = $validatedData['copy'];
+    if ($request->hasFile('requirements')) {
+        $file = $request->file('requirements');
+        $originalFilename = $file->getClientOriginalName(); // Get the original filename
+        $filename = 'File_'. $file->getClientOriginalExtension();
+        $file->move(public_path('Files_Requirements'), $filename);
+        $requestModel->requirements = $originalFilename; // Store the original filename
+    }
+    $selectedChildren = json_decode($request->input('selectedChildren'), true);
+    Log::info('Selected Children Data:', $selectedChildren);
+    $requestModel->children = json_encode($selectedChildren);
+    $requestModel->save();
+
+
+    // Return a response
+    return response()->json(['success' => 'Certificate request submitted successfully']);
+}
+
+public function submitRequestftj(Request $request)
+{
+    $userId = $request->session()->get('userId');
+    
+    if (!$userId) {
+        return response()->json(['error' => 'User ID not found in session'], 400);
+    }
+    Log::info('User ID retrieved:', ['userId' => $userId]);
+    // Retrieve user data using the user ID
+    $user = Resident::where('reg_number', $userId)->first();
+    $email = $user->email;
+    // Validate the incoming request data
+    $validatedData = $request->validate([
+        'voters' => 'required|in:Voters,Non-Voters',
+        'name' => ['required', function ($attribute, $value, $fail) {
+            if ($value === 'undefined') {
+                $fail($attribute.' is invalid.');
+            }
+        }],
+        'copy' => 'required|min:1|max:5',
+        'requirements' => $request->hasFile('requirements') ? 'required|mimes:pdf|max:50000' : '',
+        'type' => 'required|in:First Time Job seeker (Minor),First Time Job Seeker Oath Taking,First Time Job Seeker',
+        'pname' => 'nullable|regex:/^[a-zA-Z\s\p{P}0-9]+$/u',
+        'paddress' => 'nullable|regex:/^[a-zA-Z\s\p{P}0-9]+$/u',
+        'page' => 'nullable',
+        'fileInputparent' => $request->hasFile('fileInputparent') ? 'nullable|mimes:pdf|max:50000' : ''
+
+    ], [
+        'voters.required' => 'Voters field is required.',
+        'name.required' => 'Name field is required.',
+        'name.invalid' => 'Name field is invalid.',
+        'copy.required' => 'Copy field is required.',
+        'copy.min' => 'Copy field must be at least 0.',
+        'copy.max' => 'Copy field must not exceed 5.',
+        'requirements.required' => 'Requirements field is required.',
+        'requirements.mimes' => 'Requirements must be a PDF file.',
+        'requirements.max' => 'Requirements file size must not exceed 50MB.',
+        'pname.regex' => 'Parent Name field is invalid.',
+        'paddress.regex' => 'Parent Address is Invalid.',
+        'fileInputparent.max' => 'Parents Requirements file size must not exceed 50MB.',
+        'fileInputparent.mimes' => 'Parent Requirements must be a PDF file.',
+    ]);
+    // Save the data to the database
+    $requestModel = new FTJRequest();
+    $requestModel->email = $email;
+    $requestModel->reg_num = $user->reg_number; // Assuming 'reg_number' is the correct field
+    $requestModel->voters = $validatedData['voters'];
+    $requestModel->name = $validatedData['name'];
+    $requestModel->copy = $validatedData['copy'];
+    if ($request->hasFile('requirements')) {
+        $file = $request->file('requirements');
+        $originalFilename = $file->getClientOriginalName(); // Get the original filename
+        $filename = 'File_'. $file->getClientOriginalExtension();
+        $file->move(public_path('Files_Requirements'), $filename);
+        $requestModel->requirements = $originalFilename; // Store the original filename
+    }
+    if ($request->hasFile('fileInputparent')) {
+        $file = $request->file('fileInputparent');
+        $originalFilename = $file->getClientOriginalName(); // Get the original filename
+        $filename = 'Parent_File_'. $file->getClientOriginalExtension();
+        $file->move(public_path('Files_Requirements'), $filename);
+        $requestModel->parentrequirements = $originalFilename; // Store the original filename
+    }
+    $requestModel->type = $validatedData['type'];
+    $requestModel->pname = $validatedData['pname'];
+    $requestModel->paddress = $validatedData['paddress'];
+    $requestModel->page = $validatedData['page'];
+    $requestModel->save();
+
+
+    // Return a response
+    return response()->json(['success' => 'First-Time Job Seeker request submitted successfully']);
+}
+
+public function getData(Request $request)
+{
+    $userId = $request->session()->get('userId');
+        
+    if (!$userId) {
+        return response()->json(['error' => 'User ID not found in session'], 400);
+    }
+    Log::info('User ID retrieved:', ['userId' => $userId]);
+    
+    // Retrieve user data using the user ID
+    $user = Resident::where('reg_number', $userId)->first();
+    Log::info('User data retrieved:', ['user' => $user]);
+
+
+    $data['indigency_requests'] = IndigencyRequest::where('reg_num', $user->reg_number)->get();
+    $data['certificate'] = CertificateRequest::where('reg_num', $user->reg_number)->get();
+    $data['business_permit'] = BusinessPermit::where('reg_num', $user->reg_number)->get();
+    $data['business_cessation'] = BusinessCessation::where('reg_num', $user->reg_number)->get();
+    $data['first_time_job_seeker'] = FTJRequest::where('reg_num', $user->reg_number)->get();
+    $data['solo_parent'] = SoloparentRequest::where('reg_num', $user->reg_number)->get();
+    Log::info('User ID retrieved data:', ['user' => $data]);
+    
+    return response()->json($data);
+}
+public function cancelRequest(Request $request)
+    {
+        $id = $request->input('id');
+        $type = $request->input('type');
+        Log::info('Certificate ID retrieved data:', ['ID' => $id]);
+        // Find the request by 
+        if($type == "Barangay Indigency"){
+            $request = IndigencyRequest::find($id);
+        }else if($type == "Business Permit"){
+            $request = BusinessPermit::find($id);
+        }else if($type == "Business Cessation"){
+            $request = BusinessCessation::find($id);
+        }else if($type == "First Time Job Seeker Oath Taking" || $type == "First Time Job seeker (Minor)" || $type == "First Time Job Seeker"){
+            $request = FTJRequest::find($id);
+        }else if($type == "Solo Parents"){
+            $request = SoloparentRequest::find($id);
+        }else if($type == "Barangay Certificate"){
+            $request = CertificateRequest::find($id);
+        }
+       
+
+        if (!$request) {
+            return response()->json(['error' => 'Request not found'], 404);
+        }
+
+        // Update the status to "Cancelled"
+        $request->status = 'Cancelled';
+        $request->save();
+
+        return response()->json(['message' => 'Request cancelled successfully']);
+    }
+    public function forumpost(Request $request)
+    {
+        $userId = $request->session()->get('userId');
+        try {
+            $request->validate([
+                'topic' => 'required|string|max:255|regex:/^[a-zA-Z0-9\s\W]+$/|unique:forums,topic',
+                'description' => 'nullable|string|regex:/^[a-zA-Z0-9\s\W]+$/',
+                'name' => 'required|string|regex:/^[a-zA-Z0-9\s\W]+$/',
+            ]);
+            
+            $forum = new Forum();
+            $forum->name = $request->name;
+            $forum->topic = $request->topic;
+            $forum->description = $request->description;
+            $forum->reg_num = $userId;
+            $forum->save();
+            
+            return response()->json(['message' => 'Forum created successfully']);
+        } catch (ValidationException $e) {
+            $errors = $e->validator->errors();
+            $topicError = $errors->first('topic');
+            
+            if ($topicError === 'The topic has already been taken.') {
+                // Topic is already taken
+                return response()->json(['message' => $topicError], 422); // 422 Unprocessable Entity status code
+            } else {
+                // Other validation errors
+                return response()->json(['message' => 'Validation failed', 'errors' => $errors], 422);
+            }
+        }
+    }
+    public function getForumData(Request $request)
+    {
+        $adminID = "REG_000000_00";
+        $userId = $request->session()->get('userId');
+        
+        if ($request->has('userId') && $adminID === "REG_000000_00") {
+            // Fetch forum details based on ID
+            $forum = Forum::where('reg_num', $userId)->find($request->id);
+            return response()->json($forum);
+        } else {
+            // Fetch all forum data for the specified user and admin
+            $forums = Forum::where(function ($query) use ($userId, $adminID) {
+                $query->where('reg_num', $userId)
+                      ->orWhere('reg_num', $adminID);
+            })->get();
+            return response()->json(['forums' => $forums]);
+        }
+    }
+    public function storecomment(Request $request)
+{
+    $userId = $request->session()->get('userId');
+    // Validate the request data
+    $validatedData = $request->validate([
+        'comment' => 'required|string',
+        'adminname' => 'required|string',
+        'profile' => 'required|string',
+        'id_form' => 'required|exists:forums,id', // Assuming the foreign key is 'id_form' referencing the 'id' column of the 'forms' table
+    ]);
+
+    // Create a new comment
+    $comment = new Comment();
+    $comment->comment = $validatedData['comment'];
+    $comment->name = $validatedData['adminname'];
+    $comment->id_form = $validatedData['id_form']; 
+    $comment->profile = $validatedData['profile']; 
+    // Add any other necessary fields
+
+    // Save the comment
+    $comment->save();
+    
+    // Optionally, return a success response
+    return response()->json(['message' => 'Comment posted successfully'], 200);
+}
+public function getInfos()
+{
+    $infos = Info::first(); // Assuming you want to fetch the first record
+    return response()->json($infos);
+}
+public function getActiveOfficials()
+    {
+        $activeOfficials = Official::where('status', 'active')->get();
+        return response()->json($activeOfficials);
+    } 
+    public function logout(Request $request)
+{
+    $userId = $request->session()->get('userId');
+
+    Auth::logout(); // This will log the user out
+
+    $request->session()->flush(); // Destroy the session
+
+    $request->session()->regenerateToken(); // Regenerate the CSRF token
+
+    return response()->json(['message' => 'Logged out successfully', 'userId' => $userId]);
+}
+ 
 }
 
 ?>
