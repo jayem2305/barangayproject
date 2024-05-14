@@ -11,14 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('forums', function (Blueprint $table) {
+        Schema::create('business_permits', function (Blueprint $table) {
             $table->id();
+            $table->string('email');
             $table->string('reg_num');
             $table->foreign('reg_num')->references('reg_number')->on('residents')->onDelete('cascade');
+            $table->string('type')->default('Business Permit');
+            $table->enum('voters', ['Voters', 'Non-Voters']);
             $table->string('name');
-            $table->string('topic');
-            $table->text('description')->nullable();
-            $table->string('status')->default('active');
+            $table->string('copy');
+            $table->string('bname');
+            $table->string('baddress');
+            $table->string('requirements'); // Assuming file path will be stored
+            $table->string('status')->default('Pending');
             $table->timestamps();
         });
     }
@@ -28,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('forums');
+        Schema::dropIfExists('business_permits');
     }
 };

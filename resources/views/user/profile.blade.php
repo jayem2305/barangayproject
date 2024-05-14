@@ -33,7 +33,7 @@
     <ul class="dropdown-menu" style="max-height: 300px; overflow-y: auto;">
         <li><a class="dropdown-item" href="../User/forum"><i class="bi bi-info-circle-fill"></i> Forum</a></li>
         <li><a class="dropdown-item text-bg-primary" href="../User/profile"><i class="bi bi-person-circle"></i> Profile</a></li>
-        <li><a class="dropdown-item" href="../" class="nav-item nav-link text-white"><i class="bi bi-door-closed"></i> Logout</a></li>
+        <li><a class="dropdown-item" href="/" class="nav-item nav-link text-white"><i class="bi bi-door-closed"></i> Logout</a></li>
     </ul>
 </li>
 

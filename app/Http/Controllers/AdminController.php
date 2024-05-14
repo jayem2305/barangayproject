@@ -52,6 +52,7 @@ class AdminController extends Controller
             $forum->name = $request->name;
             $forum->topic = $request->topic;
             $forum->description = $request->description;
+            $forum->reg_num = "REG_000000_00";
             $forum->save();
             
             return response()->json(['message' => 'Forum created successfully']);

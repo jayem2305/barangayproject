@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('mission');
             $table->string('vission');
-            $table->string('history');
+            $table->string('history', 5000);
             $table->string('logo')->nullable();
             $table->timestamps();
         });
