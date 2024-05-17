@@ -57,6 +57,14 @@ Route::middleware(['web'])->group(function () {
     // Routes that handle form submissions
     Route::post('/login', [AuthController::class, 'loginPost'])->name('login.post');
 });
+Route::get('/Admin/count-pending-ftj', [CertificatesController::class, 'countPendingFtj'])->name('count.pending.ftj');
+Route::get('/Admin/count-pending-indigency', [CertificatesController::class, 'countPendingindigency'])->name('count.pending.indigency');
+Route::get('/Admin/count-pending-certificate', [CertificatesController::class, 'countPendingcert'])->name('count.pending.cert');
+Route::get('/Admin/count-pending-permit', [CertificatesController::class, 'countPendingpermit'])->name('count.pending.permit');
+Route::get('/Admin/count-pending-cessation', [CertificatesController::class, 'countPendingcessation'])->name('count.pending.cessation');
+Route::get('/Admin/count-pending-soloparent', [CertificatesController::class, 'countPendingsoloparent'])->name('count.pending.soloparent');
+Route::get('/Admin/certificate/get-data/{type}', [CertificatesController::class, 'getData']);
+
 Route::get('/Admin', [AdminController::class, 'statisticalreport'])->name('admin.statisticalreport');
 Route::get('/Admin/resident', [AdminController::class, 'resident'])->name('admin.resident');
 Route::get('/Admin/certificate', [AdminController::class, 'certificate'])->name('admin.certificate');

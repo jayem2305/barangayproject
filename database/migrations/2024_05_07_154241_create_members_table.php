@@ -31,7 +31,7 @@ class CreateMembersTable extends Migration
             $table->string('occupation');
             $table->string('profile2x2');
             $table->string('indicate_if');
-            $table->string('Status')->default('pending');
+            $table->string('Status')->default('Resident');
             $table->timestamps();
         });
     }

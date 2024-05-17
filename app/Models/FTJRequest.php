@@ -21,6 +21,9 @@ class FTJRequest extends Model
         'paddress',
         'page',
     ];
-
+    public function residents()
+    {
+        return $this->belongsTo(Resident::class, 'reg_num', 'reg_number');
+    }
     // You can define relationships or additional methods here
 }

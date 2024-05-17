@@ -142,7 +142,7 @@
                response.forEach(function(official) {
                 if(official.position == "Punong Barangay" || official.position == "Chairman"){
                     var officialHtml = '<div class="col-lg-12">' +
-                                        '<div class="card text-center" style="max-width: 340px; margin-left:23rem;">' +
+                                        '<div class="card text-center" style="max-width: 340px; margin-left:22rem;">' +
                                             '<img src="../residentprofile/' + official.profile_path + '" class="card-img-top" alt="' + official.name + '">' +
                                             '<div class="card-body">' +
                                                 '<h5 class="card-title">' + official.name + '</h5>' +

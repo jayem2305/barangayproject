@@ -20,4 +20,8 @@ class BusinessCessation extends Model
         'baddress',
         'requirements'
     ];
+    public function resident()
+    {
+        return $this->belongsTo(Resident::class, 'reg_num', 'reg_number');
+    }
 }

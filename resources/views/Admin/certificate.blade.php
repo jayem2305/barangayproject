@@ -1,8 +1,8 @@
-@extends('layouts.certificateheader')
+@extends('layouts.admincertificate')
 @section('title', 'Barangay 781 Zone 85')
 
 @section('certificate')
-<body>
+<body style="background-color:#1C2035">
     <!-- Spinner Start -->
     <div id="spinner"
     class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
@@ -60,14 +60,28 @@
     <div class="col-3">
         <div class="card text-white" style="background-color: #1C2035;" >
         <br>
-          <img src="../barangayprorfile/1714398238_logo.png" class=" rounded-circle mx-auto d-block" alt="..." width="200" height="200">
+          <img src="../barangayprorfile/1714398238_logo.png" class=" rounded-circle mx-auto d-block" alt="..." width="200" height="200" id="logo">
           <hr>
           <div class="d-grid gap-3">
-  <button class="btn btn-outline-light" type="button">First-Time Job Seeker</button>
-  <button class="btn btn-outline-light" type="button">Barangay Indigency</button>
-  <button class="btn btn-outline-light" type="button">Barangay Certificate</button>
-  <button class="btn btn-outline-light" type="button">Business Permit</button>
-  <button class="btn btn-outline-light" type="button">Cessation of Business</button>
+          <div class="btn-group-vertical" role="group" aria-label="Vertical radio toggle button group">
+  <input type="radio" class="btn-check" name="options-base" id="ftj" autocomplete="off" >
+<label class="btn btn-outline-primary" for="ftj">First-Time Job Seeker <span class="badge text-bg-primary" id="ftj_pending">0</span></label>
+
+<input type="radio" class="btn-check" name="options-base" id="indigency" autocomplete="off">
+<label class="btn btn-outline-primary" for="indigency">Barangay Indigency <span class="badge text-bg-primary"id="indigency_pending">0</span></label>
+
+<input type="radio" class="btn-check" name="options-base" id="certificate" autocomplete="off" >
+<label class="btn btn-outline-primary" for="certificate">Barangay Certificate <span class="badge text-bg-primary"id="cert_pending">0</span></label>
+
+<input type="radio" class="btn-check" name="options-base" id="permits" autocomplete="off">
+<label class="btn btn-outline-primary" for="permits">Business Permit <span class="badge text-bg-primary"id="permit_pending">0</span></label>
+
+<input type="radio" class="btn-check" name="options-base" id="cessation" autocomplete="off">
+<label class="btn btn-outline-primary" for="cessation">Cessation of Business  <span class="badge text-bg-primary"id="cessation_pending">0</span></label>
+
+<input type="radio" class="btn-check" name="options-base" id="soloparent" autocomplete="off">
+<label class="btn btn-outline-primary" for="soloparent">Solo Parent <span class="badge text-bg-primary"id="soloparent_pending">0</span></label>
+</div>
 </div>
         </div>
     </div>
@@ -95,6 +109,7 @@
         </div>
         <div class="card">
             <div class="card-body" style="background-color: #E8E6E6;">
+            <h3>Approved Certificate</h3>
                 <table class="table" id="ClaimTable">
                     <thead>
                         <tr>

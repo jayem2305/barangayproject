@@ -17,6 +17,9 @@ class SoloParentRequest extends Model
         'children',
         // Add other fillable attributes here
     ];
-
+    public function resident()
+    {
+        return $this->belongsTo(Resident::class, 'reg_num', 'reg_number');
+    }
     // Define any relationships or custom methods here
 }
