@@ -162,8 +162,12 @@ $(document).ready( function () {
 // Assuming you're using jQuery
 // Ajax Call
 var selectedValue; // Define selectedValue outside of event handlers
+<<<<<<< HEAD
+
+=======
 var selectedAge = null;
 var selectedImageFilename = null;
+>>>>>>> a156b64cad5a4daf7e6ec879c79ff806fb1ef9c0
 $('.names_display').change(function() {
     // Get the selected option's value and text
     selectedValue = $(this).val(); // Update the value of selectedValue
@@ -173,9 +177,12 @@ $('.names_display').change(function() {
     $('.selected_option_display').text(selectedText);
 });
 
+<<<<<<< HEAD
+=======
 
 
 
+>>>>>>> a156b64cad5a4daf7e6ec879c79ff806fb1ef9c0
 $('.names_display').click(function() {
     $.ajax({
         url: '{{ route("related-data") }}',
@@ -189,8 +196,13 @@ $('.names_display').click(function() {
                 // Loop through fetched data and append options
                 $.each(data, function(index, fullName) {
                     $('.names_display').append($('<option>', {
+<<<<<<< HEAD
+                        value: fullName,
+                        text: fullName
+=======
                         value: fullName.name,
                         text: fullName.name
+>>>>>>> a156b64cad5a4daf7e6ec879c79ff806fb1ef9c0
                     }));
                     if (fullName.name === selectedValue) {
                         selectedAge = fullName.age;
@@ -302,6 +314,13 @@ document.addEventListener("DOMContentLoaded", function() {
         processData: false,
         success: function (response) {
             console.log(response);
+<<<<<<< HEAD
+            var message = "Barangay Indigency Added successfully";
+            // Show the toast notification with the dynamic message
+            $('#liveToast .toast-body').text(message);
+            $('#liveToast').toast('show');
+            // Handle success response
+=======
             displaytable();
             // Show success toast message
             $('#display').text('successfully Requested');
@@ -309,6 +328,7 @@ document.addEventListener("DOMContentLoaded", function() {
             $('.toast-body').text('Request submitted successfully.');
             $('.toast').toast('show');
             
+>>>>>>> a156b64cad5a4daf7e6ec879c79ff806fb1ef9c0
         },
         error: function (xhr, status, error) {
             console.error(xhr.responseJSON);

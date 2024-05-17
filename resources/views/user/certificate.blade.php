@@ -243,6 +243,10 @@
                     </div>
                 </div>
             </div>    
+<<<<<<< HEAD
+            
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+=======
         </div>
     </div> 
 <div class="row g-2">
@@ -322,6 +326,7 @@
                     <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i
                         class="bi bi-arrow-up"></i></a>
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+>>>>>>> a156b64cad5a4daf7e6ec879c79ff806fb1ef9c0
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header">
@@ -385,6 +390,19 @@
         </div>
 </div>
 </div>
+<<<<<<< HEAD
+
+
+<div class="toast-container position-absolute top-0 end-0 p-3" style="margin-top: 1rem;">
+    <div id="liveToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true"> 
+        <div class="toast-body">
+            <div class="row">
+                <div class="col-lg-10 col-sm-10 col-md-10">
+                    <strong class="me-auto">Archived of resident is successful.</strong>
+                </div>
+                <div class="col-lg-2 col-sm-2 col-md-2">
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+=======
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
     <button type="button" class="btn btn-primary upload-indigency">Submit</button>
@@ -409,6 +427,7 @@
                   <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
                   <div>
                     Fill Up the form
+>>>>>>> a156b64cad5a4daf7e6ec879c79ff806fb1ef9c0
                 </div>
             </div>
         </div>
@@ -685,6 +704,10 @@
             <h1 class="modal-title fs-5" id="exampleModalLabel">Request Application of Solo Parent</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+<<<<<<< HEAD
+    </div> 
+   
+=======
         <div class="modal-body">
             <div class="container-fluid">
              <div id="error-message"  >
@@ -915,3 +938,4 @@
         </div>
     </div>
 </div>
+>>>>>>> a156b64cad5a4daf7e6ec879c79ff806fb1ef9c0
