@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class CertificateRequest extends Model
 {
     use HasFactory;
-
+    protected $table = 'certificate_requests';
     protected $fillable = [
         'email',
         'reg_num',

@@ -132,7 +132,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
    <!-- forgot password modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -141,23 +141,24 @@
             </div>
             <div class="modal-body">
                 <div class="container-fluid">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Fill up the Form</h1>
+                    <h1 class="modal-title fs-5">Fill up the Form</h1>
                     <div class="row">
                         <div class="col-lg-12">
                             <div id="forgotpassresult">
-                                <div class="alert alert-primary d-flex align-items-center" role="alert" >
-                                    <div class="spinner-border text-primary" role="status" style="display:none;" id="load">
-                                        <span class="visually-hidden">Loading...</span>
-                                    </div> 
-                                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/ id="svg"></svg>
+                                <div class="alert alert-primary d-flex align-items-center" role="alert">
+                                   
+                                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+                                        <use xlink:href="#info-fill" id="svg"/>
+                                    </svg>
                                     <div>
-                                        Provide your email for the further Instruction.
+                                        Provide your email for further instructions.
                                     </div>
                                 </div>
                             </div>
                             <div class="form-floating">
-                                <input type="text" class="form-control" id="emaisl" name="emaisl" placeholder="Your Email Address">
+                                <input type="email" class="form-control" id="email_check" name="email" placeholder="Your Email Address">
                                 <label for="email">Your Email Address</label>
+                                <div class="invalid-feedback" id="emailFeedback"></div>
                             </div>
                             <br>
                         </div>
@@ -166,10 +167,13 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary forgot-btn" data-email = "email">Submit</button>
+                <button type="button" class="btn btn-primary forgot-btn" data-email="email">  <div class="spinner-border text-light" role="status" style="display:none;" id="load">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div> Submit</button>
             </div>
         </div>
     </div>
 </div>
+
 
 @endsection

@@ -242,12 +242,7 @@
                         </div>
                     </div>
                 </div>
-            </div>    
-<<<<<<< HEAD
-            
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-=======
-        </div>
+            </div>
     </div> 
 <div class="row g-2">
     <div class="col-12">
@@ -325,8 +320,7 @@
                     <!-- Back to Top -->
                     <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i
                         class="bi bi-arrow-up"></i></a>
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
->>>>>>> a156b64cad5a4daf7e6ec879c79ff806fb1ef9c0
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header">
@@ -390,28 +384,13 @@
         </div>
 </div>
 </div>
-<<<<<<< HEAD
-
-
-<div class="toast-container position-absolute top-0 end-0 p-3" style="margin-top: 1rem;">
-    <div id="liveToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true"> 
-        <div class="toast-body">
-            <div class="row">
-                <div class="col-lg-10 col-sm-10 col-md-10">
-                    <strong class="me-auto">Archived of resident is successful.</strong>
-                </div>
-                <div class="col-lg-2 col-sm-2 col-md-2">
-                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-=======
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
     <button type="button" class="btn btn-primary upload-indigency">Submit</button>
 </div>
 </div>
-
 </div>
 </div>
-
 
 <div class="modal fade" id="exampleModalCertificate" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-xl">
@@ -427,7 +406,7 @@
                   <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
                   <div>
                     Fill Up the form
->>>>>>> a156b64cad5a4daf7e6ec879c79ff806fb1ef9c0
+
                 </div>
             </div>
         </div>
@@ -604,10 +583,10 @@
         </div>
 </div>
 </div>
-<div class="modal-footer">
+<dsclass="modal-footer">
     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
     <button type="button" class="btn btn-primary upload-cessation">Submit</button>
-</div>
+</dsclass=>
 </div>
 </div>
 </div>
@@ -654,7 +633,7 @@
                 <label for="formGroupExampleInput" class="form-label">Upload your Requirements <span class="text-danger">*</span> <span class="text-primary"><i class="bi bi-info-circle"></i> Compiled it in PDF format with maximum 50mb</span></label>
                 <input type="file" class="form-control form-control-lg" id="requirements_ftj" >
             </div>
-            <div class="col-lg-12">
+            <div class="col-lg-6">
             <label for="formGroupExampleInput" class="form-label">Type of First-Time Job Seeker<span class="text-danger">*</span></label>
                 <select class="form-select form-select-lg mb-3" aria-label="Large select example"name="ftjtypes" id="ftjtypes">
                     <option selected disabled>-----</option>
@@ -662,6 +641,21 @@
                     <option value="First Time Job Seeker Oath Taking">First Time Job Seeker Oath Taking</option>
                     <option value="First Time Job Seeker">First Time Job Seeker</option>
                 </select>
+            </div>
+            <div class="col-lg-6">
+            <label for="formGroupExampleInput" class="form-label">Number of years Resided in the Barangay<span class="text-danger">*</span></label>
+                <div class="row g-2">
+                    <div class="col-lg-6">
+                        <input type="number" class="form-control form-control-lg" value="0" name="numberofliving" id="numberofliving" min="0"  >
+                    </div>
+                    <div class="col-lg-6">
+                        <select class="form-select form-select-lg mb-3" aria-label="Large select example"name="typeofdays" id="typeofdays">
+                            <option selected disabled>-----</option>
+                            <option value="Months">Months</option>
+                            <option value="Years">Years</option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="col-lg-12" style="display: none;" id="minordisplay">
                 <div class="row">
@@ -704,10 +698,6 @@
             <h1 class="modal-title fs-5" id="exampleModalLabel">Request Application of Solo Parent</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-<<<<<<< HEAD
-    </div> 
-   
-=======
         <div class="modal-body">
             <div class="container-fluid">
              <div id="error-message"  >
@@ -938,4 +928,3 @@
         </div>
     </div>
 </div>
->>>>>>> a156b64cad5a4daf7e6ec879c79ff806fb1ef9c0

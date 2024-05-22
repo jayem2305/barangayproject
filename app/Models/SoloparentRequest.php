@@ -8,8 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class SoloParentRequest extends Model
 {
     use HasFactory;
+    protected $table = 'solo_parent_requests';
 
     protected $fillable = [
+        'reg_num',
+        'type',
         'voters',
         'name',
         'copy',

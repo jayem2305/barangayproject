@@ -152,13 +152,13 @@ for (var i = 0; i < months.length; i++) {
   //  $('#tableResident').DataTable();
    // fetchResidentData();
    var table = $('#tableResident').DataTable();
-   function fetchResidentData() {
+function fetchResidentData() {
     var ext;
     var voters;
     var age;
     // Perform an AJAX request to fetch data from the server
     $.ajax({
-        url: "{{ route('admin.getresident') }}",
+        url: "{{ route('admin.getmembers') }}",
         method: 'GET',
         dataType: 'json',
         success: function(response) {
@@ -166,7 +166,7 @@ for (var i = 0; i < months.length; i++) {
             table.clear();
             
             // Populate the DataTable with the fetched data
-            $.each(response, function(index, resident) {
+            $.each(response.residents, function(index, resident) {
                 if(resident.ext == null){
                     ext = "";
                 }else{
@@ -195,6 +195,35 @@ for (var i = 0; i < months.length; i++) {
                     // Add more properties as needed
                 ]);
             });
+            $.each(response.members, function(index, members) {
+                if(members.ext == null){
+                    ext = "";
+                }else{
+                    ext = members.ext;
+                }
+
+                if (members.age <= 14) {
+                    age = "Minor";
+                } else if (members.age >= 60) {
+                    age = "Senior";
+                } else {
+                    age = "Adult";
+                }
+                table.row.add([
+                    members.lname + ", " + members.fname + " "+ members.mname + " " +ext,
+                    members.age,
+                    "-----",
+                    members.household,
+                    members.gender,
+                    age
+                    // Add more properties as needed
+                ]);
+            });
+            table.draw();
+            // Add member data if needed
+            $.each(response.members, function(index, member) {
+                // Handle member data here, you can add it to the same table or a different one
+            });
             
             // Redraw the table to reflect changes
             table.draw();
@@ -205,6 +234,7 @@ for (var i = 0; i < months.length; i++) {
         }
     });
 }
+
 
         fetchResidentData();
     } );

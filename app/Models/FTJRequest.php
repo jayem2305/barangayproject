@@ -15,6 +15,7 @@ class FTJRequest extends Model
         'voters',
         'name',
         'copy',
+        'number_day',
         'requirements',
         'parentrequirements',
         'pname',

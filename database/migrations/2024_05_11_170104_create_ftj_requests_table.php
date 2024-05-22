@@ -22,6 +22,7 @@ class CreateFtjRequestsTable extends Migration
             $table->string('voters');
             $table->string('name');
             $table->string('copy');
+            $table->string('number_day');
             $table->string('requirements');
             $table->string('parentrequirements')->nullable();
             $table->string('pname')->nullable();

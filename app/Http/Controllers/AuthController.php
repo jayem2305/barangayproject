@@ -16,7 +16,9 @@ use App\Rules\UniqueNameCombination;
 use Illuminate\Support\Facades\Log;
 use App\Models\Resident;
 use App\Models\Member;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AccountApprovalNotification;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -410,6 +412,34 @@ return response()->json(['status' => 'success']);
     }
     return redirect(route("register"))
     ->with("Error","Failed to created account");*/
+    public function checkEmail(Request $request)
+{
+    $email = $request->input('email');
+    $exists = Resident::where('email', $email)->exists();
+
+    try {
+        if ($exists) {
+            $token = Str::random(60);
+            $subject = "Forget Password Reset";
+            $body = "Click the button to change your Password <a href='" . url('/reset-password/' . $token) . "'>Click Here!</a>";
+
+            // Send email notification using Mailable class
+            try {
+                Mail::to($email)->send(new AccountApprovalNotification($subject, $body));
+                return response()->json(['exists' => true]);
+            } catch (\Exception $e) {
+                Log::error('Exception while sending email: ' . $e->getMessage());
+                return response()->json(['error' => 'Failed to send email'], 500);
+            }
+        } else {
+            return response()->json(['exists' => false]);
+        }
+    } catch (\Exception $e) {
+        Log::error('Error checking email: ' . $e->getMessage());
+        return response()->json(['error' => 'Internal Server Error'], 500);
+    }
+}
+
 }
 
 

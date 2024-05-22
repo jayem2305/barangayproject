@@ -10,6 +10,7 @@ use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\ResidentListController;
 use App\Http\Controllers\OfficialController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\CertificatesController;
 
 
@@ -64,7 +65,14 @@ Route::get('/Admin/count-pending-permit', [CertificatesController::class, 'count
 Route::get('/Admin/count-pending-cessation', [CertificatesController::class, 'countPendingcessation'])->name('count.pending.cessation');
 Route::get('/Admin/count-pending-soloparent', [CertificatesController::class, 'countPendingsoloparent'])->name('count.pending.soloparent');
 Route::get('/Admin/certificate/get-data/{type}', [CertificatesController::class, 'getData']);
+Route::get('/Admin/certificate/get', [CertificatesController::class, 'getRelatedData'])->name('related-datas');
+Route::match(['get', 'post'], '/Admin/generate-pdf', [CertificatesController::class, 'generatePDF'])->name('generate.pdf');
+Route::post('/Admin/certificate/update', [CertificatesController::class, 'sendEmailNotificationCert'])->name('approvecert');
+Route::post('/Admin/certificate/Decline', [CertificatesController::class, 'sendEmailNotificationDecline'])->name('declined');
 
+
+
+Route::get('/statistical/get', [StatisticsController::class, 'getResidentsAndMembers'])->name('admin.getmembers');
 Route::get('/Admin', [AdminController::class, 'statisticalreport'])->name('admin.statisticalreport');
 Route::get('/Admin/resident', [AdminController::class, 'resident'])->name('admin.resident');
 Route::get('/Admin/certificate', [AdminController::class, 'certificate'])->name('admin.certificate');
@@ -131,6 +139,8 @@ Route::get('/',[AuthController::class,"index"])->name('home');
 Route::get("/onlineservices",[AuthController::class,"onlineservices"])->name("onlineservices");
 Route::get("/aboutus",[AuthController::class,"aboutus"])->name("aboutus");
 Route::get("/login",[AuthController::class,"login"])->name("login");
+// routes/web.php
+Route::post('/check-email', [AuthController::class, 'checkEmail'])->name('check.email');
 
 Route::get("/register",[AuthController::class,"register"])
 ->name("register");
@@ -138,3 +148,5 @@ Route::post('/register/step1', [AuthController::class, 'step1'])->name('register
 Route::post('/register/step2', [AuthController::class, 'step2'])->name('register.step2');
 //Route::post('/register/storeMember',  [AuthController::class, 'storeMember'])->name('store.member');
 Route::post('/register/laststep', [AuthController::class, 'laststep'])->name('register.laststep');
+Route::get('/reset-password/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');

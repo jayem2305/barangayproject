@@ -70,35 +70,26 @@
             </div>
             <div class="overflow-auto row" style="max-height: 40rem;" id="certificateCards">
               <div class="col-lg-4 mb-3 mb-sm-0">
-                <div class="card" style="height: 23rem; margin-bottom: 1rem;">
+                <div class="card" style=" margin-bottom: 1rem;">
                   <div class="card-body">
                     <h1 class="text-primary" style="text-align:center; font-size:5rem;"><i class="bi bi-file-earmark-richtext"></i></h1>
                     <h5 class="card-title"style="text-align:center;" >Barangay Indigency</h5>
                     <hr>
-                    <div class="overflow-auto row" style="max-height: 7.5rem;" id="searchResults">
-                        <p class="card-text " style="text-align:left;"><b>Types of Barangay Indigency : </b>
-                            <div class="col-md-5">
-                                <dl style="text-align: left;">
-                                    <li>4P's</li>
-                                    <li>Non-Voters</li>
-                                </dl>
-                            </div>
-                            <div  class="col-md-7">
-                             <dl style="text-align: left;">
-                                <li>Voters for Burial / Financial</li>
-                                <li>Voters</li>
-                            </dl>
-                        </div>
-                        <b>Prepare the following items for claim purposes: </b>
-                        <div class="col-md-12">
-                            <dl style="text-align: left;">
-                                <li>Atleast 1 valid ID</li>
-                                <li>Control Number</li>
-                                <li>Student ID (for Students Only)</li>
-                            </dl>
-                        </div>
-                    </p>
-                </div>
+                    <div  id="searchResults">
+                                            <b>Requirements</b>
+                                            <div class="col-md-12">
+                                                <dl style="text-align: left;">
+                                                    <li>Atleast 1 valid ID</li>
+                                                    <li>Control Number</li>
+                                                    <li>Student ID (for Students Only)</li>
+                                                    <a href=""  class="icon-link icon-link-hover" data-bs-toggle="modal" data-bs-target="#requirement_indigency">
+                                                        See more...
+                                                        <svg class="bi" aria-hidden="true"><use xlink:href="#arrow-right"></use></svg>
+                                                        </a>
+                                                </dl>
+                                            </div>
+                                        </p>
+                                    </div>
             </div>
             <div class="card-footer">
              <a href="login" class="btn btn-primary col-lg-12">Request <i class="bi bi-chevron-double-right"></i></a>
@@ -106,23 +97,26 @@
      </div>
  </div>
  <div class="col-lg-4 mb-3 mb-sm-0">
-    <div class="card" style="height: 23rem; margin-bottom: 1rem;">
+    <div class="card" style=" margin-bottom: 1rem;">
       <div class="card-body">
         <h1 class="text-primary" style="text-align:center; font-size:5rem;"><i class="bi bi-file-earmark-richtext"></i></h1>
         <h5 class="card-title"style="text-align:center;" >Business Permit</h5>
         <hr>
-        <div class="overflow-auto row" style="max-height: 7.5rem;">
-            <p class="card-text " style="text-align:left;">
-                <b>Prepare the following items for claim purposes: </b>
-                <div class="col-md-12">
-                    <dl style="text-align: left;">
-                        <li>Atleast 1 valid ID</li>
-                        <li>Control Number</li>
-                        <li>Student ID (for Students Only)</li>
-                    </dl>
-                </div>
-            </p>
-        </div>
+        <div>
+                                    <b>Requirements</b>
+                                            <div class="col-md-12">
+                                                <dl style="text-align: left;">
+                                                    <li>Atleast 1 valid ID</li>
+                                                    <li>Control Number</li>
+                                                    <li>Student ID (for Students Only)</li>
+                                                    <a href=""  class="icon-link icon-link-hover" data-bs-toggle="modal" data-bs-target="#requirement_permit">
+                                                        See more...
+                                                        <svg class="bi" aria-hidden="true"><use xlink:href="#arrow-right"></use></svg>
+                                                        </a>
+                                                </dl>
+                                            </div>
+                                        </p>
+                                    </div>
     </div>
     <div class="card-footer">
      <a href="login" class="btn btn-primary col-lg-12">Request <i class="bi bi-chevron-double-right"></i></a>
@@ -130,23 +124,24 @@
 </div>
 </div>
 <div class="col-lg-4 mb-3 mb-sm-0">
-    <div class="card" style="height: 23rem; margin-bottom: 1rem;">
+    <div class="card" style="height: 24rem; margin-bottom: 1rem;">
       <div class="card-body">
         <h1 class="text-primary" style="text-align:center; font-size:5rem;"><i class="bi bi-file-earmark-richtext"></i></h1>
         <h5 class="card-title"style="text-align:center;" >Application of Solo Parent</h5>
         <hr>
-        <div class="overflow-auto row" style="max-height: 7.5rem;">
-            <p class="card-text " style="text-align:left;">
-              <b>Prepare the following items for claim purposes: </b>
-              <div class="col-md-12">
-                <dl style="text-align: left;">
-                    <li>Atleast 1 valid ID</li>
-                    <li>Control Number</li>
-                    <li>Student ID (for Students Only)</li>
-                </dl>
-            </div>
-        </p>
-    </div>
+        <div class="col-md-12">
+                                                <dl style="text-align: left;">
+                                                    <li>Atleast 1 valid ID</li>
+                                                    <li>Control Number</li>
+                                                    <li>Student ID (for Students Only)</li>
+                                                    <a href=""  class="icon-link icon-link-hover" data-bs-toggle="modal" data-bs-target="#requirement_soloparent">
+                                                        See more...
+                                                        <svg class="bi" aria-hidden="true"><use xlink:href="#arrow-right"></use></svg>
+                                                        </a>
+                                                   
+                                                </dl>
+                                                
+                                            </div>
 </div>
 <div class="card-footer">
  <a href="login" class="btn btn-primary col-lg-12">Request <i class="bi bi-chevron-double-right"></i></a>
@@ -154,30 +149,28 @@
 </div>
 </div>
 <div class="col-lg-4 mb-3 mb-sm-0">
-    <div class="card" style="height: 23rem; margin-bottom: 1rem;">
+    <div class="card" style=" margin-bottom: 1rem;">
       <div class="card-body">
         <h1 class="text-primary" style="text-align:center; font-size:5rem;"><i class="bi bi-file-earmark-richtext"></i></h1>
         <h5 class="card-title"style="text-align:center;" >First time job seeker</h5>
         <hr>
-        <div class="overflow-auto row" style="max-height: 7.5rem;">
-            <p class="card-text " style="text-align:left;"><b>Types of First time job seeker: </b>
-                <div class="col-md-12">
-                    <dl style="text-align: left;">
-                        <li>Oath of Undertaking</li>
-                        <li>First Time job seeker</li>
-                        <li>First Time job seeker for minor</li>
-                    </dl>
-                </div>
-                <b>Prepare the following items for claim purposes: </b>
-                <div class="col-md-12">
-                    <dl style="text-align: left;">
-                        <li>Atleast 1 valid ID</li>
-                        <li>Control Number</li>
-                        <li>Student ID (for Students Only)</li>
-                    </dl>
-                </div>
-            </p>
-        </div>
+        <div>
+                                    <b>Requirements</b>
+                                            <div class="col-md-12">
+                                                <dl style="text-align: left;">
+                                                    <li>Atleast 1 valid ID</li>
+                                                    <li>Control Number</li>
+                                                    <li>Student ID (for Students Only)</li>
+                                                    <a href=""  class="icon-link icon-link-hover" data-bs-toggle="modal" data-bs-target="#requirement_ftj">
+                                                        See more...
+                                                        <svg class="bi" aria-hidden="true"><use xlink:href="#arrow-right"></use></svg>
+                                                        </a>
+                                                    
+                                                </dl>
+                                                
+                                            </div>
+                                        </p>
+                                    </div>
     </div>
     <div class="card-footer">
      <a href="login" class="btn btn-primary col-lg-12">Request <i class="bi bi-chevron-double-right"></i></a>
@@ -185,23 +178,27 @@
 </div>
 </div>
 <div class="col-lg-4 mb-3 mb-sm-0">
-    <div class="card" style="height: 23rem; margin-bottom: 1rem;">
+    <div class="card" style=" margin-bottom: 1rem;">
       <div class="card-body">
         <h1 class="text-primary" style="text-align:center; font-size:5rem;"><i class="bi bi-file-earmark-richtext"></i></h1>
         <h5 class="card-title"style="text-align:center;" >Cessation of Business</h5>
         <hr>
-        <div class="overflow-auto row" style="max-height: 7.5rem;">
-            <p class="card-text " style="text-align:left;">
-               <b>Prepare the following items for claim purposes: </b>
-               <div class="col-md-12">
-                <dl style="text-align: left;">
-                    <li>Atleast 1 valid ID</li>
-                    <li>Control Number</li>
-                    <li>Student ID (for Students Only)</li>
-                </dl>
-            </div>
-        </p>
-    </div>
+        <div>
+                                    <b>Requirements</b>
+                                            <div class="col-md-12">
+                                                <dl style="text-align: left;">
+                                                    <li>Atleast 1 valid ID</li>
+                                                    <li>Control Number</li>
+                                                    <li>Student ID (for Students Only)</li>
+                                                    <a href=""  class="icon-link icon-link-hover" data-bs-toggle="modal" data-bs-target="#requirement_cessation">
+                                                        See more...
+                                                        <svg class="bi" aria-hidden="true"><use xlink:href="#arrow-right"></use></svg>
+                                                        </a>
+                                                </dl>
+                                                
+                                            </div>
+                                        </p>
+                                    </div>
 </div>
 <div class="card-footer">
  <a href="login" class="btn btn-primary col-lg-12">Request <i class="bi bi-chevron-double-right"></i></a>
@@ -209,38 +206,25 @@
 </div>
 </div>
 <div class="col-lg-4 mb-3 mb-sm-0">
-    <div class="card" style="height: 23rem; margin-bottom: 1rem;">
+    <div class="card" style=" margin-bottom: 1rem;">
       <div class="card-body">
         <h1 class="text-primary" style="text-align:center; font-size:5rem;"><i class="bi bi-file-earmark-richtext"></i></h1>
         <h5 class="card-title"style="text-align:center;" >Barangay Certificate</h5>
         <hr>
-        <div class="overflow-auto row" style="max-height: 7.5rem;">
-            <p class="card-text " style="text-align:left;"><b>Types of Barangay Certificate : </b>
-                <div class="col-md-5">
-                    <dl style="text-align: left;">
-                        <li>Bail</li>
-                        <li>Non-Voters</li>
-                        <li>Probation</li>
-                    </dl>
-                </div>
-                <div  class="col-md-7">
-                 <dl style="text-align: left;">
-                    <li>National ID</li>
-                    <li>Voters</li>
-                    <li>Non-Voters Kagawad Signatory</li>
-                </dl>
-            </div>
-            <b>Prepare the following items for claim purposes: </b>
-            <div class="col-md-12">
-                <dl style="text-align: left;">
-                    <li>Atleast 1 valid ID</li>
-                    <li>Control Number</li>
-                    <li>Student ID (for Students Only)</li>
-                    <li>Business Permit</li>
-                </dl>
-            </div>
-        </p>
-    </div>
+        <div>
+                                    <b>Requirements</b>
+                                            <div class="col-md-12">
+                                                <dl style="text-align: left;">
+                                                    <li>Atleast 1 valid ID</li>
+                                                    <li>Control Number</li>
+                                                    <li>Student ID (for Students Only)</li>   
+                                                    <a href="" class="icon-link"  data-bs-toggle="modal" data-bs-target="#requirement_certificate">
+                                                        See more...
+                                                        </a> 
+                                                </dl>
+                                            </div>
+                                        </p>
+                                    </div>
 </div>
 <div class="card-footer">
  <a href="login" class="btn btn-primary col-lg-12">Request <i class="bi bi-chevron-double-right"></i></a>
@@ -472,6 +456,165 @@
         </div>
     </div>
 </div>
+</div>
+<div class="modal fade" id="requirement_indigency" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Barangay Indigency Requirements</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <b>Requirements:</b>
+            <dl style="text-align: left;">
+                <li>Atleast 1 valid ID</li>
+                <li>Control Number</li>
+                <li>Student ID (for Students Only)</li>
+                
+                <b>Available Purposes of Baranggay Indigency :</b>
+                <div class="col-md-12">
+                    <dl style="text-align: left;">
+                        <li>Financial Assistance</li>
+                        <li>School Requirement</li>
+                        <li>Burial Assistance</li>
+                        <li>Educational Assistance</li>
+                        <li>Medical Assistance</li>
+                        <li>Hospital Requirement</li>
+                        <li>Scholarship Application</li>
+                        <li>Social Pension for Indigent Senior Citizen Application</li>
+                        <li>Others <span class="text-primary"><i class="bi bi-info-circle"></i> Specify The Purpose if Others is selected</span></li>
+                    </dl>
+                    
+                </div>                    
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="requirement_certificate" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Barangay Certificate Requirements</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <b>Requirements:</b>
+            <dl style="text-align: left;">
+                <li>Atleast 1 valid ID</li>
+                <li>Control Number</li>
+                <li>Student ID (for Students Only)</li>
+                
+                <b>Available Purposes of Baranggay Indigency :</b>
+                <div class="col-md-12">
+                    <dl style="text-align: left;">
+                        <li>Proof of Residency</li>
+                        <li>Local Employment</li>
+                        <li>PWD ID Application</li>
+                        <li>School Requirements</li>
+                        <li>Educational Assistance</li>
+                        <li>Senior Citizen Application</li>
+                        <li>Bank Account Opening</li>
+                        <li>Hospital Requirement</li>
+                        <li>Others <span class="text-primary"><i class="bi bi-info-circle"></i> Specify The Purpose if Others is selected</span></li>
+                    </dl>
+                    
+                </div>                    
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="requirement_permit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Business Permit Requirements</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <b>Requirements:</b>
+            <dl style="text-align: left;">
+                <li>Atleast 1 valid ID</li>
+                <li>Control Number</li>
+                <li>Student ID (for Students Only)</li>                 
+                <li>Baranggay Certificate</li>
+                <li>Business Name</li>
+                <li>Business Address</li>
+                <li>Permit From City hall</li>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="requirement_cessation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Business Permit Requirements</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <b>Requirements:</b>
+            <dl style="text-align: left;">
+                <li>Atleast 1 valid ID</li>
+                <li>Control Number</li>
+                <li>Student ID (for Students Only)</li>                 
+                <li>Baranggay Certificate</li>
+                <li>Business Name</li>
+                <li>Business Address</li>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="requirement_ftj" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">First time Job Seeker Requirements</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <b>Requirements:</b>
+            <dl style="text-align: left;">
+                <li>Atleast 1 valid ID</li>
+                <li>Student ID (for Students Only)</li>
+                <b>Type of First time Job Seeker Available:</b>
+                <div class="col-md-12">
+                    <dl style="text-align: left;">
+                        <li>First Time Job seeker (Minor)</li>
+                        <li>First Time Job Seeker Oath Taking</li>
+                        <li>First Time Job Seeker </li>
+                    </dl>
+                </div>    
+                <b>First time Job Seeker Requirements for Minor :</b>
+                <div class="col-md-12">
+                    <dl style="text-align: left;">
+                        <li>Need of approval of Guardian with signature</li>
+                        <li>Name of a Guardian</li>
+                        <li>Age of a Guardian</li>
+                        <li>Currently Address of Guardian</li>
+                    </dl>
+                </div>           
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="requirement_soloparent" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Business Permit Requirements</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <b>Requirements:</b>
+            <dl style="text-align: left;">
+                <li>Atleast 1 valid ID</li>
+                <li>Student ID (for Students Only)</li>                 
+                <li>Names of the child/ Children</li>
+                <li>PSA of Child / Children</li>
+            </div>
+        </div>
+    </div>
 </div>
 
 @endsection

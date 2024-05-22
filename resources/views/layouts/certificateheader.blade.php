@@ -162,12 +162,8 @@ $(document).ready( function () {
 // Assuming you're using jQuery
 // Ajax Call
 var selectedValue; // Define selectedValue outside of event handlers
-<<<<<<< HEAD
-
-=======
 var selectedAge = null;
 var selectedImageFilename = null;
->>>>>>> a156b64cad5a4daf7e6ec879c79ff806fb1ef9c0
 $('.names_display').change(function() {
     // Get the selected option's value and text
     selectedValue = $(this).val(); // Update the value of selectedValue
@@ -177,12 +173,9 @@ $('.names_display').change(function() {
     $('.selected_option_display').text(selectedText);
 });
 
-<<<<<<< HEAD
-=======
 
 
 
->>>>>>> a156b64cad5a4daf7e6ec879c79ff806fb1ef9c0
 $('.names_display').click(function() {
     $.ajax({
         url: '{{ route("related-data") }}',
@@ -196,13 +189,8 @@ $('.names_display').click(function() {
                 // Loop through fetched data and append options
                 $.each(data, function(index, fullName) {
                     $('.names_display').append($('<option>', {
-<<<<<<< HEAD
-                        value: fullName,
-                        text: fullName
-=======
                         value: fullName.name,
                         text: fullName.name
->>>>>>> a156b64cad5a4daf7e6ec879c79ff806fb1ef9c0
                     }));
                     if (fullName.name === selectedValue) {
                         selectedAge = fullName.age;
@@ -314,13 +302,6 @@ document.addEventListener("DOMContentLoaded", function() {
         processData: false,
         success: function (response) {
             console.log(response);
-<<<<<<< HEAD
-            var message = "Barangay Indigency Added successfully";
-            // Show the toast notification with the dynamic message
-            $('#liveToast .toast-body').text(message);
-            $('#liveToast').toast('show');
-            // Handle success response
-=======
             displaytable();
             // Show success toast message
             $('#display').text('successfully Requested');
@@ -328,7 +309,6 @@ document.addEventListener("DOMContentLoaded", function() {
             $('.toast-body').text('Request submitted successfully.');
             $('.toast').toast('show');
             
->>>>>>> a156b64cad5a4daf7e6ec879c79ff806fb1ef9c0
         },
         error: function (xhr, status, error) {
             console.error(xhr.responseJSON);
@@ -541,6 +521,9 @@ $('.upload-ftj').click(function (e) {
     var copy = $('#copy_ftj').val();
     var fileInput = $('#requirements_ftj')[0].files[0];
     var type = $('#ftjtypes').val();
+    var numlive = $('#numberofliving').val();
+    var dayslive = $('#typeofdays').val();
+    var number_day = numlive + " " + dayslive;
     var pname = $('#pname').val();
     var page = $('#page').val();
     var paddress = $('#paddress').val();
@@ -556,6 +539,7 @@ $('.upload-ftj').click(function (e) {
     formData.append('page', page);
     formData.append('paddress', paddress);
     formData.append('fileInputparent', fileInputparent);
+    formData.append('number_day', number_day);
 
     var csrfToken = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
@@ -611,14 +595,14 @@ function displaytable(){
                         
                         if(item.status == "Cancelled"){
                             button = $('<h4>').text('Cancelled').addClass('text-danger text-center'); 
-                        }else if(item.status == "Cancelled"){
+                        }else if(item.status == "Approved"){
                             button = $('<h4>').text('Processing').addClass('text-warning text-center'); 
                         }else if(item.status == "Ready To Claim"){
                             button = $('<h4>').text('Ready To Claim').addClass('text-success text-center'); 
                         }else if(item.status == "Claimed"){
                             button = $('<h4>').text('Claimed').addClass('text-success text-center'); 
                         }else if(item.status == "Declined"){
-                            button = $('<button>').text('Declined').addClass('btn btn-danger btn-lg d-grid gap-2 mx-auto'); 
+                            button = $('<h4>').text('Declined').addClass('text-danger text-center'); 
                         }
                         else{
                             var icon = $('<i>').addClass('bi bi-x-circle-fill'); // Create the icon element

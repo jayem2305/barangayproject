@@ -129,7 +129,7 @@
 
                 <!-- Background Image -->
                 <div >
-                    <a href="onlineservices" class="btn btn-primary btn-lg" role="button" style="margin-left: -22rem;margin-top: -6rem; z-index: 1; position: absolute;">CLICK HERE TO APPLY</a>
+                    <a href="../User/certificate" class="btn btn-primary btn-lg" role="button" style="margin-left: -22rem;margin-top: -6rem; z-index: 1; position: absolute;">CLICK HERE TO APPLY</a>
                 </div>
                 <!-- End Background Image -->
             </div>

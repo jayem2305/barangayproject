@@ -6,9 +6,12 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "barryvdh/laravel-dompdf": "*",
         "laravel/framework": "^11.0",
         "laravel/tinker": "^2.9",
-        "maatwebsite/excel": "^3.1"
+        "maatwebsite/excel": "^3.1",
+        "phpoffice/phpword": "^1.2",
+        "tecnickcom/tcpdf": "^6.7"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.13",
@@ -53,7 +56,13 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [],
+            "providers": [
+                "Barryvdh\\DomPDF\\ServiceProvider"
+            ],
+            "aliases": {
+                "PDF": "Barryvdh\\DomPDF\\Facade"
+            }
         }
     },
     "config": {

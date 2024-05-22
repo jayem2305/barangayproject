@@ -207,26 +207,25 @@ $(document).ready( function () {
         
         // Optionally, you can call this function periodically to update the count
         // setInterval(updatePendingCount, 60000); // Refresh every minute
-        $('input[type=radio][name=options-base]').change(function() {
-    var type = $(this).attr('id'); // Get the id of the selected radio button
+    $('input[type=radio][name=options-base]').change(function() {
+    var type = $(this).attr('id');
     var tableId;
-    var id,name,date,address,type,purpose,phone_number,action;
-    // Determine which table to update based on the selected radio button
-     tableId = '#ApprovalTable';
-   
-    console.log(type);
-   
+    var id ,name,date,address,type,purpose,phone_number,action;
 
+     tableId = '#ApprovalTable';
     $.ajax({
         url: '/Admin/certificate/get-data/' + type,
         type: 'GET',
         success: function(response) {
-            // Clear the existing rows in the table
-            $(tableId + ' tbody').empty();
+            $(tableId).DataTable().clear().draw();
 
+            $(tableId + ' tbody').empty();
+            if (response.length === 0) {
+            $(tableId + ' tbody').html('<tr><td colspan="8" class="text-center">No data available</td></tr>');
+        } else {
             // Append new rows to the table
             $.each(response, function(index, item) {
-                if(type == "ftj"){
+                if(item.type == "First Time Job Seeker Oath Taking" || item.type == "First Time Job Seeker" ||item.type == "First Time Job seeker (Minor)"){
                 id = "FTJ_"+formatDatecontroll(item.created_at) +"_"+item.id;
                 name = item.name;
                 date = formatDate(item.created_at);
@@ -238,13 +237,13 @@ $(document).ready( function () {
                  "<button class='btn btn-success btn-lg approve-btn' data-control-number='" + item.id + "'><i class='bi bi-check'></i></button> " +
                  "<button class='btn btn-danger btn-lg decline-btn' data-control-number='" + item.id + "'><i class='bi bi-x'></i></button></div>";
                 }
-                if(type == "indigency"){
+                if(item.type == "Barangay Indigency"){
                 id = "BI_"+formatDatecontroll(item.created_at) +"_"+item.id;
                 name = item.name;
                 date = formatDate(item.created_at);
                 address = item.resident.address;
                 type = item.type;
-                if(purpose == "Others"){
+                if(item.purpose == "Others"){
                     purpose = item.otherpurpose;
                 }else{
                     purpose = item.purpose;
@@ -254,19 +253,24 @@ $(document).ready( function () {
                  "<button class='btn btn-success btn-lg approve-btn' data-control-number='" + item.id + "'><i class='bi bi-check'></i></button> " +
                  "<button class='btn btn-danger btn-lg decline-btn' data-control-number='" + item.id + "'><i class='bi bi-x'></i></button></div>";
                 }
-                else if(type == "certificate"){
+                else if(item.type == "Barangay Certificate"){
                 id = "BC_"+formatDatecontroll(item.created_at) +"_"+item.id;
                 name = item.name;
                 date = formatDate(item.created_at);
                 address = item.resident.address;
                 type = item.type;
                 purpose = item.type;
+                if(item.purpose == "Others"){
+                    purpose = item.otherpurpose;
+                }else{
+                    purpose = item.purpose;
+                }
                 phone_number = item.resident.cnum;
                 action = "<div class='btn-group ' role='group' aria-label='Basic example'><button class='btn btn-lg btn-warning view-btn' data-control-number='" + item.id + "'><i class='bi bi-eye-fill'></i></button> " +
                  "<button class='btn btn-success btn-lg approve-btn' data-control-number='" + item.id + "'><i class='bi bi-check'></i></button> " +
                  "<button class='btn btn-danger btn-lg decline-btn' data-control-number='" + item.id + "'><i class='bi bi-x'></i></button></div>";
                 }
-                if(type == "permits"){
+                if(item.type == "Business Permit"){
                 id = "BP_"+formatDatecontroll(item.created_at) +"_"+item.id;
                 name = item.name;
                 date = formatDate(item.created_at);
@@ -278,7 +282,7 @@ $(document).ready( function () {
                  "<button class='btn btn-success btn-lg approve-btn' data-control-number='" + item.id + "'><i class='bi bi-check'></i></button> " +
                  "<button class='btn btn-danger btn-lg decline-btn' data-control-number='" + item.id + "'><i class='bi bi-x'></i></button></div>";
                 }
-                if(type == "cessation"){
+                if(item.type == "Business Cessation"){
                 id = "BCS_"+formatDatecontroll(item.created_at) +"_"+item.id;
                 name = item.name;
                 date = formatDate(item.created_at);
@@ -290,29 +294,222 @@ $(document).ready( function () {
                  "<button class='btn btn-success btn-lg approve-btn' data-control-number='" + item.id + "'><i class='bi bi-check'></i></button> " +
                  "<button class='btn btn-danger btn-lg decline-btn' data-control-number='" + item.id + "'><i class='bi bi-x'></i></button></div>";
                 }
-                if(type == "soloparent"){
+                if(item.type == "Solo Parents"){
                 id = "SP_"+formatDatecontroll(item.created_at) +"_"+item.id;
                 name = item.name;
                 date = formatDate(item.created_at);
                 address = item.resident.address;
-                type = "Barangay Certificate";
+                type = "Solo parent";
                 purpose = item.type;
                 phone_number = item.resident.cnum;
                 action = "<div class='btn-group ' role='group' aria-label='Basic example'><button class='btn btn-lg btn-warning view-btn' data-control-number='" + item.id + "'><i class='bi bi-eye-fill'></i></button> " +
                  "<button class='btn btn-success btn-lg approve-btn' data-control-number='" + item.id + "'><i class='bi bi-check'></i></button> " +
                  "<button class='btn btn-danger btn-lg decline-btn' data-control-number='" + item.id + "'><i class='bi bi-x'></i></button></div>";
                 }
-                $(tableId + ' tbody').append('<tr>' +
-                    '<td>' + id + '</td>' +
-                    '<td>' + name + '</td>' +
-                    '<td>' + date + '</td>' +
-                    '<td>' + address  + '</td>' +
-                    '<td>' + type + '</td>' +
-                    '<td>' + purpose + '</td>' +
-                    '<td>0' + phone_number + '</td>' +
-                    '<td>' + action + '</td>' +
-                    '</tr>');
+                var row = $(tableId).DataTable().row.add([
+                    id,
+                    name,
+                    date,
+                    address,
+                    type,
+                    purpose,
+                    '0' + phone_number,
+                    action
+                ]).draw().node();
+                console.log(row);
+                    // Attach event listeners to the buttons in the row
+                    $(row).find('.view-btn').on('click', function() {
+                        // Handle view button click
+                        var controlId = $(this).data('control-number');
+                        // Get the data associated with the row and populate the modal
+                        // Show the modal
+                        if(type == "Barangay Indigency"){
+                        $('#myModal').modal('show');
+                        $('#voters').val(item.voters);
+                        $('#names_display').val(name);
+                        $('#copy').val(item.copy);
+                        $('#purpose').val(purpose);
+                        $('#childdisplay_view').hide();
+
+                        var embedTag = "<embed src='../Files_Requirements/" + item.requirements + "' type='application/pdf' width='100%' height='600px' />";
+                        // Append the <embed> tag to the <div> with id "pdfViewer"
+                        $("#pdfViewer").html(embedTag);
+                        }
+                        if(type == "Barangay Certificate"){
+                        $('#myModal').modal('show');
+                        $('#voters').val(item.voters);
+                        $('#names_display').val(name);
+                        $('#copy').val(item.copy);
+                        $('#purpose').val(purpose);
+                        $('#childdisplay_view').hide();
+
+                        var embedTag = "<embed src='../Files_Requirements/" + item.requirements + "' type='application/pdf' width='100%' height='600px' />";
+                        // Append the <embed> tag to the <div> with id "pdfViewer"
+                        $("#pdfViewer").html(embedTag);
+                        }
+                        if(type == "Business Permit"){
+                        $('#modalBpermit').modal('show');
+                        $('#voters_permit').val(item.voters);
+                        $('#names_display_permit').val(name);
+                        $('#copy_permit').val(item.copy);
+                        $('#bname').val(item.bname);
+                        $('#baddress').val(item.baddress);
+                        $('#purpose_permit').val(purpose);
+                        $('#ceo_display').hide();
+                        var embedTag = "<embed src='../Files_Requirements/" + item.requirements + "' type='application/pdf' width='100%' height='600px' />";
+                        // Append the <embed> tag to the <div> with id "pdfViewer"
+                        $("#pdfViewer_permit").html(embedTag);
+                        }
+                        if(type == "Business Cessation"){
+                        $('#modalBpermit').modal('show');
+                        $('#voters_permit').val(item.voters);
+                        $('#names_display_permit').val(name);
+                        $('#copy_permit').val(item.copy);
+                        $('#bname').val(item.bname);
+                        $('#baddress').val(item.baddress);
+                        $('#purpose_permit').val(purpose);
+                        $('#ceo_display').show();
+                        $('#ceo').val(item.CEO);
+                        var embedTag = "<embed src='../Files_Requirements/" + item.requirements + "' type='application/pdf' width='100%' height='600px' />";
+                        // Append the <embed> tag to the <div> with id "pdfViewer"
+                        $("#pdfViewer_permit").html(embedTag);
+                        }
+                        if(type == "Solo parent"){
+                        $('#myModal').modal('show');
+                        $('#voters').val(item.voters);
+                        $('#names_display').val(name);
+                        $('#copy').val(item.copy);
+                        $('#purpose').val(purpose);
+                        $('#childdisplay_view').show();
+                       // Assuming item.children is a JSON string like '["Enrique, Jhon mark Alacapa"]'
+                        // Parse it if necessary
+                        var childrenArray = JSON.parse(item.children);
+
+                        // Check if it's an array and then iterate over it
+                        if (Array.isArray(childrenArray)) {
+                            // Clear the existing content of the #childdisplay element
+                            $('#childdisplay').empty();
+
+                            // Iterate over the children array and create list items for each child
+                            childrenArray.forEach(function(child) {
+                                // Create a list item element and set its text to the child's name
+                                var listItem = $('<li>').text(child);
+
+                                // Append the list item to the #childdisplay element
+                                $('#childdisplay').append(listItem);
+                            });
+                        } else {
+                            // Handle the case where childrenArray is not an array (optional)
+                            console.error('children is not an array:', childrenArray);
+                        }
+                        var embedTag = "<embed src='../Files_Requirements/" + item.requirements + "' type='application/pdf' width='100%' height='600px' />";
+                        // Append the <embed> tag to the <div> with id "pdfViewer"
+                        $("#pdfViewer").html(embedTag);
+                        }
+                        if(type == "First-Time Job Seeker"){
+                        $('#exampleModalftjcert').modal('show');
+                        $('#voters_ftj').val(item.voters);
+                        $('#names_display_ftj').val(name);
+                        $('#copy_ftj').val(item.copy);
+                        $('#ftjtypes').val(purpose);
+                        if(item.pname != null){
+                            $('#minordisplay').show();
+                            $('#pname').val(item.pname);
+                            $('#paddress').val(item.paddress);
+                            $('#page').val(item.page);
+                            var parenttag = "<embed src='../Files_Requirements/" + item.parentrequirements + "' type='application/pdf' width='100%' height='600px' />";
+                            $("#requirements_parents_ftj").html(parenttag);
+                        }else{
+                            $('#minordisplay').hide();
+                        }
+                        var embedTag = "<embed src='../Files_Requirements/" + item.requirements + "' type='application/pdf' width='100%' height='600px' />";
+                        $("#requirements_ftj").html(embedTag);
+                        }
+                        console.log(type);
+                    });
+
+                    $(row).find('.approve-btn').on('click', function() {
+    // Handle approve button click
+    var controlId = $(this).data('control-number');
+    $("#setid").val(item.id);
+    $("#typeofcert").val(item.type);
+    var display_item = item.type; 
+
+    $.ajax({
+        url: "{{route('approvecert')}}",
+        method: 'POST',
+        data: {
+            email: item.email, // Change this to the actual email
+            type: item.type,
+            id: item.id
+        },
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+
+        success: function(response) {
+            console.log('Email notification sent successfully');
+            //var controlId = $(this).data('control-number');
+            $('#kagawadsignatory').modal('show');
+            console.log('Approve button clicked for control number: ' + controlId);
+            console.log('Type of cert: ' + item.type);
+        updatePendingCount();
+        // Check the type and trigger change event accordingly
+            if (display_item === "First Time Job Seeker Oath Taking" || display_item === "First Time Job Seeker" || display_item === "First Time Job seeker (Minor)") {
+                $('#ftj').prop('checked', true).trigger('change');
+            } else if (display_item === "Barangay Indigency") {
+                $('#indigency').prop('checked', true).trigger('change');
+            } else if (display_item === "Barangay Certificate") {
+                $('#certificate').prop('checked', true).trigger('change');
+            } else if (display_item === "Business Permit") {
+                $('#permits').prop('checked', true).trigger('change');
+            } else if (display_item === "Business Cessation") {
+                $('#cessation').prop('checked', true).trigger('change');
+            } else if (display_item === "Solo Parents") {
+                $('#soloparent').prop('checked', true).trigger('change');
+            }
+
+        },
+        error: function(xhr, status, error) {
+            console.error('Error sending email notification:', error);
+            // Handle error response if needed
+        }
+    });
+});
+
+
+                  /*  $(row).find('.approve-btn').on('click', function() {
+                        // Handle approve button click
+                        var controlId = $(this).data('control-number');
+                        // Perform necessary action
+                        $("#setid").val(item.id);
+                        $("#typeofcert").val(item.type);
+                        $('#kagawadsignatory').modal('show');
+
+                        //$('#kagawadsignatory').show();
+                        console.log('Approve button clicked for control number: ' + controlId);
+                        console.log('Type of cert: ' + item.type);
+                    });*/
+
+                    $(row).find('.decline-btn').on('click', function() {
+                        // Handle decline button click
+                        var controlId = $(this).data('control-number');
+                        // Perform necessary action
+                        var userName = $(this).data('user-name'); // Assuming you have a data attribute with the user name
+                        // Populate modal with user information
+                        $('#user-name').text(item.name);
+                        $("#setid_decline").val(item.id);
+                        $("#emaildecline").val(item.email);
+                        $("#typeofcert_decline").val(item.type);
+                        $("#controlnum").val(id);
+                        // Show the modal
+                        $('#declineModal').modal('show');
+                        console.log('Decline button clicked for control number: ' + controlId);
+                    });
+                  
             });
+            $(tableId).DataTable();
+        }
         },
         error: function(xhr, status, error) {
             // Handle errors
@@ -320,7 +517,95 @@ $(document).ready( function () {
 
         }
     });
+    
 });
+$('.pdfconvert').on('click', function() {
+    var controlId = $("#setid").val();
+    var typeofcert = $("#typeofcert").val();
+    var offcier = $("#official_display_solo").val();
+    console.log('button clicked for control number: ' + controlId);
+    
+    $.ajax({
+        url: '/Admin/generate-pdf',
+        type: 'POST',
+        data: {
+            id: controlId,
+            type: typeofcert,
+            offcier: offcier
+        },
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            // PDF generation successful, open the generated PDF in the modal
+            $('#pdfFrame').attr('src', response.url);
+            $('#pdfModal').modal('show');
+            $('#liveToast .toast-body').text('Document Approve Successfully');
+            var toastElement = new bootstrap.Toast(document.getElementById('liveToast'));
+            toastElement.show();
+            console.log(response);
+            
+        },
+        error: function(xhr, status, error) {
+            // Handle error
+            console.error(error);
+        }
+    });
+});
+
+$('.decline_request').on('click', function() {
+    var controlId = $("#setid_decline").val();
+    var typeofcert = $("#typeofcert_decline").val();
+    var email = $("#emaildecline").val();
+    var text = $("#declineReason").val();
+    var controlnum = $("#controlnum").val();
+    console.log('button clicked for control number: ' + controlId); 
+    $.ajax({
+        url: "{{route('declined')}}",
+        type: 'POST',
+        data: {
+            id: controlId,
+            type: typeofcert,
+            email: email,
+            text: text,
+            controlnum:controlnum
+
+        },
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            console.log(response);
+            $('#liveToast .toast-body').text('Document Declined Successfully');
+            var toastElement = new bootstrap.Toast(document.getElementById('liveToast'));
+            toastElement.show();
+            $('#declineModal').modal('hide');
+            if (typeofcert === "First Time Job Seeker Oath Taking" || typeofcert === "First Time Job Seeker" || typeofcert === "First Time Job seeker (Minor)") {
+                $('#ftj').prop('checked', true).trigger('change');
+            } else if (typeofcert === "Barangay Indigency") {
+                $('#indigency').prop('checked', true).trigger('change');
+            } else if (typeofcert === "Barangay Certificate") {
+                $('#certificate').prop('checked', true).trigger('change');
+            } else if (typeofcert === "Business Permit") {
+                $('#permits').prop('checked', true).trigger('change');
+            } else if (typeofcert === "Business Cessation") {
+                $('#cessation').prop('checked', true).trigger('change');
+            } else if (typeofcert === "Solo Parents") {
+                $('#soloparent').prop('checked', true).trigger('change');
+            }
+            console.log(typeofcert);
+        updatePendingCount();
+
+
+        },
+        error: function(xhr, status, error) {
+            // Handle error
+            console.error(error);
+        }
+    });
+});
+
+
 function formatDate(dateString) {
     var date = new Date(dateString);
     var options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -334,4 +619,46 @@ function formatDatecontroll(dateString) {
     return month + day + year;
 }
     });
+
+
+var selectedValue; // Define selectedValue outside of event handlers
+$('#official_display_solo').change(function() {
+    // Get the selected option's value and text
+    selectedValue = $(this).val(); // Update the value of selectedValue
+    var selectedText = $(this).find('option:selected').text();
+    
+    // Update the text of a separate element to display the selected option
+    $('.selected_option_display_officials').text(selectedText);
+});
+
+    $('#official_display_solo').click(function() {
+    $.ajax({
+        url: '{{ route("related-datas") }}',
+        type: 'GET',
+        success: function(data) {
+            // Clear existing options before populating new ones
+            $('#official_display_solo').empty();
+            // Add a default option
+            // Check if data is not empty
+            if (data.length > 0) {
+                // Loop through fetched data and append options
+                $.each(data, function(index, fullName) {
+                    $('#official_display_solo').append($('<option>', {
+                        value: fullName.name,
+                        text: fullName.name
+                    }));   
+                });
+            } else {
+                console.log('No data found');
+            }
+            // If there's a selected value, set it as selected
+            if (selectedValue) {
+                $('#official_display_solo').val(selectedValue);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+        }
+    });
+});
 </script>

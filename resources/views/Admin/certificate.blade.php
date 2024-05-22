@@ -57,7 +57,7 @@
 </section>
 </div>
 <div class="row g-0" style="margin-top: -3rem;">
-    <div class="col-3">
+    <div class="col-2">
         <div class="card text-white" style="background-color: #1C2035;" >
         <br>
           <img src="../barangayprorfile/1714398238_logo.png" class=" rounded-circle mx-auto d-block" alt="..." width="200" height="200" id="logo">
@@ -85,7 +85,7 @@
 </div>
         </div>
     </div>
-    <div class="col-9">
+    <div class="col-10">
         <div class="card">
             <div class="card-body" style="background-color: #E8E6E6;">
              <h3>History and Monitoring of Certificate</h3>
@@ -138,4 +138,254 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">View Requested Document</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+    <div class="container-fluid">
+        <div class="row ">
+            <div class="col-4">
+            <label for="formGroupExampleInput" class="form-label">Are you a voters of Manila ? <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="voters" id="voters"  readonly>
+            </div>
+            <div class="col-8">
+                <label for="formGroupExampleInput" class="form-label">Name of Requester <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="names_display" id="names_display"  readonly>
+            </div>
+            <div class="col-3">
+                <label for="formGroupExampleInput" class="form-label">Number of copies <span class="text-danger">*</span></label>
+                <input type="number" class="form-control" id="copy" readonly>
+            </div>
+            <div class="col-9">
+            <label for="formGroupExampleInput" class="form-label">Purpose of Barangay Certificate <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="purpose" id="purpose" readonly>
+            </div>
+            <div class="col-lg-12" id="childdisplay_view">
+            <label for="formGroupExampleInput" class="form-label text-primary">Name of Child/Children:<span class="text-danger">*</span></label>
+                <div class="row gx-2" id="childdisplay">
+                    
+                   
+                </div>
+            </div>
+        </div>
+            <div class="col-12">
+                <br>
+                <label for="formGroupExampleInput" class="form-label">Uploaded PDF Requirements <span class="text-danger">*</span></label>
+                <div id="pdfViewer">
+                    <!-- PDF will be displayed here -->
+                </div>
+            </div>
+        </div>
+</div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    <button type="button" class="btn btn-primary upload-indigency">Submit</button>
+</div>
+</div>
+</div>
+</div>
+
+
+<div class="modal fade" id="modalBpermit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">View Requested Document</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="container-fluid">
+        <div class="row gy-3">
+        <div class="col-4">
+            <label for="formGroupExampleInput" class="form-label">Are you a voters of Manila ? <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="voters" id="voters_permit"  readonly>
+            </div>
+            <div class="col-8">
+                <label for="formGroupExampleInput" class="form-label">Name of Requester <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="names_display" id="names_display_permit"  readonly>
+            </div>
+            <div class="col-3">
+                <label for="formGroupExampleInput" class="form-label">Number of copies <span class="text-danger">*</span></label>
+                <input type="number" class="form-control" id="copy_permit" readonly>
+            </div>
+            <div class="col-lg-9">
+            <label for="formGroupExampleInput" class="form-label">Business Name: <span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-lg" placeholder="Business Name" name="bname" id="bname" readonly>
+            </div>
+            <div class="col-lg-12" id="ceo_display">
+            <label for="formGroupExampleInput" class="form-label">CEO Name: <span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-lg" name="ceo" id="ceo" readonly>
+            </div>
+            <div class="col-lg-12">
+            <label for="formGroupExampleInput" class="form-label">Business Address: <span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-lg" placeholder="Business Address" name="baddress" id="baddress" readonly>
+            </div>
+            <div class="col-12">
+            <label for="formGroupExampleInput" class="form-label">Purpose <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="purpose" id="purpose_permit" readonly>
+            </div>
+            <div class="col-12">
+                <br>
+                <label for="formGroupExampleInput" class="form-label">Uploaded PDF Requirements <span class="text-danger">*</span></label>
+                <div id="pdfViewer_permit">
+                    <!-- PDF will be displayed here -->
+                </div>
+            </div>
+        </div>
+</div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    <button type="button" class="btn btn-primary upload-bpermit">Submit</button>
+</div>
+</div>
+</div>
+</div>
+
+<div class="modal fade" id="exampleModalftjcert" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">View Requested Document</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="container-fluid">
+        <div class="row gy-3">
+            <div class="col-4">
+            <input type="hidden" class="form-control" value="First-Time Job Seeker" name="cbpermit" id="cbpermit">
+            <label for="formGroupExampleInput" class="form-label">Are you a voters of Manila ? <span class="text-danger">*</span></label>
+            <input type="text" class="form-control form-control-lg" name="voters" id="voters_ftj" readonly>
+            </div>
+            <div class="col-8">
+                <label for="formGroupExampleInput" class="form-label">Name of Requester <span class="text-danger">*</span></label>
+            <input type="text" class="form-control form-control-lg" name="names_display" id="names_display_ftj" readonly>
+            </div>
+            <div class="col-3">
+                <label for="formGroupExampleInput" class="form-label">Number of copies <span class="text-danger">*</span></label>
+                <input type="number" class="form-control form-control-lg" id="copy_ftj" max="5" min="1" value="1" readonly>
+            </div>
+            <div class="col-lg-9">
+            <label for="formGroupExampleInput" class="form-label">Type of First-Time Job Seeker<span class="text-danger">*</span></label>
+            <input type="text" class="form-control form-control-lg" name="ftjtypes" id="ftjtypes" readonly>
+            </div>
+            <div class="col-12">
+                <label for="formGroupExampleInput" class="form-label">Uploaded PDF Requirements</label>
+                <div id="requirements_ftj" ></div>
+            </div>
+            <div class="col-lg-12" style="display: none;" id="minordisplay">
+                <div class="row">
+                    <hr>
+                    <h4>Guardian Information</h4>
+                    <div class="col-lg-6">
+                    <label for="formGroupExampleInput" class="form-label">Guardian Name: <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-lg" placeholder="Guardian's Name" name="pname" id="pname" readonly>
+                    </div>
+                    <div class="col-lg-6">
+                    <label for="formGroupExampleInput" class="form-label">Guardians age: <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control form-control-lg" placeholder="Guardian Age" name="page" id="page" min="18"readonly>
+                    </div>
+                    <div class="col-lg-12">
+                    <label for="formGroupExampleInput" class="form-label">Guardians Current Address: <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-lg" placeholder="Guardian Current Address" name="paddress" id="paddress" readonly >
+                    </div>
+                    <div class="col-12">
+                    <label for="formGroupExampleInput" class="form-label">Approval of Guardian With Valid ID <span class="text-danger">*</span> </label>
+                    <div id="requirements_parents_ftj"></div>
+                    </div>  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    <button type="button" class="btn btn-primary upload-ftj">Submit</button>
+</div>
+</div>
+</div>
+</div>
+
+<div class="modal fade" id="kagawadsignatory" data-bs-backdrop="static" tabindex="-1" aria-labModalLabel" aria-hidden="true">elledby="example
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Kagawad Signatory</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <label for="formGroupExampleInput" class="form-label">Select a name of Kagawad: <span class="text-danger">*</span></label>
+        <select class="form-select form-select-lg mb-3" aria-label="Large select example" name="official_display_solo" id="official_display_solo">
+           
+        </select>
+        <input type="hidden" class="form-control form-control-lg" id="setid">
+        <input type="hidden" class="form-control form-control-lg" id="typeofcert">
+        <input type="hidden" class="form-control form-control-lg" id="emaiapprove">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary pdfconvert">Convert to PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="pdfModal" tabindex="-1" role="dialog" aria-labelledby="pdfModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="pdfModalLabel">Generated PDF</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <iframe id="pdfFrame" src="" style="width: 100%; height: 500px;" frameborder="0"></iframe>
+      </div>
+      <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="declineModal" tabindex="-1" role="dialog" aria-labelledby="declineModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="declineModalLabel">Decline Reason</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h3 id="userName">To Mr./Ms. : <span id="user-name"></span></h3>
+        <label for="declineReason">Why is it Declined?</label>
+        <input type="hidden" class="form-control form-control-lg" id="setid_decline">
+        <input type="hidden" class="form-control form-control-lg" id="typeofcert_decline">
+        <input type="hidden" class="form-control form-control-lg" id="emaildecline">
+        <input type="hidden" class="form-control form-control-lg" id="controlnum">
+        <textarea class="form-control" id="declineReason" rows="3" required></textarea>
+      </div>
+      <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger decline_request" id="submitDeclineReason">Decline</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header text-success">
+      <strong class="me-auto">Document Status</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body text-bg-success">
+      Document Declined Successfully
+    </div>
+  </div>
 </div>

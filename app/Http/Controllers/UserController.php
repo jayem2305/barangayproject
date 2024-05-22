@@ -406,9 +406,10 @@ public function store(Request $request)
         return response()->json(['error' => 'Failed to add member. Please try again later.'], 500);
     }
     }
-    public function displayMembers()
+    public function displayMembers(Request $request)
     {
-        $members = Member::all(); // Assuming Member is your model for members
+        $userId = $request->session()->get('userId');
+        $members = Member::where('reg_num',$userId)->get(); // Assuming Member is your model for members
 
         return response()->json($members);
     }
@@ -425,6 +426,7 @@ public function store(Request $request)
 }
 public function edit($id)
 {
+    
     $member = Member::findOrFail($id);
     return $member;
 }
@@ -602,7 +604,7 @@ public function submitRequestindignecy(Request $request)
         $file = $request->file('requirements');
         $originalFilename = $file->getClientOriginalName(); // Get the original filename
         $filename = 'File_'. $file->getClientOriginalExtension();
-        $file->move(public_path('Files_Requirements'), $filename);
+        $file->move(public_path('Files_Requirements'), $originalFilename);
         $requestModel->requirements = $originalFilename; // Store the original filename
     }
     $requestModel->save();
@@ -703,7 +705,7 @@ public function submitBusinessPermit(Request $request)
         $file = $request->file('requirements_bpermit');
         $originalFilename = $file->getClientOriginalName(); // Get the original filename
         $filename = 'File_'. $file->getClientOriginalExtension();
-        $file->move(public_path('Files_Requirements'), $filename);
+        $file->move(public_path('Files_Requirements'), $originalFilename);
         $businessPermit->requirements = $originalFilename; // Store the original filename
     }
     $businessPermit->save();
@@ -766,8 +768,8 @@ public function submitCessation(Request $request)
     if ($request->hasFile('requirements')) {
         $file = $request->file('requirements');
         $originalFilename = $file->getClientOriginalName();
-        $filename = 'File_'. $file->getClientOriginalExtension();
-        $file->move(public_path('Files_Requirements'), $filename);
+        $filename = 'File_'.$originalFilename. $file->getClientOriginalExtension();
+        $file->move(public_path('Files_Requirements'), $originalFilename);
         $businessCessation->requirements = $originalFilename;
     }
 
@@ -832,7 +834,7 @@ public function submitRequestcertificate(Request $request)
         $file = $request->file('requirements');
         $originalFilename = $file->getClientOriginalName(); // Get the original filename
         $filename = 'File_'. $file->getClientOriginalExtension();
-        $file->move(public_path('Files_Requirements'), $filename);
+        $file->move(public_path('Files_Requirements'), $originalFilename);
         $requestModel->requirements = $originalFilename; // Store the original filename
     }
     $requestModel->save();
@@ -884,7 +886,7 @@ public function submitRequestsoloparent(Request $request)
         $file = $request->file('requirements');
         $originalFilename = $file->getClientOriginalName(); // Get the original filename
         $filename = 'File_'. $file->getClientOriginalExtension();
-        $file->move(public_path('Files_Requirements'), $filename);
+        $file->move(public_path('Files_Requirements'), $originalFilename);
         $requestModel->requirements = $originalFilename; // Store the original filename
     }
     $selectedChildren = json_decode($request->input('selectedChildren'), true);
@@ -922,11 +924,13 @@ public function submitRequestftj(Request $request)
         'pname' => 'nullable|regex:/^[a-zA-Z\s\p{P}0-9]+$/u',
         'paddress' => 'nullable|regex:/^[a-zA-Z\s\p{P}0-9]+$/u',
         'page' => 'nullable',
+        'number_day' => 'required',
         'fileInputparent' => $request->hasFile('fileInputparent') ? 'nullable|mimes:pdf|max:50000' : ''
 
     ], [
         'voters.required' => 'Voters field is required.',
         'name.required' => 'Name field is required.',
+        'number_day.required' => 'Number of Days field is required.',
         'name.invalid' => 'Name field is invalid.',
         'copy.required' => 'Copy field is required.',
         'copy.min' => 'Copy field must be at least 0.',
@@ -950,20 +954,21 @@ public function submitRequestftj(Request $request)
         $file = $request->file('requirements');
         $originalFilename = $file->getClientOriginalName(); // Get the original filename
         $filename = 'File_'. $file->getClientOriginalExtension();
-        $file->move(public_path('Files_Requirements'), $filename);
+        $file->move(public_path('Files_Requirements'), $originalFilename);
         $requestModel->requirements = $originalFilename; // Store the original filename
     }
     if ($request->hasFile('fileInputparent')) {
         $file = $request->file('fileInputparent');
         $originalFilename = $file->getClientOriginalName(); // Get the original filename
         $filename = 'Parent_File_'. $file->getClientOriginalExtension();
-        $file->move(public_path('Files_Requirements'), $filename);
+        $file->move(public_path('Files_Requirements'), $originalFilename);
         $requestModel->parentrequirements = $originalFilename; // Store the original filename
     }
     $requestModel->type = $validatedData['type'];
     $requestModel->pname = $validatedData['pname'];
     $requestModel->paddress = $validatedData['paddress'];
     $requestModel->page = $validatedData['page'];
+    $requestModel->number_day = $validatedData['number_day'];
     $requestModel->save();
 
 

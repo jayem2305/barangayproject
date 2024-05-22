@@ -845,6 +845,103 @@ function prevStep(step) {
     var nextStep = document.getElementById('step' + (step + 1));
     nextStep.style.display = 'none';
 }
+$(document).ready(function() {
+        $.ajax({
+            url: "{{ route('getInfos') }}",
+            type: "GET",
+            dataType: "json",
+            success: function(response) {
+                // Update Mission
+                $('#mission').html(response.mission);
+                // Update Vision
+                $('#vision').html(response.vission);
+                // Update History
+                $('#history').html(response.history);
+                // Update Logo
+                $('#logo').attr('src', '../barangayprorfile/'+response.logo);
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+        $.ajax({
+           url: "{{ route('getActiveOfficials') }}",
+           type: "GET",
+           dataType: "json",
+           success: function(response) {
+               response.forEach(function(official) {
+                if(official.position == "Punong Barangay" || official.position == "Chairman"){
+                    var officialHtml = '<div class="col-lg-12">' +
+                                        '<div class="card text-center" style="max-width: 340px; margin-left:22rem;">' +
+                                            '<img src="../residentprofile/' + official.profile_path + '" class="card-img-top" alt="' + official.name + '">' +
+                                            '<div class="card-body">' +
+                                                '<h5 class="card-title">' + official.name + '</h5>' +
+                                                '<p class="card-text text-primary">' + official.position + '</p>' +
+                                            '</div>' +
+                                        '</div>' +
+                                      '</div>';   
+                }else{
+                    var officialHtml = '<div class="col-lg-3">' +
+                                        '<div class="card text-center" >' +
+                                            '<img src="../residentprofile/' + official.profile_path + '" class="card-img-top" alt="' + official.name + '">' +
+                                            '<div class="card-body">' +
+                                                '<h5 class="card-title">' + official.name + '</h5>' +
+                                                '<p class="card-text text-primary">' + official.position + '</p>' +
+                                            '</div>' +
+                                        '</div>' +
+                                      '</div>';
+                }
+                   
+                   $('#display_officials').append(officialHtml);
+               });
+           },
+           error: function(xhr, status, error) {
+               console.error(xhr.responseText);
+           }
+       });
+    });
+
+    $(document).ready(function() {
+    $('.forgot-btn').click(function() {
+        var email = $('#email_check').val();
+        var token = '{{ csrf_token() }}';
+
+        // Clear previous error state
+        $('#email_check').removeClass('is-invalid');
+        $('#emailFeedback').text('');
+
+        $.ajax({
+            url: "{{ route('check.email') }}",
+            type: 'POST',
+            data: {
+                email: email,
+                _token: token
+            },
+            beforeSend: function() {
+                $('#load').show();
+            },
+            success: function(response) {
+                $('#load').hide();
+                if (response.exists) {
+//alert('Email exists in the Resident table.');
+                    $('#email_check').addClass('is-valid');
+                    $('#emailFeedback').removeClass('invalid-feedback');
+                    $('#emailFeedback').addClass('valid-feedback');
+                    $('#emailFeedback').text('Password Reset Had been Sent to your Email');
+                    // Add further actions if needed, e.g., sending reset password email.
+                } else {
+                    $('#email_check').addClass('is-invalid');
+                    $('#emailFeedback').text('Email does not exist.');
+                }
+            },
+            error: function(xhr) {
+                $('#load').hide();
+                $('#email_check').addClass('is-invalid');
+                $('#emailFeedback').text('An error occurred. Please try again.');
+            }
+        });
+    });
+});
 </script>
 
 </body>

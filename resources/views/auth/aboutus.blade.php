@@ -94,7 +94,7 @@
             <p class="fs-5 fw-medium text-primary">Our Barangay Officials</p>
             <h1 class="display-5 mb-5">Our Expert People Ready to Help You</h1>
         </div>
-        <div class="row g-4">
+        <div class="row g-4" id="display_officials">
     
         </div>
     </div>
