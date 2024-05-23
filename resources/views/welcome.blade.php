@@ -109,35 +109,44 @@
                     </div>
                 </div>
                 <!-- Copyright End -->
+<style>
+    @media (max-width: 1200px) {
+    .modal-body a.btn {
+        margin-top: -5rem;  /* Adjust this value as needed */
+    }
+}
+
+@media (max-width: 768px) {
+    .modal-body a.btn {
+        margin-top: -4rem;  /* Adjust this value as needed */
+    }
+}
+
+@media (max-width: 576px) {
+    .modal-body a.btn {
+        margin-top: -3rem;  /* Adjust this value as needed */
+    }
+}
 
 
-
-
-
-        <!-- Back to Top -->
-        <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i
-            class="bi bi-arrow-up"></i></a>
-
-
-                    <!-- Back to Top -->
-                    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i
-                        class="bi bi-arrow-up"></i></a>
-
-                       <div class="modal fade" tabindex="-1" role="dialog" id="autoShowModal" >
+</style>
+<div class="modal fade" tabindex="-1" role="dialog" id="autoShowModal">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-body" style="background-image: url('../pic/popup.png'); background-size: cover; height: auto; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                <button type="button" class="btn-close custom-close-button" data-bs-dismiss="modal" aria-label="Close" style="margin-left: 48rem; margin-bottom: 23rem; z-index: 1;"></button>
-
-                <!-- Background Image -->
-                <div >
-                    <a href="onlineservices" class="btn btn-primary btn-lg" role="button" style="margin-left: -22rem;margin-top: -6rem; z-index: 1; position: absolute;">CLICK HERE TO APPLY</a>
+            <div class="modal-body position-relative p-0">
+                <button type="button" class="btn-close custom-close-button" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; top: 1rem; right: 1rem; z-index: 2;"></button>
+                <img src="../pic/popup.png" class="img-fluid" alt="..." style="width: 100%; height: auto; display: block;">
+                <div class="position-absolute w-100 h-100 d-flex justify-content-start align-items-end p-3" style="top: 0; left: 0;">
+                    <a href="onlineservices" class="btn btn-primary btn-lg" role="button" style="z-index: 3;">CLICK HERE TO APPLY</a>
                 </div>
-                <!-- End Background Image -->
             </div>
         </div>
     </div>
 </div>
+
+
+
+
 
 
 

@@ -68,4 +68,5 @@ class AccountApprovalNotification extends Mailable
 
         return [];
     }
+    
 }

@@ -21,19 +21,19 @@ class CertificatesController extends Controller
 {
     public function countPendingFtj()
 {
-    $pendingCount = FtjRequest::where('status', 'Pending')
+    $pendingCount = FtjRequest::where('status', 'Pending')->orwhere('status', 'Approved')->orWhere('status', 'Ready To claim')
     ->count();
     return response()->json(['count' => $pendingCount]);
 }
 public function countPendingindigency()
 {
-    $pendingCount = IndigencyRequest::where('status', 'pending')
+    $pendingCount = IndigencyRequest::where('status', 'pending')->orwhere('status', 'Approved')->orWhere('status', 'Ready To claim')
     ->count();
     return response()->json(['count' => $pendingCount]);
 }
 public function countPendingcert()
 {
-    $pendingCount = CertificateRequest::where('status', 'pending')
+    $pendingCount = CertificateRequest::where('status', 'pending')->orwhere('status', 'Approved')->orWhere('status', 'Ready To claim')
     ->count();
     Log::info('Retrieved Certificate:', ['cert' => $pendingCount]);
 
@@ -41,19 +41,19 @@ public function countPendingcert()
 }
 public function countPendingpermit()
 {
-    $pendingCount = BusinessPermit::where('status', 'pending')
+    $pendingCount = BusinessPermit::where('status', 'pending')->orwhere('status', 'Approved')->orWhere('status', 'Ready To claim')
     ->count();
     return response()->json(['count' => $pendingCount]);
 }
 public function countPendingcessation()
 {
-    $pendingCount = BusinessCessation::where('status', 'Pending')
+    $pendingCount = BusinessCessation::where('status', 'Pending')->orwhere('status', 'Approved')->orWhere('status', 'Ready To claim')
     ->count();
     return response()->json(['count' => $pendingCount]);
 }
 public function countPendingsoloparent()
 {
-    $pendingCount = SoloparentRequest::where('status', 'pending')
+    $pendingCount = SoloparentRequest::where('status', 'pending')->orwhere('status', 'Approved')->orWhere('status', 'Ready To claim')
     ->count();
     return response()->json(['count' => $pendingCount]);
 }
@@ -130,6 +130,88 @@ public function getData($type)
         }
 
         return response()->json($data);
+    }
+    public function GetdataApproved($type)
+    {
+        switch ($type) {
+            case 'ftj':
+                $datas = FtjRequest::where('status', 'Approved')->orWhere('status', 'Ready To claim')
+                ->orWhere('status', 'Claimed')
+                ->whereHas('residents', function ($query) {
+                    $query->whereColumn('reg_num', 'residents.reg_number');
+                })
+                ->with(['residents' => function ($query) {
+                    $query->select('reg_number', 'address', 'cnum');
+                }])
+                ->get();
+                break;
+            case 'indigency':
+                $datas = IndigencyRequest::where('type', 'Barangay Indigency')->where('status', 'Approved')
+                ->orWhere('status', 'Ready To claim')
+                ->orWhere('status', 'Claimed')
+                ->whereHas('resident', function ($query) {
+                    $query->whereColumn('reg_num', 'residents.reg_number');
+                })
+                ->with(['resident' => function ($query) {
+                    $query->select('reg_number', 'address', 'cnum');
+                }])
+                ->get();
+                break;
+            case 'certificate':
+                $datas = CertificateRequest::where('type', 'Barangay Certificate')->where('status', 'Approved')
+                ->orWhere('status', 'Claimed')
+                ->orWhere('status', 'Ready To claim')
+                ->whereHas('resident', function ($query) {
+                    $query->whereColumn('reg_num', 'residents.reg_number');
+                })
+                ->with(['resident' => function ($query) {
+                    $query->select('reg_number', 'address', 'cnum');
+                }])
+                ->get();
+                break;
+            case 'permits':
+                $datas = BusinessPermit::where('type', 'Business Permit')->where('status', 'Approved')
+                ->orWhere('status', 'Claimed')
+                ->orWhere('status', 'Ready To claim')
+                ->whereHas('resident', function ($query) {
+                    $query->whereColumn('reg_num', 'residents.reg_number');
+                })
+                ->with(['resident' => function ($query) {
+                    $query->select('reg_number', 'address', 'cnum');
+                }])
+                ->get();
+                Log::info('Retrieved Resident:', ['permits' => $datas]);
+                break;
+
+            case 'cessation':
+                $datas = BusinessCessation::where('type', 'Business Cessation')->where('status', 'Approved')
+                ->orWhere('status', 'Claimed')
+                ->orWhere('status', 'Ready To claim')
+                ->whereHas('resident', function ($query) {
+                    $query->whereColumn('reg_num', 'residents.reg_number');
+                })
+                ->with(['resident' => function ($query) {
+                    $query->select('reg_number', 'address', 'cnum');
+                }])
+                ->get();
+                break;
+            case 'soloparent':
+                $datas = SoloparentRequest::where('type', 'Solo Parents')->where('status', 'Approved')
+                ->orWhere('status', 'Claimed')
+                ->orWhere('status', 'Ready To claim')
+                ->whereHas('resident', function ($query) {
+                    $query->whereColumn('reg_num', 'residents.reg_number');
+                })
+                ->with(['resident' => function ($query) {
+                    $query->select('reg_number', 'address', 'cnum');
+                }])
+                ->get();
+                break;
+            default:
+                $datas = [];
+        }
+
+        return response()->json($datas);
     }
     public function getRelatedData(Request $request)
     {
@@ -1237,7 +1319,93 @@ public function sendEmailNotificationDecline(Request $request)
         return response()->json(['error' => 'Internal Server Error'], 500);
     }
 }
-    
+public function sendEmailNotificationClaim(Request $request)
+{
+    // Retrieve the resident ID from the request
+    $email = $request->input('email');
+    $type = $request->input('type');
+    $id = $request->input('id');
+    Log::info('Received resident email:', ['email' => $email]);
+    try {
+        if($type == "First Time Job Seeker"||$type == "First Time Job seeker (Minor)"||$type == "First Time Job Seeker Oath Taking" ){
+            $resident = FtjRequest::findOrFail($id);
+        }else if($type == "Business Cessation"){
+            $resident = BusinessCessation::findOrFail($id);
+        }else if($type == "Business Permit"){
+            $resident = BusinessPermit::findOrFail($id);
+        }else if($type == "Barangay Certificate"){
+            $resident = CertificateRequest::findOrFail($id);
+        }else if($type == "Barangay Indigency"){
+            $resident = IndigencyRequest::findOrFail($id);
+        }else if($type == "Solo Parents"){
+            $resident = SoloparentRequest::findOrFail($id);
+        }else{
+         Log::error('No dataBases Found');
+        }
+        // Fetch the resident based on the ID
+        Log::info('Retrieved email:', ['email_resident' => $email]);
+        Log::info('Resident Email:', ['email' => $email]);
+        $subject="Document Ready to Be Claimed";
+        $Body = "Your Document Request are now Ready to claim. Please Present the Controll Number of the Document and 1 valid ID.";
+        // Send email notification using Mailable class
+        try {
+            Mail::to($email)->send(new AccountApprovalNotification($subject, $Body));
+            $resident->status = 'Ready To claim';
+            $resident->save();
+        } catch (\Exception $e) {
+            Log::error('Exception while sending email: ' . $e->getMessage());
+        }
+        return response()->json(['success' => true]);
+    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        Log::error('Error sending email notification: Resident with ID ' . $id . ' not found');
+        return response()->json(['error' => 'Resident not found'], 404);
+    } catch (\Exception $e) {
+        Log::error('Error sending email notification: ' . $e->getMessage());
+        return response()->json(['error' => 'Internal Server Error'], 500);
+    }
+}
+public function sendEmailNotificationClaimed(Request $request)
+{
+    // Retrieve the resident ID from the request
+    $email = $request->input('email');
+    $type = $request->input('type');
+    $id = $request->input('id');
+    Log::info('Received resident email:', ['email' => $email]);
+    try {
+        if($type == "First Time Job Seeker"||$type == "First Time Job seeker (Minor)"||$type == "First Time Job Seeker Oath Taking" ){
+            $resident = FtjRequest::findOrFail($id);
+        }else if($type == "Business Cessation"){
+            $resident = BusinessCessation::findOrFail($id);
+        }else if($type == "Business Permit"){
+            $resident = BusinessPermit::findOrFail($id);
+        }else if($type == "Barangay Certificate"){
+            $resident = CertificateRequest::findOrFail($id);
+        }else if($type == "Barangay Indigency"){
+            $resident = IndigencyRequest::findOrFail($id);
+        }else if($type == "Solo Parents"){
+            $resident = SoloparentRequest::findOrFail($id);
+        }else{
+         Log::error('No dataBases Found');
+        }
+        // Fetch the resident based on the ID
+        Log::info('Retrieved email:', ['email_resident' => $email]);
+        Log::info('Resident Email:', ['email' => $email]);
+
+        try {
+            $resident->status = 'Claimed';
+            $resident->save();
+        } catch (\Exception $e) {
+            Log::error('Exception while sending email: ' . $e->getMessage());
+        }
+        return response()->json(['success' => true]);
+    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        Log::error('Error sending email notification: Resident with ID ' . $id . ' not found');
+        return response()->json(['error' => 'Resident not found'], 404);
+    } catch (\Exception $e) {
+        Log::error('Error sending email notification: ' . $e->getMessage());
+        return response()->json(['error' => 'Internal Server Error'], 500);
+    }
+}
     
 
     

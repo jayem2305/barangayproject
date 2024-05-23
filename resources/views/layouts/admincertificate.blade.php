@@ -204,14 +204,26 @@ $(document).ready( function () {
 
         // Call the function on page load
         updatePendingCount();
-        
+        function toggleSpinner(button, show) {
+        var spinner = $(button).find('.spinner-border');
+        var icon = $(button).find('i');
+
+        if (show) {
+            spinner.removeClass('d-none');
+            icon.addClass('d-none');
+        } else {
+            spinner.addClass('d-none');
+            icon.removeClass('d-none');
+        }
+    }
         // Optionally, you can call this function periodically to update the count
         // setInterval(updatePendingCount, 60000); // Refresh every minute
     $('input[type=radio][name=options-base]').change(function() {
     var type = $(this).attr('id');
     var tableId;
+    var claimtableid;
     var id ,name,date,address,type,purpose,phone_number,action;
-
+    claimtableid = '#ClaimTable';
      tableId = '#ApprovalTable';
     $.ajax({
         url: '/Admin/certificate/get-data/' + type,
@@ -233,9 +245,21 @@ $(document).ready( function () {
                 type = "First-Time Job Seeker";
                 purpose = item.type;
                 phone_number = item.residents.cnum;
-                action = "<div class='btn-group ' role='group' aria-label='Basic example'><button class='btn btn-lg btn-warning view-btn' data-control-number='" + item.id + "'><i class='bi bi-eye-fill'></i></button> " +
-                 "<button class='btn btn-success btn-lg approve-btn' data-control-number='" + item.id + "'><i class='bi bi-check'></i></button> " +
-                 "<button class='btn btn-danger btn-lg decline-btn' data-control-number='" + item.id + "'><i class='bi bi-x'></i></button></div>";
+                action = "<div class='btn-group' role='group' aria-label='Basic example'>" +
+            "<button class='btn btn-lg btn-warning view-btn' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +
+                "<i class='bi bi-eye-fill'></i>" +
+            "</button> " +
+            "<button class='btn btn-success btn-lg approve-btn' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +
+                "<i class='bi bi-check'></i>" +
+            "</button> " +
+            "<button class='btn btn-danger btn-lg decline-btn' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +
+                "<i class='bi bi-x'></i>" +
+            "</button>" +
+        "</div>";
+
                 }
                 if(item.type == "Barangay Indigency"){
                 id = "BI_"+formatDatecontroll(item.created_at) +"_"+item.id;
@@ -250,8 +274,15 @@ $(document).ready( function () {
                 }
                 phone_number = item.resident.cnum;
                 action = "<div class='btn-group ' role='group' aria-label='Basic example'><button class='btn btn-lg btn-warning view-btn' data-control-number='" + item.id + "'><i class='bi bi-eye-fill'></i></button> " +
-                 "<button class='btn btn-success btn-lg approve-btn' data-control-number='" + item.id + "'><i class='bi bi-check'></i></button> " +
-                 "<button class='btn btn-danger btn-lg decline-btn' data-control-number='" + item.id + "'><i class='bi bi-x'></i></button></div>";
+            "<button class='btn btn-success btn-lg approve-btn' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +
+                "<i class='bi bi-check'></i>" +
+            "</button> " +
+            "<button class='btn btn-danger btn-lg decline-btn' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +
+                "<i class='bi bi-x'></i>" +
+            "</button>" +
+        "</div>"
                 }
                 else if(item.type == "Barangay Certificate"){
                 id = "BC_"+formatDatecontroll(item.created_at) +"_"+item.id;
@@ -267,8 +298,15 @@ $(document).ready( function () {
                 }
                 phone_number = item.resident.cnum;
                 action = "<div class='btn-group ' role='group' aria-label='Basic example'><button class='btn btn-lg btn-warning view-btn' data-control-number='" + item.id + "'><i class='bi bi-eye-fill'></i></button> " +
-                 "<button class='btn btn-success btn-lg approve-btn' data-control-number='" + item.id + "'><i class='bi bi-check'></i></button> " +
-                 "<button class='btn btn-danger btn-lg decline-btn' data-control-number='" + item.id + "'><i class='bi bi-x'></i></button></div>";
+            "<button class='btn btn-success btn-lg approve-btn' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +
+                "<i class='bi bi-check'></i>" +
+            "</button> " +
+            "<button class='btn btn-danger btn-lg decline-btn' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +
+                "<i class='bi bi-x'></i>" +
+            "</button>" +
+        "</div>"
                 }
                 if(item.type == "Business Permit"){
                 id = "BP_"+formatDatecontroll(item.created_at) +"_"+item.id;
@@ -279,8 +317,15 @@ $(document).ready( function () {
                 purpose = item.type;
                 phone_number = item.resident.cnum;
                 action = "<div class='btn-group ' role='group' aria-label='Basic example'><button class='btn btn-lg btn-warning view-btn' data-control-number='" + item.id + "'><i class='bi bi-eye-fill'></i></button> " +
-                 "<button class='btn btn-success btn-lg approve-btn' data-control-number='" + item.id + "'><i class='bi bi-check'></i></button> " +
-                 "<button class='btn btn-danger btn-lg decline-btn' data-control-number='" + item.id + "'><i class='bi bi-x'></i></button></div>";
+            "<button class='btn btn-success btn-lg approve-btn' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +
+                "<i class='bi bi-check'></i>" +
+            "</button> " +
+            "<button class='btn btn-danger btn-lg decline-btn' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +
+                "<i class='bi bi-x'></i>" +
+            "</button>" +
+        "</div>"
                 }
                 if(item.type == "Business Cessation"){
                 id = "BCS_"+formatDatecontroll(item.created_at) +"_"+item.id;
@@ -291,8 +336,15 @@ $(document).ready( function () {
                 purpose = item.type;
                 phone_number = item.resident.cnum;
                 action = "<div class='btn-group ' role='group' aria-label='Basic example'><button class='btn btn-lg btn-warning view-btn' data-control-number='" + item.id + "'><i class='bi bi-eye-fill'></i></button> " +
-                 "<button class='btn btn-success btn-lg approve-btn' data-control-number='" + item.id + "'><i class='bi bi-check'></i></button> " +
-                 "<button class='btn btn-danger btn-lg decline-btn' data-control-number='" + item.id + "'><i class='bi bi-x'></i></button></div>";
+            "<button class='btn btn-success btn-lg approve-btn' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +
+                "<i class='bi bi-check'></i>" +
+            "</button> " +
+            "<button class='btn btn-danger btn-lg decline-btn' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +
+                "<i class='bi bi-x'></i>" +
+            "</button>" +
+        "</div>"
                 }
                 if(item.type == "Solo Parents"){
                 id = "SP_"+formatDatecontroll(item.created_at) +"_"+item.id;
@@ -303,8 +355,15 @@ $(document).ready( function () {
                 purpose = item.type;
                 phone_number = item.resident.cnum;
                 action = "<div class='btn-group ' role='group' aria-label='Basic example'><button class='btn btn-lg btn-warning view-btn' data-control-number='" + item.id + "'><i class='bi bi-eye-fill'></i></button> " +
-                 "<button class='btn btn-success btn-lg approve-btn' data-control-number='" + item.id + "'><i class='bi bi-check'></i></button> " +
-                 "<button class='btn btn-danger btn-lg decline-btn' data-control-number='" + item.id + "'><i class='bi bi-x'></i></button></div>";
+            "<button class='btn btn-success btn-lg approve-btn' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +
+                "<i class='bi bi-check'></i>" +
+            "</button> " +
+            "<button class='btn btn-danger btn-lg decline-btn' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +
+                "<i class='bi bi-x'></i>" +
+            "</button>" +
+        "</div>"
                 }
                 var row = $(tableId).DataTable().row.add([
                     id,
@@ -431,10 +490,12 @@ $(document).ready( function () {
                     $(row).find('.approve-btn').on('click', function() {
     // Handle approve button click
     var controlId = $(this).data('control-number');
+    
     $("#setid").val(item.id);
     $("#typeofcert").val(item.type);
     var display_item = item.type; 
-
+    var button = this;
+        toggleSpinner(button, true);
     $.ajax({
         url: "{{route('approvecert')}}",
         method: 'POST',
@@ -468,10 +529,14 @@ $(document).ready( function () {
             } else if (display_item === "Solo Parents") {
                 $('#soloparent').prop('checked', true).trigger('change');
             }
-
+            $('#liveToast .toast-body').text('Document Approve Successfully');
+            var toastElement = new bootstrap.Toast(document.getElementById('liveToast'));
+            toastElement.show();
+            toggleSpinner(button, false);
         },
         error: function(xhr, status, error) {
             console.error('Error sending email notification:', error);
+            toggleSpinner(button, false);
             // Handle error response if needed
         }
     });
@@ -517,6 +582,317 @@ $(document).ready( function () {
 
         }
     });
+    $.ajax({
+    url: '/Admin/certificate/GetdataApproved/' + type,
+    type: 'GET',
+    success: function(response) {
+            console.log(type);
+            
+            $(claimtableid).DataTable().clear().draw();
+
+            $(claimtableid + ' tbody').empty();
+            if (response.length === 0) {
+            $(claimtableid + ' tbody').html('<tr><td colspan="8" class="text-center">No data available</td></tr>');
+        } else {
+            // Append new rows to the table
+            $.each(response, function(index, item) {
+
+                if(item.type == "First Time Job Seeker Oath Taking" || item.type == "First Time Job Seeker" ||item.type == "First Time Job seeker (Minor)"){
+                id = "FTJ_"+formatDatecontroll(item.created_at) +"_"+item.id;
+                name = item.name;
+                date = formatDate(item.created_at);
+                address = item.residents.address;
+                type = "First-Time Job Seeker";
+                purpose = item.type;
+                phone_number = item.residents.cnum;
+                if(item.status == "Ready To claim"){
+                    action = "<div class='btn-group btn-group-lg' role='group' aria-label='Basic example'>" +
+                  "<button class='btn btn-primary btn-lg pdfconvert_display' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" + "<i class='bi bi-printer' ></i></button> " +
+                 "<button class='btn btn-success btn-lg claim-btn' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +"<i>Claim</i></button></div>";
+                }else if(item.status == "Claimed"){
+                    action = "<h3 class='text-success'>Claimed</h3>";
+                }else{
+                    action = "<div class='btn-group btn-group-lg' role='group' aria-label='Basic example'>" +
+                  "<button class='btn btn-primary btn-lg pdfconvert_display' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +"<i class='bi bi-printer' ></i></button> " +
+                 "<button class='btn btn-success btn-lg ready_to_claim-btn' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +"<i class='bi bi-check2-circle'></i></button></div>";
+                }
+                }
+                if(item.type == "Barangay Indigency"){
+                id = "BI_"+formatDatecontroll(item.created_at) +"_"+item.id;
+                name = item.name;
+                date = formatDate(item.created_at);
+                address = item.resident.address;
+                type = item.type;
+                if(item.purpose == "Others"){
+                    purpose = item.otherpurpose;
+                }else{
+                    purpose = item.purpose;
+                }
+                phone_number = item.resident.cnum;
+                if(item.status == "Ready To claim"){
+                    action = "<div class='btn-group btn-group-lg' role='group' aria-label='Basic example'>" +
+                  "<button class='btn btn-primary btn-lg pdfconvert_display' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" + "<i class='bi bi-printer' ></i></button> " +
+                 "<button class='btn btn-success btn-lg claim-btn' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +"<i>Claim</i></button></div>";
+                }else if(item.status == "Claimed"){
+                    action = "<h3 class='text-success'>Claimed</h3>";
+                }else{
+                    action = "<div class='btn-group btn-group-lg' role='group' aria-label='Basic example'>" +
+                  "<button class='btn btn-primary btn-lg pdfconvert_display' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +"<i class='bi bi-printer' ></i></button> " +
+                 "<button class='btn btn-success btn-lg ready_to_claim-btn' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +"<i class='bi bi-check2-circle'></i></button></div>";
+                }
+                
+                }
+                else if(item.type == "Barangay Certificate"){
+                id = "BC_"+formatDatecontroll(item.created_at) +"_"+item.id;
+                name = item.name;
+                date = formatDate(item.created_at);
+                address = item.resident.address;
+                type = item.type;
+                purpose = item.type;
+                if(item.purpose == "Others"){
+                    purpose = item.otherpurpose;
+                }else{
+                    purpose = item.purpose;
+                }
+                phone_number = item.resident.cnum;
+                if(item.status == "Ready To claim"){
+                    action = "<div class='btn-group btn-group-lg' role='group' aria-label='Basic example'>" +
+                  "<button class='btn btn-primary btn-lg pdfconvert_display' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" + "<i class='bi bi-printer' ></i></button> " +
+                 "<button class='btn btn-success btn-lg claim-btn' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +"<i>Claim</i></button></div>";
+                }else if(item.status == "Claimed"){
+                    action = "<h3 class='text-success'>Claimed</h3>";
+                }else{
+                    action = "<div class='btn-group btn-group-lg' role='group' aria-label='Basic example'>" +
+                  "<button class='btn btn-primary btn-lg pdfconvert_display' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +"<i class='bi bi-printer' ></i></button> " +
+                 "<button class='btn btn-success btn-lg ready_to_claim-btn' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +"<i class='bi bi-check2-circle'></i></button></div>";
+                }
+                }
+                if(item.type == "Business Permit"){
+                id = "BP_"+formatDatecontroll(item.created_at) +"_"+item.id;
+                name = item.name;
+                date = formatDate(item.created_at);
+                address = item.resident.address;
+                type = item.type;
+                purpose = item.type;
+                phone_number = item.resident.cnum;
+                if(item.status == "Ready To claim"){
+                    action = "<div class='btn-group btn-group-lg' role='group' aria-label='Basic example'>" +
+                  "<button class='btn btn-primary btn-lg pdfconvert_display' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" + "<i class='bi bi-printer' ></i></button> " +
+                 "<button class='btn btn-success btn-lg claim-btn' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +"<i>Claim</i></button></div>";
+                }else if(item.status == "Claimed"){
+                    action = "<h3 class='text-success'>Claimed</h3>";
+                }else{
+                    action = "<div class='btn-group btn-group-lg' role='group' aria-label='Basic example'>" +
+                  "<button class='btn btn-primary btn-lg pdfconvert_display' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +"<i class='bi bi-printer' ></i></button> " +
+                 "<button class='btn btn-success btn-lg ready_to_claim-btn' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +"<i class='bi bi-check2-circle'></i></button></div>";
+                }
+                }
+                if(item.type == "Business Cessation"){
+                id = "BCS_"+formatDatecontroll(item.created_at) +"_"+item.id;
+                name = item.name;
+                date = formatDate(item.created_at);
+                address = item.resident.address;
+                type = item.type;
+                purpose = item.type;
+                phone_number = item.resident.cnum;
+                if(item.status == "Ready To claim"){
+                    action = "<div class='btn-group btn-group-lg' role='group' aria-label='Basic example'>" +
+                  "<button class='btn btn-primary btn-lg pdfconvert_display' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" + "<i class='bi bi-printer' ></i></button> " +
+                 "<button class='btn btn-success btn-lg claim-btn' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +"<i>Claim</i></button></div>";
+                }else if(item.status == "Claimed"){
+                    action = "<h3 class='text-success'>Claimed</h3>";
+                }else{
+                    action = "<div class='btn-group btn-group-lg' role='group' aria-label='Basic example'>" +
+                  "<button class='btn btn-primary btn-lg pdfconvert_display' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +"<i class='bi bi-printer' ></i></button> " +
+                 "<button class='btn btn-success btn-lg ready_to_claim-btn' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +"<i class='bi bi-check2-circle'></i></button></div>";
+                }
+                }
+                if(item.type == "Solo Parents"){
+                id = "SP_"+formatDatecontroll(item.created_at) +"_"+item.id;
+                name = item.name;
+                date = formatDate(item.created_at);
+                address = item.resident.address;
+                type = "Solo parent";
+                purpose = item.type;
+                phone_number = item.resident.cnum;
+                if(item.status == "Ready To claim"){
+                    action = "<div class='btn-group btn-group-lg' role='group' aria-label='Basic example'>" +
+                  "<button class='btn btn-primary btn-lg pdfconvert_display' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" + "<i class='bi bi-printer' ></i></button> " +
+                 "<button class='btn btn-success btn-lg claim-btn' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +"<i>Claim</i></button></div>";
+                }else if(item.status == "Claimed"){
+                    action = "<h3 class='text-success'>Claimed</h3>";
+                }else{
+                    action = "<div class='btn-group btn-group-lg' role='group' aria-label='Basic example'>" +
+                  "<button class='btn btn-primary btn-lg pdfconvert_display' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +"<i class='bi bi-printer' ></i></button> " +
+                 "<button class='btn btn-success btn-lg ready_to_claim-btn' data-control-number='" + item.id + "'>" +
+                "<span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>" +"<i class='bi bi-check2-circle'></i></button></div>";
+                }
+                }
+                var row = $(claimtableid).DataTable().row.add([
+                    id,
+                    name,
+                    date,
+                    address,
+                    type,
+                    purpose,
+                    '0' + phone_number,
+                    action
+                ]).draw().node();
+                console.log(row);
+                   
+                $(row).find('.ready_to_claim-btn').on('click', function() {
+    // Handle approve button click
+    var button = this;
+        toggleSpinner(button, true);
+                var controlId = $(this).data('control-number');
+                $("#setid").val(item.id);
+                $("#typeofcert").val(item.type);
+                var display_item = item.type; 
+                //alert(item.email);
+                $.ajax({
+                    url: "{{route('claimcert')}}",
+                    method: 'POST',
+                    data: {
+                        email: item.email, // Change this to the actual email
+                        type: item.type,
+                        id: item.id
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        console.log('Email notification sent successfully');
+                        //var controlId = $(this).data('control-number');
+                        //$('#kagawadsignatory').modal('show');
+                        console.log('Approve button clicked for control number: ' + controlId);
+                        console.log('Type of cert: ' + item.type);
+                    updatePendingCount();
+                    // Check the type and trigger change event accordingly
+                        if (display_item === "First Time Job Seeker Oath Taking" || display_item === "First Time Job Seeker" || display_item === "First Time Job seeker (Minor)") {
+                            $('#ftj').prop('checked', true).trigger('change');
+                        } else if (display_item === "Barangay Indigency") {
+                            $('#indigency').prop('checked', true).trigger('change');
+                        } else if (display_item === "Barangay Certificate") {
+                            $('#certificate').prop('checked', true).trigger('change');
+                        } else if (display_item === "Business Permit") {
+                            $('#permits').prop('checked', true).trigger('change');
+                        } else if (display_item === "Business Cessation") {
+                            $('#cessation').prop('checked', true).trigger('change');
+                        } else if (display_item === "Solo Parents") {
+                            $('#soloparent').prop('checked', true).trigger('change');
+                        }
+                        $('#liveToast .toast-body').text('Document Update Successfully');
+                         var toastElement = new bootstrap.Toast(document.getElementById('liveToast'));
+                        toastElement.show();
+                        toggleSpinner(button, false);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error sending email notification:', error);
+                        // Handle error response if needed
+                        toggleSpinner(button, false);
+                    }
+                });
+            });
+            $(row).find('.claim-btn').on('click', function() {
+                var button = this;
+        toggleSpinner(button, true);
+    // Handle approve button click
+                var controlId = $(this).data('control-number');
+                $("#setid").val(item.id);
+                $("#typeofcert").val(item.type);
+                var display_item = item.type; 
+               // alert(item.email);
+                $.ajax({
+                    url: "{{route('claimedcert')}}",
+                    method: 'POST',
+                    data: {
+                        email: item.email, // Change this to the actual email
+                        type: item.type,
+                        id: item.id
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        console.log('Emaiil notfication sent successfully');
+                        //var controlId = $(this).data('control-number');
+                        //$('#kagawadsignatory').modal('show');
+                        console.log('Approve button clicked for control number: ' + controlId);
+                        console.log('Type of cert: ' + item.type);
+                    updatePendingCount();
+                    // Check the type and trigger change event accordingly
+                        if (display_item === "First Time Job Seeker Oath Taking" || display_item === "First Time Job Seeker" || display_item === "First Time Job seeker (Minor)") {
+                            $('#ftj').prop('checked', true).trigger('change');
+                        } else if (display_item === "Barangay Indigency") {
+                            $('#indigency').prop('checked', true).trigger('change');
+                        } else if (display_item === "Barangay Certificate") {
+                            $('#certificate').prop('checked', true).trigger('change');
+                        } else if (display_item === "Business Permit") {
+                            $('#permits').prop('checked', true).trigger('change');
+                        } else if (display_item === "Business Cessation") {
+                            $('#cessation').prop('checked', true).trigger('change');
+                        } else if (display_item === "Solo Parents") {
+                            $('#soloparent').prop('checked', true).trigger('change');
+                        }
+                        $('#liveToast .toast-body').text('Document Claimed Successfully');
+                        var toastElement = new bootstrap.Toast(document.getElementById('liveToast'));
+                        toggleSpinner(button, false);
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error sending email notification:', error);
+                        toggleSpinner(button, false);
+                        // Handle error response if needed
+                    }
+                });
+            });
+
+                    $(row).find('.pdfconvert_display').on('click', function() {
+                        // Handle decline button click
+                        var controlId = $(this).data('control-number');
+                        // Perform necessary action
+                        $("#setid").val(item.id);
+                        $("#typeofcert").val(item.type);
+                        $('#kagawadsignatory').modal('show');
+
+                        //$('#kagawadsignatory').show();
+                        console.log('Approve button clicked for control number: ' + controlId);
+                        console.log('Type of cert: ' + item.type);
+                    });
+                  
+            });
+            $(claimtableid).DataTable();
+        }
+        },
+        error: function(xhr, status, error) {
+            // Handle errors
+            console.error(xhr.responseText);
+
+        }
+    });
     
 });
 $('.pdfconvert').on('click', function() {
@@ -540,9 +916,6 @@ $('.pdfconvert').on('click', function() {
             // PDF generation successful, open the generated PDF in the modal
             $('#pdfFrame').attr('src', response.url);
             $('#pdfModal').modal('show');
-            $('#liveToast .toast-body').text('Document Approve Successfully');
-            var toastElement = new bootstrap.Toast(document.getElementById('liveToast'));
-            toastElement.show();
             console.log(response);
             
         },
@@ -554,6 +927,8 @@ $('.pdfconvert').on('click', function() {
 });
 
 $('.decline_request').on('click', function() {
+    var button = this;
+        toggleSpinner(button, true);
     var controlId = $("#setid_decline").val();
     var typeofcert = $("#typeofcert_decline").val();
     var email = $("#emaildecline").val();
@@ -595,12 +970,14 @@ $('.decline_request').on('click', function() {
             }
             console.log(typeofcert);
         updatePendingCount();
-
+        toggleSpinner(button, false);
+        $("#declineReason").val('');
 
         },
         error: function(xhr, status, error) {
             // Handle error
             console.error(error);
+            toggleSpinner(button, false);
         }
     });
 });

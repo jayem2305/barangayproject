@@ -113,14 +113,6 @@ function registerPost(Request $request){
     'occupation' => 'required|regex:/^[a-zA-Z\s ]+$/',
     'email' => 'required|email|unique:residents,email',
     'password' => 'required|min:8|regex:/^(?=.*[a-zA-Z0-9 ])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]+$/',
-    'employed' => 'nullable',
-    'unemployed' => 'nullable',
-    'PWD' => 'nullable',
-    'OFW' => 'nullable',
-    'soloparent' => 'nullable',
-    'OSY' => 'nullable',
-    'student' => 'nullable',
-    'OSC' => 'nullable',
 
 
 ];
@@ -181,6 +173,46 @@ if ($validator->fails()) {
 $data = $request->all();
 
 $data_step1 = $validator->validated();
+$indicateIf = [];
+
+if ($request->has('employed') && $request->input('employed') !== null) {
+    $indicateIf[] = $request->input('employed');
+}
+
+if ($request->has('unemployed') && $request->input('unemployed') !== null) {
+    $indicateIf[] = $request->input('unemployed');
+}
+
+if ($request->has('PWD') && $request->input('PWD') !== null) {
+    $indicateIf[] = $request->input('PWD');
+}
+
+if ($request->has('OFW') && $request->input('OFW') !== null) {
+    $indicateIf[] = $request->input('OFW');
+}
+
+if ($request->has('soloparent') && $request->input('soloparent') !== null) {
+    $indicateIf[] = $request->input('soloparent');
+}
+
+if ($request->has('OSY') && $request->input('OSY') !== null) {
+    $indicateIf[] = $request->input('OSY');
+}
+
+if ($request->has('student') && $request->input('student') !== null) {
+    $indicateIf[] = $request->input('student');
+}
+
+if ($request->has('OSC') && $request->input('OSC') !== null) {
+    $indicateIf[] = $request->input('OSC');
+}
+
+if (empty($indicateIf)) {
+    return response()->json(['error' => 'At least one checkbox must be checked'], 400);
+}
+
+// Convert the array of checkbox values into a string
+$indicateIfString = implode(',', $indicateIf);
 $checkedCheckboxes = array_filter($data_step1);
     $request->session()->put('step1', $checkedCheckboxes);
 // Remove 'proofofowner' from the data since we've stored the file name separately
@@ -189,7 +221,7 @@ $request->session()->put('step1', $data_step1);
 // Further processing, if needed
 return response()->json(['status' => 'success']);
     }
-    // Other logic...
+ 
  
 
     public function step2(Request $request)
@@ -329,47 +361,46 @@ return response()->json(['status' => 'success']);
     $checkboxes = ['employed', 'unemployed', 'PWD', 'soloparent', 'OFW', 'student', 'OSC', 'OSY'];
     $indicateIfValues = [];
  // Retrieve values from the session
- $step1Data = $request->session()->get('step1');
-    if (isset($step1Data['employed']) && $step1Data['employed']) {
-    $employedValue = $step1Data['employed'];
+ $indicateIf = [];
 
-    }
-    if (isset($step1Data['unemployed']) && $step1Data['unemployed']) {
-        $unemployedValue = $step1Data['unemployed'];
-    }
-    
-    if (isset($step1Data['PWD']) && $step1Data['PWD']) {
-        $PWDValue = $step1Data['PWD'];
-    }
-    
-    if (isset($step1Data['soloparent']) && $step1Data['soloparent']) {
-        $soloparentValue = $step1Data['soloparent'];
-    }
-    
-    if (isset($step1Data['OFW']) && $step1Data['OFW']) {
-        $OFWValue = $step1Data['OFW'];
-    }
-    
-    if (isset($step1Data['student']) && $step1Data['student']) {
-        $studentValue = $step1Data['student'];
-    }
-    
-    if (isset($step1Data['OSC']) && $step1Data['OSC']) {
-        $OSCValue = $step1Data['OSC'];
-    }
-    
-   if (isset($step1Data['OSY']) && $step1Data['OSY']) {
-        $OSYValue = $step1Data['OSY'];
-    }
-    foreach ($checkboxes as $checkbox) {
-        if (isset($step1Data[$checkbox]) && $step1Data[$checkbox]) {
-            $indicateIfValues[$checkbox] = 1;
-        } else {
-            $indicateIfValues[$checkbox] = 0;
-        }
-    }
-    // Convert the array to JSON string
-    $indicateIfString = json_encode($indicateIfValues);
+ if ($request->has('employed') && $request->input('employed') !== null) {
+     $indicateIf[] = $request->input('employed');
+ }
+ 
+ if ($request->has('unemployed') && $request->input('unemployed') !== null) {
+     $indicateIf[] = $request->input('unemployed');
+ }
+ 
+ if ($request->has('PWD') && $request->input('PWD') !== null) {
+     $indicateIf[] = $request->input('PWD');
+ }
+ 
+ if ($request->has('OFW') && $request->input('OFW') !== null) {
+     $indicateIf[] = $request->input('OFW');
+ }
+ 
+ if ($request->has('soloparent') && $request->input('soloparent') !== null) {
+     $indicateIf[] = $request->input('soloparent');
+ }
+ 
+ if ($request->has('OSY') && $request->input('OSY') !== null) {
+     $indicateIf[] = $request->input('OSY');
+ }
+ 
+ if ($request->has('student') && $request->input('student') !== null) {
+     $indicateIf[] = $request->input('student');
+ }
+ 
+ if ($request->has('OSC') && $request->input('OSC') !== null) {
+     $indicateIf[] = $request->input('OSC');
+ }
+ 
+ if (empty($indicateIf)) {
+     return response()->json(['error' => 'At least one checkbox must be checked'], 400);
+ }
+ 
+ // Convert the array of checkbox values into a string
+ $indicateIfString = implode(',', $indicateIf);
     $resident->indicate_if = $indicateIfString;
     $resident->owner_type = $request->session()->get('step2.owner');
     $resident->owner_name = $request->session()->get('step2.ownername');

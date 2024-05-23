@@ -596,9 +596,9 @@ function displaytable(){
                         if(item.status == "Cancelled"){
                             button = $('<h4>').text('Cancelled').addClass('text-danger text-center'); 
                         }else if(item.status == "Approved"){
-                            button = $('<h4>').text('Processing').addClass('text-warning text-center'); 
+                            button = $('<h4>').text('In Process').addClass('text-warning text-center'); 
                         }else if(item.status == "Ready To Claim"){
-                            button = $('<h4>').text('Ready To Claim').addClass('text-success text-center'); 
+                            button = $('<h4>').text('Ready To claim').addClass('text-success text-center'); 
                         }else if(item.status == "Claimed"){
                             button = $('<h4>').text('Claimed').addClass('text-success text-center'); 
                         }else if(item.status == "Declined"){

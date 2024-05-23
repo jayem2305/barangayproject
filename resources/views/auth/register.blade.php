@@ -105,9 +105,9 @@
                     <div class="col-lg-6">
                         <div class="row">
                             <div class="col-lg-12">
-                            <label for="formGroupExampleInput" class="form-label">Comeplete Address<span class="text-danger">*</span></label>
+                            <label for="formGroupExampleInput" class="form-label">Complete Address<span class="text-danger">*</span></label>
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control form-control-lg" id="address" placeholder="Comeplete Address" name="address" >
+                                <input type="text" class="form-control form-control-lg" id="address" placeholder="Complete Address" name="address" >
                             </div>
                             </div>
                         </div>
@@ -137,7 +137,7 @@
                             <div class="col-lg-12">
                             <label for="formGroupExampleInput" class="form-label">Date of Birth<span class="text-danger">*</span></label>
                             <div class="input-group mb-3">
-                                <input type="date" class="form-control form-control-lg" id="birthday" placeholder="Date of Birth" name="birthday" max="2009-12-31" >
+                                <input type="date" class="form-control form-control-lg" id="birthday" placeholder="Date of Birth" name="birthday" max="2009-12-31" min="1924-12-31" >
                             </div>
                             </div>
                         </div>
@@ -438,6 +438,9 @@ data-password="password" name="firststep"> <span class="next-text ">Next</span>
     <div class="input-group mb-3">
         <input class="form-control form-control-lg" type="file" placeholder="letter ng May-ari"name="proofofowner" id="proofofowner" >
     </div>
+    <div class="valid-secondary text-primary" style="margin-top: -1rem;">
+        Only for non-owners.
+                            </div>
 </div>
 <div class="col-lg-6">
 <label for="numberoffam">No. of HouseHold Members<span class="text-danger">*</span></label>
@@ -680,6 +683,10 @@ data-password="password" name="firststep"> <span class="next-text ">Next</span>
                 <div class="row">
                     <div class="col-lg-12">
                     <h6>By using the Website, you acknowledge that you have read, understood, and agree to be bound by these Terms and our Privacy Policy.</h6>
+                    </div>
+                    <div class="text-danger">
+                    <p><i class="bi bi-info-circle"></i> Please be advised that you will not be allowed to continue with the account creation process if you decline the terms and conditions. 
+                        </p>
                     </div>
                     <div class="col-lg-12 d-grid gap-2 d-md-flex justify-content-md-end">
                         <a href="/" type="button" class="btn btn-secondary" >Decline</a>

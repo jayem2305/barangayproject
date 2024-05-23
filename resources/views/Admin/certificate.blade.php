@@ -60,7 +60,7 @@
     <div class="col-2">
         <div class="card text-white" style="background-color: #1C2035;" >
         <br>
-          <img src="../barangayprorfile/1714398238_logo.png" class=" rounded-circle mx-auto d-block" alt="..." width="200" height="200" id="logo">
+          <img src="../img/load.gif" class=" rounded-circle mx-auto d-block" alt="..." width="200" height="200" id="logo">
           <hr>
           <div class="d-grid gap-3">
           <div class="btn-group-vertical" role="group" aria-label="Vertical radio toggle button group">
@@ -184,10 +184,6 @@
         </div>
 </div>
 </div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-primary upload-indigency">Submit</button>
-</div>
 </div>
 </div>
 </div>
@@ -240,10 +236,6 @@
             </div>
         </div>
 </div>
-</div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-primary upload-bpermit">Submit</button>
 </div>
 </div>
 </div>
@@ -304,10 +296,6 @@
             </div>
         </div>
     </div>
-</div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-primary upload-ftj">Submit</button>
 </div>
 </div>
 </div>
@@ -372,7 +360,8 @@
       </div>
       <div class="modal-footer">
       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-danger decline_request" id="submitDeclineReason">Decline</button>
+        <button type="button" class="btn btn-danger decline_request" id="submitDeclineReason"><span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span>
+        <i>Decline</i></button>
       </div>
     </div>
   </div>

@@ -62,7 +62,7 @@
 <!-- statistic start -->
 <div class="container-fluid col-lg-12" style="margin-top:-2rem;" >
     <div class="row"style="margin-left:1.5rem;" >
-        <div class="card col-lg-2" style="width: 15rem;">
+        <div class="card col-lg-3" style="width: 15rem;">
           <div class="card-body">
             <b><h3 style="text-align:center; font-size:7rem;"><span id="residences_num"></h3>
                 <h3 style="text-align:center; ">Total Numbers of Residences</h3></b>
@@ -90,7 +90,7 @@
                 <p style="text-align:center;">Includes all Registered that lives in the community</p>
             </div>
         </div>
-        <div class="card col-lg-2" style="width: 15rem;">
+        <div class="card col-lg-3" style="width: 15rem;">
           <div class="card-body">
             <b><h3 style="text-align:center; font-size:7rem;"><span id="female_num"></span></h3>
                 <h3 style="text-align:center; ">Total Numbers of Females</h3></b>
@@ -117,39 +117,55 @@
                     <br>
                     <div class="row">
                         <div class="col-lg-2">
+                             <label for="formGroupExampleInput" class="form-label">Name</label>
                             <div class="input-group mb-3">
-                              <span class="input-group-text" id="inputGroup-sizing-default">Name</span>
-                              <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                              <input type="text" class="form-control form-control-lg" id="name" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                           </div>
                       </div>
                       <div class="col-lg-2">
+            <label for="formGroupExampleInput" class="form-label">Age</label>
                         <div class="input-group mb-3">
-                          <span class="input-group-text" id="inputGroup-sizing-default">Age</span>
-                          <input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                          <input type="number" class="form-control form-control-lg" id="age" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                       </div>
                   </div>
                   <div class="col-lg-2">
+                  <label for="formGroupExampleInput" class="form-label">Address</label>
                     <div class="input-group mb-3">
-                      <span class="input-group-text" id="inputGroup-sizing-default">Address</span>
-                      <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                      <input type="text" class="form-control form-control-lg" id="address" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                   </div>
               </div>
               <div class="col-lg-2">
+            <label for="formGroupExampleInput" class="form-label">Voters</label>
                 <div class="input-group mb-3">
-                  <span class="input-group-text" id="inputGroup-sizing-default">Voters</span>
-                  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                    <select class="form-select form-select-lg mb-3" id="voters" aria-label="Large select example">
+                        <option disabled>----</option>
+                        <option value="All">All</option>
+                        <option value="Voters">Voters</option>
+                        <option value="Non-Voters">Non-Voters</option>      
+                    </select>
               </div>
           </div>
           <div class="col-lg-2">
+            <label for="formGroupExampleInput" class="form-label">Sex</label>
             <div class="input-group mb-3">
-              <span class="input-group-text" id="inputGroup-sizing-default">Sex</span>
-              <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+              <select class="form-select form-select-lg mb-3" id="sex" aria-label="Large select example">
+                        <option disabled>----</option>
+                        <option value="All">All</option>
+                        <option value="Female">Female</option>
+                        <option value="Male">Male</option>      
+                </select>
           </div>
       </div>
       <div class="col-lg-2">
+      <label for="formGroupExampleInput" class="form-label">Status</label>
         <div class="input-group mb-3">
-          <span class="input-group-text" id="inputGroup-sizing-default">Status</span>
-          <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+          <select class="form-select form-select-lg mb-3" id="status" aria-label="Large select example" disabled>
+                        <option disabled>----</option>
+                        <option value="All">All</option>
+                        <option value="Adult">Adult</option>
+                        <option value="Minor">Minor</option>
+                        <option value="Senior">Senior</option>      
+                </select>
       </div>
   </div>
   <table class="table" id="tableResident">

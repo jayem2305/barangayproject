@@ -65,14 +65,18 @@ Route::get('/Admin/count-pending-permit', [CertificatesController::class, 'count
 Route::get('/Admin/count-pending-cessation', [CertificatesController::class, 'countPendingcessation'])->name('count.pending.cessation');
 Route::get('/Admin/count-pending-soloparent', [CertificatesController::class, 'countPendingsoloparent'])->name('count.pending.soloparent');
 Route::get('/Admin/certificate/get-data/{type}', [CertificatesController::class, 'getData']);
+Route::get('/Admin/certificate/GetdataApproved/{type}', [CertificatesController::class, 'GetdataApproved']);
 Route::get('/Admin/certificate/get', [CertificatesController::class, 'getRelatedData'])->name('related-datas');
 Route::match(['get', 'post'], '/Admin/generate-pdf', [CertificatesController::class, 'generatePDF'])->name('generate.pdf');
 Route::post('/Admin/certificate/update', [CertificatesController::class, 'sendEmailNotificationCert'])->name('approvecert');
+Route::post('/Admin/certificate/claim', [CertificatesController::class, 'sendEmailNotificationClaim'])->name('claimcert');
+Route::post('/Admin/certificate/ed', [CertificatesController::class, 'sendEmailNotificationClaimed'])->name('claimedcert');
 Route::post('/Admin/certificate/Decline', [CertificatesController::class, 'sendEmailNotificationDecline'])->name('declined');
 
 
 
 Route::get('/statistical/get', [StatisticsController::class, 'getResidentsAndMembers'])->name('admin.getmembers');
+Route::get('/statistical/index', [StatisticsController::class, 'index'])->name('admin.index.stat');
 Route::get('/Admin', [AdminController::class, 'statisticalreport'])->name('admin.statisticalreport');
 Route::get('/Admin/resident', [AdminController::class, 'resident'])->name('admin.resident');
 Route::get('/Admin/certificate', [AdminController::class, 'certificate'])->name('admin.certificate');
@@ -113,7 +117,7 @@ Route::post('/update_Event', [EventsController::class, 'update_event'])->name('E
 Route::post('/update_Project', [EventsController::class, 'update_project'])->name('Project.update');
 Route::post('/update_info', [EventsController::class, 'update_info'])->name('info.update');
 Route::get('/info/fetch', [EventsController::class, 'fetchInfo'])->name('info.fetch');
-Route::get('/export',  [ExportController::class, 'export'])->name('export');
+Route::post('/export',  [ExportController::class, 'export'])->name('export');
 Route::get('/get-image', [UserController::class, 'getImage'])->name('get.image');
 Route::get('/get-projects', [UserController::class, 'getProjects'])->name('get.project');
 Route::get('/get-news-events', [UserController::class, 'getNewsAndEvents'])->name('get.events');

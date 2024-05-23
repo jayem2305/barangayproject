@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Resident;
+use App\Models\Member;
 use App\Models\Official;
 use App\Models\DeclinedNotification;
 use Illuminate\Support\Facades\Log;
@@ -16,20 +17,30 @@ class ResidentListController extends Controller
     public function index()
     {
         // Get counts from the database
-    $totalResidences = Resident::whereNotIn('status', ['admin'])->count();
-    $totalSeniors = Resident::whereNotIn('status', ['admin'])->where('age', '>=', 65)->count();
-    $totalMinors = Resident::whereNotIn('status', ['admin'])->where('age', '<', 18)->count();
-    $totalMales = Resident::whereNotIn('status', ['admin'])->where('gender', 'male')->count();
-    $totalFemales = Resident::whereNotIn('status', ['admin'])->where('gender', 'female')->count();
+    $totalResidences = Resident::whereNotIn('status', ['Admin','Declined','pending'])->count();
+    $totalSeniors = Resident::whereNotIn('status', ['Admin','Declined','pending'])->where('age', '>=', 65)->count();
+    $totalMinors = Resident::whereNotIn('status', ['Admin','Declined','pending'])->where('age', '<', 18)->count();
+    $totalMales = Resident::whereNotIn('status', ['Admin','Declined','pending'])->where('gender', 'male')->count();
+    $totalFemales = Resident::whereNotIn('status', ['Admin','Declined','pending'])->where('gender', 'female')->count();
     
-
+    $totalResidencesMember = Member::whereNotIn('status', ['Admin','Declined','pending'])->count();
+    $totalSeniorsMember = Member::whereNotIn('status', ['Admin','Declined','pending'])->where('age', '>=', 65)->count();
+    $totalMinorsMember = Member::whereNotIn('status', ['Admin','Declined','pending'])->where('age', '<', 18)->count();
+    $totalMalesMember = Member::whereNotIn('status', ['Admin','Declined','pending'])->where('gender', 'male')->count();
+    $totalFemalesMember = Member::whereNotIn('status', ['Admin','Declined','pending'])->where('gender', 'female')->count();
     // Pass counts to the view
+    $totalR = $totalResidences + $totalResidencesMember;
+    $totalS = $totalSeniors + $totalSeniorsMember;
+    $totalM = $totalMinors + $totalMinorsMember;
+    $totalML = $totalMales + $totalMalesMember;
+    $totalF = $totalFemales + $totalFemalesMember;
+    
     return response()->json([
-        'totalResidences' => $totalResidences,
-        'totalSeniors' => $totalSeniors,
-        'totalMinors' => $totalMinors,
-        'totalMales' => $totalMales,
-        'totalFemales' => $totalFemales,
+        'totalResidences' => $totalR,
+        'totalSeniors' => $totalS,
+        'totalMinors' => $totalM,
+        'totalMales' => $totalML,
+        'totalFemales' => $totalF,
     ]);
     }
     

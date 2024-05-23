@@ -268,14 +268,6 @@ $(document).ready(function () {
     var civil = $('#civil').val();
     var citizenship = $('#citizenship').val();
     var occupation = $('#occupation').val();
-    var employed = $('#employed').val();
-    var unemployed = $('#unemployed').val();
-    var PWD = $('#PWD').val();
-    var OFW = $('#OFW').val();
-    var soloparent = $('#soloparent').val();
-    var OSY = $('#OSY').val();
-    var student = $('#student').val();
-    var OSC = $('#OSC').val();
     var email = $('#email').val();
     var password = $('#password').val();
     var formData = new FormData();
@@ -293,10 +285,17 @@ $(document).ready(function () {
     formData.append('gender', gender);
     formData.append('civil', civil);
     formData.append('citizenship', citizenship);
-    formData.append('occupation', occupation);
+    formData.append('occupation', occupation); 
     formData.append('email', email);
     formData.append('password', password);
-    
+    formData.append('employed', $('#employed').is(':checked') ? $('#employed').val() : null);
+    formData.append('Unemployed', $('#unemployed').is(':checked') ? $('#unemployed').val() : null);
+    formData.append('PWD', $('#PWD').is(':checked') ? $('#PWD').val() : null);
+    formData.append('OFW', $('#OFW').is(':checked') ? $('#OFW').val() : null);
+    formData.append('soloparent', $('#soloparent').is(':checked') ? $('#soloparent').val() : null);
+    formData.append('OSY', $('#OSY').is(':checked') ? $('#OSY').val() : null);
+    formData.append('student', $('#student').is(':checked') ? $('#student').val() : null);
+    formData.append('OSC', $('#OSC').is(':checked') ? $('#OSC').val() : null);
     // Get all form data
     $('#step1').find('input, select, textarea').each(function() {
         formData.append($(this).attr('name'), $(this).val());
@@ -304,57 +303,12 @@ $(document).ready(function () {
     // Check if any required fields are empty
     var requiredFields = ['lname', 'fname', 'address', 'household', 'Birth', 'birthday', 'age', 'cnum', 'gender', 'civil', 'citizenship', 'occupation', 'email', 'password'];
     var isValid = true;
-
-
-    // If any required field is empty, stop further processing
     if (!isValid) {
         spinner.addClass('d-none');
         nextText.removeClass('d-none');
         arrowIcon.removeClass('d-none');
         return;
     }
-    // Create an array to store checked checkboxes
-    var checkboxes = [];
-// Check each checkbox and add its value to the array if checked
-if ($('#employed').is(':checked')) {
-    checkboxes.push($('#employed').val());
-}
-
-if ($('#unemployed').is(':checked')) {
-    checkboxes.push($('#unemployed').val());
-}
-if ($('#PWD').is(':checked')) {
-    checkboxes.push($('#PWD').val());
-}
-if ($('#OFW').is(':checked')) {
-    checkboxes.push($('#OFW').val());
-}
-if ($('#soloparent').is(':checked')) {
-    checkboxes.push($('#soloparent').val());
-}
-if ($('#OSY').is(':checked')) {
-    checkboxes.push($('#OSY').val());
-}
-if ($('#student').is(':checked')) {
-    checkboxes.push($('#student').val());
-}
-if ($('#OSC').is(':checked')) {
-    checkboxes.push($('#OSC').val());
-}
-
-// Convert checkboxes array to JSON string
-console.log("Checked Checkboxes:", checkboxes);
-
-// Now add the checkboxes JSON string to the form data
-formData.append('checkboxes', checkboxesJSON);
-
-var checkboxesJSON = JSON.stringify(checkboxes);
-console.log("Checkbox JSON:", checkboxesJSON);
-
-
-
-
-    // Get the CSRF token from the meta tag
     var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
     console.log('Sending AJAX request...');
@@ -370,12 +324,6 @@ console.log("Checkbox JSON:", checkboxesJSON);
         success: function(result) {
             console.log('AJAX request successful:', result);
             $('#step2').find('input, select, textarea').removeClass('is-valid');
-
-            // Check the status property of the result object for each step
-            if (checkboxes.length === 0) {
-    // Display error message
-    $('.alert-danger_message').css('display', 'block');
-} else {
     // Hide the alert
     $('.alert-danger_message').css('display', 'none');
     if (result.status === 'success') {
@@ -403,7 +351,7 @@ console.log("Checkbox JSON:", checkboxesJSON);
                     });
                 }
             }
-}
+
 
             spinner.addClass('d-none');
             // Show "Next" text and arrow icon again
@@ -746,7 +694,14 @@ $('.laststep-btn').click(function() {
     formData.append('voterscert', voterscert);
     formData.append('idv', idv);
     formData.append('pic', pic);
-    formData.append('checkboxes', JSON.stringify(checkboxes));
+    formData.append('employed', $('#employed').is(':checked') ? $('#employed').val() : null);
+    formData.append('Unemployed', $('#unemployed').is(':checked') ? $('#unemployed').val() : null);
+    formData.append('PWD', $('#PWD').is(':checked') ? $('#PWD').val() : null);
+    formData.append('OFW', $('#OFW').is(':checked') ? $('#OFW').val() : null);
+    formData.append('soloparent', $('#soloparent').is(':checked') ? $('#soloparent').val() : null);
+    formData.append('OSY', $('#OSY').is(':checked') ? $('#OSY').val() : null);
+    formData.append('student', $('#student').is(':checked') ? $('#student').val() : null);
+    formData.append('OSC', $('#OSC').is(':checked') ? $('#OSC').val() : null);
 
     $.ajax({
         url: "{{ route('register.laststep') }}",

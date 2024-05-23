@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\AccountApprovalNotification;
 use Illuminate\Support\Facades\Log;
 use App\Models\DeclinedNotification;
-
+use Illuminate\Support\HtmlString;
 class ResidentController extends Controller
 {
     public function pendingaccount()
@@ -39,7 +39,8 @@ public function sendEmailNotification(Request $request)
         $email = $resident->email;
         Log::info('Resident Email:', ['email' => $email]);
         $subject="Account Approval Notification";
-        $Body = "your Account had been approved you may now login.";
+        $Body =new HtmlString("Your Account had been approved you may now login. <a href='" . url('/login') . "'>Click Here to Login</a>.");
+
         // Send email notification using Mailable class
         try {
             Mail::to($email)->send(new AccountApprovalNotification($subject, $Body));

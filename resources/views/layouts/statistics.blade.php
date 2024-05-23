@@ -116,8 +116,36 @@
                     <script>
         $(document).ready(function(){
             $('#exportButton').click(function(){
-                window.location.href = "{{ route('export') }}";
+               // window.location.href = " route('export') }}";
+               let data = {
+                name: $('#name').val(),
+                age: $('#age').val(),
+                address: $('#address').val(),
+                voters: $('#voters').val(),
+                sex: $('#sex').val(),
+                status: $('#status').val(),
+                _token: '{{ csrf_token() }}' // Make sure to include the CSRF token
+            };
+
+            $.ajax({
+                url: '{{ route("export") }}',
+                type: 'POST',
+                data: data,
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function(data, status, xhr) {
+                    var blob = new Blob([data], { type: xhr.getResponseHeader('Content-Type') });
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = 'data.xlsx';
+                    link.click();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
             });
+        });
             // Get the select element
 var yearSelect = document.getElementById('yearSelect');
 
