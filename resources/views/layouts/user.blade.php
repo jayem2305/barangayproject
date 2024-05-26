@@ -916,6 +916,7 @@ $('#OSC_editmember').prop('checked', checkCheckbox('Out of School Children (OSC)
 function deleteMember(memberId) {
     var csrfToken = $('meta[name="csrf-token"]').attr('content');
     // Send AJAX request to delete the member
+    if (confirm('Are you sure you want to delete this member?')) {
     $.ajax({
         url: '/User/members/' + memberId, // Correct route URL
         type: 'DELETE',
@@ -935,6 +936,7 @@ function deleteMember(memberId) {
             // Handle error response
         }
     });
+}
 }
 $('.editmember-btn').click(function(e) {
     e.preventDefault();

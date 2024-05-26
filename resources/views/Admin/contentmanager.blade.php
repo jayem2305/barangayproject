@@ -290,19 +290,6 @@
 </div>
 </div>
 
-<div class="toast-container position-fixed bottom-0 end-0 p-3">
-  <div id="liveToast" class="toast text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header">
-      <strong class="me-auto text-success headerupdate">Updated Successfully</strong>
-      <small class="text-muted">Just now</small>
-      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-    <div class="toast-body">
-      Announcement updated successfully!
-    </div>
-  </div>
-</div>
-
 <!-- Update modal-->
 <div class="modal fade" id="updateAnnouncement" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg ">
@@ -521,5 +508,16 @@
 </div>
 </div>
 </div>
+</div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header ">
+      <strong class="me-auto text-success">SuccessFully Added</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body text-bg-success">
+      Message goes here 
+    </div>
+  </div>
 </div>
 @endsection

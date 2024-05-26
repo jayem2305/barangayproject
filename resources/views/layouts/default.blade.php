@@ -152,19 +152,20 @@ $(document).ready(function () {
                 }
             },
             error: function (xhr, status, error) {
-                spinner.addClass('d-none');
-                loginText.removeClass('d-none');
-                
-                console.error('AJAX request failed:', xhr, status, error);
-                var response = xhr.responseJSON;
-                if (response && response.error) {
-                    $('#opTag').html('<div class="alert alert-danger d-flex align-items-center" role="alert"><svg class="bi flex-shrink-0 me-2" role="img" width="24" height="24" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg><div>'+response.error+'</div></div>');
-                } else {
-                    $('#opTag').html('<div class="alert alert-danger d-flex align-items-center" role="alert"><svg class="bi flex-shrink-0 me-2" role="img" width="24" height="24" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg><div>'+response.error+'</div></div>');
-                }
-                $('#email').addClass('is-invalid');
-                $('#password').addClass('is-invalid');
-            }
+    spinner.addClass('d-none');
+    loginText.removeClass('d-none');
+    
+    console.error('AJAX request failed:', xhr, status, error);
+    var response = xhr.responseJSON;
+    if (response && response.error) {
+        $('#opTag').html('<div class="alert alert-danger d-flex align-items-center" role="alert"><svg class="bi flex-shrink-0 me-2" role="img" width="24" height="24" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg><div>'+response.error+'</div></div>');
+    } else {
+        $('#opTag').html('<div class="alert alert-danger d-flex align-items-center" role="alert"><svg class="bi flex-shrink-0 me-2" role="img" width="24" height="24" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg><div>Account Must be Valid</div></div>');
+    }
+    $('#email').addClass('is-invalid');
+    $('#password').addClass('is-invalid');
+}
+
         });
     });
 });

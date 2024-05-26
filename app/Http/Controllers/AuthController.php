@@ -19,6 +19,8 @@ use App\Models\Member;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AccountApprovalNotification;
 use Illuminate\Support\Str;
+use Illuminate\Support\HtmlString;
+
 
 class AuthController extends Controller
 {
@@ -40,10 +42,14 @@ public function aboutus(){
 public function loginPost(Request $request)
 {
     $request->validate([
-        'email' => 'required|email',
-        'password' => 'required',
-    ]);
-    
+       'email' => 'required|email',
+    'password' => 'required',
+], [
+    'email.required' => 'Email address is required.',
+    'email.email' => 'Please enter a valid email address.',
+    'password.required' => 'Password is required.',
+]);
+
     // Retrieve the resident by email
     $resident = Resident::where('email', $request->email)->first();
 
@@ -75,11 +81,11 @@ public function loginPost(Request $request)
             // Redirect to the admin dashboard
             return response()->json(['success' => 'Login successful', 'redirect' => route('admin.statisticalreport')]);
         } else {
-            return response()->json(['error' => 'Invalid user status'], 422);
+            return response()->json(['error' => 'User not found'], 422);
         }
     } else {
         // If passwords do not match, return error
-        return response()->json(['error' => 'Invalid credentials: Password incorrect'], 422);
+        return response()->json(['error' => 'Password incorrect'], 422);
     }
 }
 
@@ -452,7 +458,7 @@ return response()->json(['status' => 'success']);
         if ($exists) {
             $token = Str::random(60);
             $subject = "Forget Password Reset";
-            $body = "Click the button to change your Password <a href='" . url('/reset-password/' . $token) . "'>Click Here!</a>";
+            $body = new HtmlString("Click the button to change your Password <a href='" . url('/reset-password/' . $token) . "'>Click Here!</a>");
 
             // Send email notification using Mailable class
             try {

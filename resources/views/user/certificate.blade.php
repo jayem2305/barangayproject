@@ -583,10 +583,10 @@
         </div>
 </div>
 </div>
-<dsclass="modal-footer">
+<div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
     <button type="button" class="btn btn-primary upload-cessation">Submit</button>
-</dsclass=>
+</div>
 </div>
 </div>
 </div>

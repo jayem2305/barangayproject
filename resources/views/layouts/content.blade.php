@@ -227,7 +227,23 @@ function handlerestoreAction(eventId) {
        $(document).ready(function() {
         // Initialize CKEditor
         ClassicEditor
-            .create(document.querySelector('#editor_announcement'))
+            .create(document.querySelector('#editor_announcement'), {
+            toolbar: {
+            items: [
+                'heading',
+                '|',
+                'bold',
+                'italic',
+                'link',
+                'bulletedList',
+                'numberedList',
+                'blockQuote',
+                '|',
+                'undo',
+                'redo'
+            ]
+    },
+        language: 'en'})
             .then(editor => {
                 // Event handler for form submission
                 $('.announce-btn').click(function(event) {
@@ -255,10 +271,26 @@ function handlerestoreAction(eventId) {
                         success: function(response) {
                             console.log(response);
                             fetchEventsData();
+                            $('#staticBackdrop').modal('hide');
+                            $('#liveToast .toast-header').removeClass('text-danger').addClass('text-success');
+                            $('#liveToast .me-auto').text('Barangay Announcement');
+                            $('#liveToast .toast-body').removeClass('text-bg-danger').addClass('text-bg-success')
+                            $('#liveToast .toast-body').text('SuccessFully Added');
+                            $('#liveToast').toast('show');
+                        
                             // Optionally, close the modal or show a success message
                         },
                         error: function(xhr, status, error) {
                             console.error('Error:', error);
+                            var errorMessage = "An error occurred. Please try again."; // Default error message
+                            if (xhr.responseJSON && xhr.responseJSON.errors) {
+                                errorMessage = xhr.responseJSON.errors[Object.keys(xhr.responseJSON.errors)[0]][0];
+                            }
+                            $('#liveToast .toast-header').removeClass('text-success').addClass('text-danger');
+                            $('#liveToast .me-auto ').text('Barangay Announcement');
+                            $('#liveToast .toast-body').removeClass('text-bg-success').addClass('text-bg-danger');
+                            $('#liveToast .toast-body').text(errorMessage); // Display error message
+                            $('#liveToast').toast('show');
                         }
                     });
                 });
@@ -268,7 +300,24 @@ function handlerestoreAction(eventId) {
             });
     
         ClassicEditor
-        .create( document.querySelector( '#editor_events' ) )
+        .create( document.querySelector( '#editor_events' ), {
+            toolbar: {
+            items: [
+                'heading',
+                '|',
+                'bold',
+                'italic',
+                'link',
+                'bulletedList',
+                'numberedList',
+                'blockQuote',
+                '|',
+                'undo',
+                'redo'
+            ]
+    },
+        language: 'en'})
+        
         .then(editor => {
                 // Event handler for form submission
                 $('.event-btn').click(function(event) {
@@ -299,10 +348,26 @@ function handlerestoreAction(eventId) {
                         success: function(response) {
                             console.log(response);
                             fetchEventsData();
+                            $('#staticBackdropforevents').modal('hide');
+                            $('#liveToast .toast-header').removeClass('text-danger').addClass('text-success');
+                            $('#liveToast .me-auto').text('Barangay Events');
+                            $('#liveToast .toast-body').removeClass('text-bg-danger').addClass('text-bg-success')
+                            $('#liveToast .toast-body').text('SuccessFully Added');
+                            $('#liveToast').toast('show');
+                        
                             // Optionally, close the modal or show a success message
                         },
                         error: function(xhr, status, error) {
                             console.error('Error:', error);
+                            var errorMessage = "Something is not Right, Please Check the Information."; // Default error message
+                            if (xhr.responseJSON && xhr.responseJSON.errors) {
+                                errorMessage = xhr.responseJSON.errors[Object.keys(xhr.responseJSON.errors)[0]][0];
+                            }
+                            $('#liveToast .toast-header').removeClass('text-success').addClass('text-danger');
+                            $('#liveToast .me-auto ').text('Barangay Events');
+                            $('#liveToast .toast-body').removeClass('text-bg-success').addClass('text-bg-danger');
+                            $('#liveToast .toast-body').text(errorMessage); // Display error message
+                            $('#liveToast').toast('show');
                         }
                     });
                 });
@@ -311,7 +376,23 @@ function handlerestoreAction(eventId) {
             console.error( error );
         } );
         ClassicEditor
-        .create( document.querySelector( '#editor_project' ) )
+        .create( document.querySelector( '#editor_project' ) , {
+            toolbar: {
+            items: [
+                'heading',
+                '|',
+                'bold',
+                'italic',
+                'link',
+                'bulletedList',
+                'numberedList',
+                'blockQuote',
+                '|',
+                'undo',
+                'redo'
+            ]
+    },
+        language: 'en'})
         .then(editor => {
                 // Event handler for form submission
                 $('.project-btn').click(function(event) {
@@ -324,7 +405,7 @@ function handlerestoreAction(eventId) {
                     var end_time = $('#enddateproject').val();
                     var image = $('#filetypeproject').prop('files')[0];
                     var content = editor.getData();
-                    alert(image);
+                    //alert(image);
                     // Create a FormData object
                     var formData = new FormData();
                     formData.append('type', 'Project');
@@ -348,10 +429,26 @@ function handlerestoreAction(eventId) {
                         success: function(response) {
                             console.log(response);
                             fetchEventsData();
+                            $('#staticBackdropforproject').modal('hide');
+                            $('#liveToast .toast-header').removeClass('text-danger').addClass('text-success');
+                            $('#liveToast .me-auto').text('Barangay Project');
+                            $('#liveToast .toast-body').removeClass('text-bg-danger').addClass('text-bg-success')
+                            $('#liveToast .toast-body').text('SuccessFully Added');
+                            $('#liveToast').toast('show');
+                        
                             // Optionally, close the modal or show a success message
                         },
                         error: function(xhr, status, error) {
                             console.error('Error:', error);
+                            var errorMessage = "An error occurred. Please try again."; // Default error message
+                            if (xhr.responseJSON && xhr.responseJSON.errors) {
+                                errorMessage = xhr.responseJSON.errors[Object.keys(xhr.responseJSON.errors)[0]][0];
+                            }
+                            $('#liveToast .toast-header').removeClass('text-success').addClass('text-danger');
+                            $('#liveToast .me-auto ').text('Barangay Project');
+                            $('#liveToast .toast-body').removeClass('text-bg-success').addClass('text-bg-danger');
+                            $('#liveToast .toast-body').text(errorMessage); // Display error message
+                            $('#liveToast').toast('show');
                         }
                     });
                 });
@@ -391,7 +488,23 @@ $(document).on('click', '.btn-update', function() {
                 if (!editorAnnouncementUpdate) {
                     // Create CKEditor instance if not already initialized
                     ClassicEditor
-                        .create(document.querySelector('#editor_announcement_update'))
+                        .create(document.querySelector('#editor_announcement_update'), {
+            toolbar: {
+            items: [
+                'heading',
+                '|',
+                'bold',
+                'italic',
+                'link',
+                'bulletedList',
+                'numberedList',
+                'blockQuote',
+                '|',
+                'undo',
+                'redo'
+            ]
+    },
+        language: 'en'})
                         .then(editor => {
                             // Store the CKEditor instance
                             editorAnnouncementUpdate = editor;
@@ -421,7 +534,23 @@ $(document).on('click', '.btn-update', function() {
                 if (!editorAnnouncementUpdate) {
                     // Create CKEditor instance if not already initialized
                     ClassicEditor
-                        .create(document.querySelector('#updateeditor_events'))
+                        .create(document.querySelector('#updateeditor_events'), {
+            toolbar: {
+            items: [
+                'heading',
+                '|',
+                'bold',
+                'italic',
+                'link',
+                'bulletedList',
+                'numberedList',
+                'blockQuote',
+                '|',
+                'undo',
+                'redo'
+            ]
+    },
+        language: 'en'})
                         .then(editor => {
                             // Store the CKEditor instance
                             editorAnnouncementUpdate = editor;
@@ -453,7 +582,23 @@ $(document).on('click', '.btn-update', function() {
                 if (!editorAnnouncementUpdate) {
                     // Create CKEditor instance if not already initialized
                     ClassicEditor
-                        .create(document.querySelector('#updateeditor_project'))
+                        .create(document.querySelector('#updateeditor_project'), {
+            toolbar: {
+            items: [
+                'heading',
+                '|',
+                'bold',
+                'italic',
+                'link',
+                'bulletedList',
+                'numberedList',
+                'blockQuote',
+                '|',
+                'undo',
+                'redo'
+            ]
+    },
+        language: 'en'})
                         .then(editor => {
                             // Store the CKEditor instance
                             editorAnnouncementUpdate = editor;
@@ -519,10 +664,10 @@ $(document).on('click', '.announce-update-btn', function() {
                         errorMessage += "\n" + message;
                         // Show each error message in toast individually
                         var toast = $('#liveToast');
-            toast.find('.headerupdate').removeClass('text-success').addClass('text-danger');
+            toast.find('.toast-header').removeClass('text-success').addClass('text-danger');
             toast.removeClass('text-bg-success').addClass('text-bg-danger');
            toast.find('.toast-body').text(message);
-            toast.find('.headerupdate').text('Unsuccessful Update');
+            toast.find('.toast-header').text('Unsuccessful Update');
             var bsToast = new bootstrap.Toast(toast);
             bsToast.show();
                     });
@@ -679,7 +824,23 @@ formData.append('image', image);
     });
 });
 ClassicEditor
-    .create(document.querySelector('#updatemission'))
+    .create(document.querySelector('#updatemission'), {
+            toolbar: {
+            items: [
+                'heading',
+                '|',
+                'bold',
+                'italic',
+                'link',
+                'bulletedList',
+                'numberedList',
+                'blockQuote',
+                '|',
+                'undo',
+                'redo'
+            ]
+    },
+        language: 'en'})
     .then(editor => {
         // Set the data to the editor instance
         editorAnnouncementUpdateMission = editor;
@@ -689,7 +850,23 @@ ClassicEditor
     });
 
 ClassicEditor
-    .create(document.querySelector('#updatevission'))
+    .create(document.querySelector('#updatevission'), {
+            toolbar: {
+            items: [
+                'heading',
+                '|',
+                'bold',
+                'italic',
+                'link',
+                'bulletedList',
+                'numberedList',
+                'blockQuote',
+                '|',
+                'undo',
+                'redo'
+            ]
+    },
+        language: 'en'})
     .then(editor => {
         // Set the data to the editor instance
         editorAnnouncementUpdateVission = editor;
@@ -699,7 +876,23 @@ ClassicEditor
     });
 
 ClassicEditor
-    .create(document.querySelector('#updatehistory'))
+    .create(document.querySelector('#updatehistory'), {
+            toolbar: {
+            items: [
+                'heading',
+                '|',
+                'bold',
+                'italic',
+                'link',
+                'bulletedList',
+                'numberedList',
+                'blockQuote',
+                '|',
+                'undo',
+                'redo'
+            ]
+    },
+        language: 'en'})
     .then(editor => {
         // Set the data to the editor instance
         editorAnnouncementUpdateHistory = editor;

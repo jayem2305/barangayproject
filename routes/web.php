@@ -12,6 +12,7 @@ use App\Http\Controllers\OfficialController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\CertificatesController;
+use App\Http\Controllers\IndexController;
 
 
 Route::middleware(['web'])->group(function () {
@@ -140,6 +141,7 @@ Route::view('/userresident/index', 'userresident.index')->name('userresident.ind
 
 
 Route::get('/',[AuthController::class,"index"])->name('home');
+Route::get('/',[IndexController::class,"index"])->name('home.index');
 Route::get("/onlineservices",[AuthController::class,"onlineservices"])->name("onlineservices");
 Route::get("/aboutus",[AuthController::class,"aboutus"])->name("aboutus");
 Route::get("/login",[AuthController::class,"login"])->name("login");

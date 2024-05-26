@@ -562,23 +562,24 @@ public function submitRequestindignecy(Request $request)
     $email = $user->email;
     // Validate the incoming request data
     $validatedData = $request->validate([
-        'voters' => 'required',
+        'voters' => 'required|in:Voters,Non-Voters',
         'name' => ['required', function ($attribute, $value, $fail) {
-            if ($value === 'undefined') {
-                $fail($attribute.' is invalid.');
+            if ($value === 'undefined' || $value === 'null') {
+                $fail('Name for requester is Required');
             }
         }],
     
         'copy' => 'required|min:1|max:5',
         'purpose' => ['required', function ($attribute, $value, $fail) {
         if ($value === 'null') {
-            $fail($attribute.' is invalid.');
+            $fail('Invalid Purpose.');
         }
     }],
         'otherpurpose' => 'nullable|regex:/^[a-zA-Z\s\p{P}0-9]+$/u',
-        'requirements' => $request->hasFile('requirements') ? 'required|mimes:pdf|max:50000' : ''
+        'requirements' => 'required|mimes:pdf|max:50000'
     ], [
         'voters.required' => 'Voters field is required.',
+        'voters.in' => 'Voters field must be Valid".',
         'name.required' => 'Name field is required.',
         'copy.required' => 'Copy field is required.',
         'copy.min' => 'Copy field must be at least 0.',
@@ -603,9 +604,11 @@ public function submitRequestindignecy(Request $request)
     if ($request->hasFile('requirements')) {
         $file = $request->file('requirements');
         $originalFilename = $file->getClientOriginalName(); // Get the original filename
-        $filename = 'File_'. $file->getClientOriginalExtension();
-        $file->move(public_path('Files_Requirements'), $originalFilename);
-        $requestModel->requirements = $originalFilename; // Store the original filename
+        $filename = 'File_' . time() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('Files_Requirements'), $filename);
+        $requestModel->requirements = $filename; // Store the generated filename
+    } else {
+        $requestModel->requirements = null; // Set to null if no file is uploaded
     }
     $requestModel->save();
 
@@ -667,8 +670,8 @@ public function submitBusinessPermit(Request $request)
     $validator = $request->validate ([
         'voters' => 'required|in:Voters,Non-Voters',
         'name' => ['required', function ($attribute, $value, $fail) {
-            if ($value === 'null') {
-                $fail($attribute.' is invalid.');
+            if ($value === 'undefined' || $value === 'null') {
+                $fail('Name for requester is Required');
             }
         }],
         'copy' => 'required|min:1|max:5',
@@ -677,7 +680,7 @@ public function submitBusinessPermit(Request $request)
         'requirements_bpermit' => 'required|mimes:pdf|max:50000'
     ], [
         'voters.required' => 'Voters field is required.',
-        'voters.in' => 'Voters field must be either "Voters" or "Non-Voters".',
+        'voters.in' => 'Voters field must be Valid".',
         'name.required' => 'Name field is required.',
         'copy.required' => 'Number of copies field is required.',
         'copy.min' => 'Number of copies field must be at least 0.',
@@ -728,8 +731,8 @@ public function submitCessation(Request $request)
     $validator = $request->validate ([
         'voters' => 'required|in:Voters,Non-Voters',
         'name' => ['required', function ($attribute, $value, $fail) {
-            if ($value === 'null') {
-                $fail($attribute.' is invalid.');
+            if ($value === 'undefined' || $value === 'null') {
+                $fail('Name for requester is Required');
             }
         }],
         'copy_cessation' => 'required|min:1|max:5',
@@ -739,7 +742,7 @@ public function submitCessation(Request $request)
         'requirements' => 'required|mimes:pdf|max:50000'
     ],[
         'voters.required' => 'Voters field is required.',
-        'voters.in' => 'Voters field must be either "Voters" or "Non-Voters".',
+        'voters.in' => 'Voters field must be Valid".',
         'name.required' => 'Name field is required.',
         'copy_cessation.required' => 'Number of copies field is required.',
         'copy_cessation.min' => 'Number of copies field must be at least 0.',
@@ -793,21 +796,22 @@ public function submitRequestcertificate(Request $request)
     $validatedData = $request->validate([
         'voters' => 'required|in:Voters,Non-Voters',
         'name' => ['required', function ($attribute, $value, $fail) {
-            if ($value === 'undefined') {
-                $fail($attribute.' is invalid.');
+            if ($value === 'undefined' || $value === 'null') {
+                $fail('Name for requester is Required');
             }
         }],
     
         'copy' => 'required|min:1|max:5',
         'purpose' => ['required', function ($attribute, $value, $fail) {
-        if ($value === 'null') {
-            $fail($attribute.' is invalid.');
-        }
+            if ($value === 'null') {
+                $fail('Invalid Purpose.');
+            }
     }],
         'otherpurpose' => 'nullable|regex:/^[a-zA-Z\s\p{P}0-9]+$/u',
-        'requirements' => $request->hasFile('requirements') ? 'required|mimes:pdf|max:50000' : ''
+        'requirements' => 'required|mimes:pdf|max:50000'
     ], [
         'voters.required' => 'Voters field is required.',
+        'voters.in' => 'Voters field must be Valid".',
         'name.required' => 'Name field is required.',
         'name.invalid' => 'Name field is invalid.',
         'copy.required' => 'Copy field is required.',
@@ -858,14 +862,21 @@ public function submitRequestsoloparent(Request $request)
     $validatedData = $request->validate([
         'voters' => 'required|in:Voters,Non-Voters',
         'name' => ['required', function ($attribute, $value, $fail) {
-            if ($value === 'undefined') {
-                $fail($attribute.' is invalid.');
+            if ($value === 'undefined' || $value === 'null') {
+                $fail('Name for requester is Required');
             }
         }],
         'copy' => 'required|min:1|max:5',
-        'requirements' => $request->hasFile('requirements') ? 'required|mimes:pdf|max:50000' : ''
+        'requirements' => 'required|mimes:pdf|max:50000',
+        'selectedChildren' => ['required', function ($attribute, $value, $fail) {
+            $children = json_decode($value, true);
+            if (json_last_error() !== JSON_ERROR_NONE || !is_array($children) || empty($children)) {
+                $fail('Select the name of your Child/Children');
+            }
+        }]
     ], [
         'voters.required' => 'Voters field is required.',
+        'voters.in' => 'Voters field must be Valid".',
         'name.required' => 'Name field is required.',
         'name.invalid' => 'Name field is invalid.',
         'copy.required' => 'Copy field is required.',
@@ -914,22 +925,29 @@ public function submitRequestftj(Request $request)
     $validatedData = $request->validate([
         'voters' => 'required|in:Voters,Non-Voters',
         'name' => ['required', function ($attribute, $value, $fail) {
-            if ($value === 'undefined') {
-                $fail($attribute.' is invalid.');
+            if ($value === 'undefined' || $value === 'null') {
+                $fail('Name for requester is Required');
             }
         }],
         'copy' => 'required|min:1|max:5',
-        'requirements' => $request->hasFile('requirements') ? 'required|mimes:pdf|max:50000' : '',
+        'requirements' => 'required|mimes:pdf|max:50000',
         'type' => 'required|in:First Time Job seeker (Minor),First Time Job Seeker Oath Taking,First Time Job Seeker',
         'pname' => 'nullable|regex:/^[a-zA-Z\s\p{P}0-9]+$/u',
         'paddress' => 'nullable|regex:/^[a-zA-Z\s\p{P}0-9]+$/u',
         'page' => 'nullable',
-        'number_day' => 'required',
-        'fileInputparent' => $request->hasFile('fileInputparent') ? 'nullable|mimes:pdf|max:50000' : ''
+        'fileInputparent' => 'nullable|max:50000',
+        'number_day' => ['required', function ($attribute, $value, $fail) {
+            if ($value === '0 null' ||stripos($value, 'null') !== false ||stripos($value, '0') !== false) {
+                $fail('Number of years Resided in the Barangay is Required');
+            }
+        }],
+        
 
     ], [
         'voters.required' => 'Voters field is required.',
+        'voters.in' => 'Voters field must be Valid".',
         'name.required' => 'Name field is required.',
+        'type.in' => 'Type of First Time job Seeker is Required".',
         'number_day.required' => 'Number of Days field is required.',
         'name.invalid' => 'Name field is invalid.',
         'copy.required' => 'Copy field is required.',

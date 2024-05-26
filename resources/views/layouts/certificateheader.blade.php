@@ -308,6 +308,7 @@ document.addEventListener("DOMContentLoaded", function() {
             $('.toast').removeClass('text-bg-danger').addClass('text-bg-success');
             $('.toast-body').text('Request submitted successfully.');
             $('.toast').toast('show');
+            $('#exampleModal').modal('hide');
             
         },
         error: function (xhr, status, error) {
@@ -353,6 +354,7 @@ $('.upload-bpermit').click(function (e) {
             $('.toast').removeClass('text-bg-danger').addClass('text-bg-success');
             $('.toast-body').text('Request submitted successfully.');
             $('.toast').toast('show');
+            $('#modalBpermit').modal('hide');
         },
         error: function (xhr, status, error) {
             console.error(xhr.responseJSON);
@@ -400,6 +402,8 @@ $('.upload-cessation').click(function (e) {
             $('.toast').removeClass('text-bg-danger').addClass('text-bg-success');
             $('.toast-body').text('Request submitted successfully.');
             $('.toast').toast('show');
+            $('#modalBcessation').modal('hide');
+
         },
         error: function (xhr, status, error) {
             console.error(xhr.responseJSON);
@@ -446,8 +450,9 @@ $('.upload-certifictae').click(function (e) {
             $('.toast').removeClass('text-bg-danger').addClass('text-bg-success');
             $('.toast-body').text('Request submitted successfully.');
             $('.toast').toast('show');
+            $('#exampleModalCertificate').modal('hide');
             $('#otherpurposecert').val('');
-
+            
         },
         error: function (xhr, status, error) {
             console.error(xhr.responseJSON);
@@ -500,6 +505,7 @@ $('.upload-soloparent').click(function (e) {
             $('.toast-body').text('Request submitted successfully.');
             $('.toast').toast('show');
             $('#otherpurposecert').val('');
+            $('#exampleModalsolo').modal('hide');
 
         },
         error: function (xhr, status, error) {
@@ -560,6 +566,7 @@ $('.upload-ftj').click(function (e) {
             $('.toast-body').text('Request submitted successfully.');
             $('.toast').toast('show');
             $('#otherpurposecert').val('');
+            $('#exampleModalftjcert').modal('hide');
 
         },
         error: function (xhr, status, error) {

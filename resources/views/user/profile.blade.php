@@ -441,7 +441,7 @@
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Update Profile</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Add Profile</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">
@@ -738,7 +738,7 @@
                     <div class="col-lg-12">
                         <label for="formGroupExampleInput" class="form-label">Date of Birth<span class="text-danger">*</span></label>
                         <div class="input-group mb-3">
-                            <input type="date" class="form-control form-control-lg" id="birthday_editmember" placeholder="Date of Birth" name="birthday_editmember" max="2009-12-31"onchange="calculateAge()" >
+                            <input type="date" class="form-control form-control-lg" id="birthday_editmember" placeholder="Date of Birth" name="birthday_editmember" max="1924-12-31"onchange="calculateAge()" >
                         </div>
                     </div>
                 </div>
@@ -748,7 +748,7 @@
                     <div class="col-lg-12">
                         <label for="formGroupExampleInput" class="form-label">Age<span class="text-danger">*</span></label>
                         <div class="input-group mb-3">
-                            <input type="number" class="form-control form-control-lg" id="age_editmember" placeholder="Age" name="age_editmember" min="15" readonly>
+                            <input type="number" class="form-control form-control-lg" id="age_editmember" placeholder="Age" name="age_editmember" min="0" >
                         </div>
                     </div>
                 </div>

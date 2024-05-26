@@ -57,6 +57,9 @@ class EventsController extends Controller
             // Add any other validation rules as needed
         ]);
 
+        if($end_time < $start_time){
+            return response()->json(['error' => 'End date must be greater than or equal to the start date.'], 422);
+        }
         // Create a new announcement instance
         $announcement = new Events();
         $announcement->title = $title;
@@ -91,6 +94,9 @@ class EventsController extends Controller
             'image' => 'required|mimes:pdf,png,jpg,jpeg|max:50000',            
             // Add any other validation rules as needed
         ]);
+        if($end_time < $start_time){
+            return response()->json(['error' => 'End date must be greater than or equal to the start date.'], 422);
+        }
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             if ($image->isValid()) {
@@ -194,8 +200,8 @@ public function update(Request $request)
         'start_time.required' => 'The start date field is required.',
         'end_time.date' => 'The end date must be a valid date.',
         'start_time.date' => 'The start date must be a valid date.',
-        'end_time.before' => 'The end date must be before the start date.',
-        'start_time.after' => 'The start date must be after the end date.',
+        'end_time.before' => 'End date and Start date Is invalid.',
+        'start_time.after' => 'End date and Start date Is invalid.',
     ]);
 
     // Retrieve the updated content from the request
@@ -203,7 +209,9 @@ public function update(Request $request)
     $updatedTitle = $request->input('title');
     $updatedStart_date = $request->input('start_time');
     $updatedEnd_date = $request->input('end_time');
-
+    if($updatedEnd_date < $updatedStart_date){
+        return response()->json(['error' => 'End date and Start date Is invalid.'], 422);
+    }
     // Update the announcement content in the database
     $announcement = Events::findOrFail($request->input('id'));
     $announcement->content = $updatedContent;
@@ -232,8 +240,8 @@ public function update(Request $request)
         'start_time.required' => 'The start date field is required.',
         'end_time.date' => 'The end date must be a valid date.',
         'start_time.date' => 'The start date must be a valid date.',
-        'end_time.before' => 'The end date must be before the start date.',
-        'start_time.after' => 'The start date must be after the end date.',
+        'end_time.before' => 'End date and Start date Is invalid.',
+        'start_time.after' => 'End date and Start date Is invalid.',
     ]);
 
     // Check if the image file exists in the request
@@ -244,7 +252,9 @@ public function update(Request $request)
     $updatedTitle = $request->input('title');
     $updatedStart_date = $request->input('start_time');
     $updatedEnd_date = $request->input('end_time');
-
+    if($updatedEnd_date < $updatedStart_date){
+        return response()->json(['error' => 'End date and Start date Is invalid.'], 422);
+    }
     // Update the announcement content in the database
     $announcement = Events::findOrFail($request->input('id'));
     $announcement->content = $updatedContent;
