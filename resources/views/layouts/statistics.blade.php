@@ -119,7 +119,8 @@
                // window.location.href = " route('export') }}";
                let data = {
                 name: $('#name').val(),
-                age: $('#age').val(),
+                minage: $('#minage').val(),
+                maxage: $('#maxage').val(),
                 address: $('#address').val(),
                 voters: $('#voters').val(),
                 sex: $('#sex').val(),
@@ -161,19 +162,7 @@ for (var year = 2023; year <= currentYear; year++) {
 }
 var table = document.getElementById('tablemonths');
 
-// Define an array of month names
-var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December","Total"];
 
-// Generate the table headers dynamically
-for (var i = 0; i < months.length; i++) {
-    var row = table.insertRow(-1); // Append a row to the table
-    var monthCell = row.insertCell(0); // Add a cell for the month
-    monthCell.textContent = months[i]; // Set the text content to the month name
-    for (var j = 1; j <= 5; j++) {
-        var weekCell = row.insertCell(j); // Add cells for the weeks
-        weekCell.textContent = 0; // Set the text content for each week
-    }
-}
         });
 
         $(document).ready( function () {
@@ -237,10 +226,15 @@ function fetchResidentData() {
                 } else {
                     age = "Adult";
                 }
+                if(members.voters_filename == null){
+                    voters = "Non-Voters";
+                }else{
+                    voters = "Voters";
+                }
                 table.row.add([
                     members.lname + ", " + members.fname + " "+ members.mname + " " +ext,
                     members.age,
-                    "-----",
+                    voters,
                     members.household,
                     members.gender,
                     age
@@ -284,5 +278,95 @@ function fetchResidentData() {
         });
     });
     </script>
+    <script>
+$(document).ready(function() {
+    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December","Total"];
+    $('#yearSelect').change(function() {
+        var year = $(this).val();
+        if (year !== "Select a Year") {
+            $.ajax({
+                url: "{{ route('sum.copies') }}",
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    year: year
+                },
+                success: function(response) {
+                    var monthlyData = response.monthlyData;
+                    var tbody = $('#tablemonths tbody');
+                    tbody.empty();
+                    for (var month = 0; month < months.length - 1; month++) {
+    var weeks = monthlyData[month + 1] || {'1': 0, '2': 0, '3': 0, '4': 0};
+    var total = weeks['1'] + weeks['2'] + weeks['3'] + weeks['4'];
+    var row = '<tr>' +
+        '<td>' + months[month] + '</td>' +
+        '<td>' + weeks['1'] + '</td>' +
+        '<td>' + weeks['2'] + '</td>' +
+        '<td>' + weeks['3'] + '</td>' +
+        '<td>' + weeks['4'] + '</td>' +
+        '<td class="text-bg-primary">' + total + '</td>' +
+        '</tr>';
+    tbody.append(row);
+}
+
+                },
+                error: function(xhr) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    });
+
+    function getTableData() {
+    var tableData = [];
+    $('#tablemonths tbody tr').each(function(rowIndex) {
+        var rowData = [];
+        $(this).find('td').each(function(colIndex) {
+            rowData.push($(this).text());
+        });
+        tableData.push(rowData);
+    });
+    return tableData;
+}
+$('#exportButtontable').click(function() {
+    var tableData = getTableData();
+    var today = new Date().toISOString().slice(0, 10); 
+    console.log(tableData); // Verify table data in browser console
+    $.ajax({
+        url: '/export-excel',
+        type: 'POST',
+        data: {
+            _token: '{{ csrf_token() }}',
+            tableData: tableData
+        },
+        xhrFields: {
+            responseType: 'blob' // Set the response type to blob
+        },
+        success: function(data) {
+            // Create a blob object from the response data
+            var blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            // Create a temporary URL for the blob
+            var url = window.URL.createObjectURL(blob);
+            // Create a link element to trigger the download
+            var link = document.createElement('a');
+            link.href = url;
+            link.download = 'Report_' + today + '.xlsx'; // Set the filename
+            // Simulate click to trigger the download
+            link.click();
+            // Clean up
+            window.URL.revokeObjectURL(url);
+        },
+        error: function(xhr) {
+            console.error(xhr.responseText);
+        }
+    });
+});
+
+
+
+
+});
+</script>
+
 </body>
 </html>

@@ -113,8 +113,21 @@
                     <!-- Template Javascript -->
                     <script src="../js/main.js"></script>
                     <script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
-                    <script type="text/javascript"></script>
                     <script type="text/javascript">
+                      document.addEventListener('DOMContentLoaded', function() {
+                        // Get the URL path
+                        const urlPath = window.location.pathname;
+
+                        // Extract the regnum from the URL path
+                        const regnum = urlPath.split('/').pop();
+
+                        // Log the value to the console
+                        console.log("Regnum: " + regnum);
+
+                        // Set the value of the hidden input field
+                        document.getElementById('idnumber').value = regnum;
+                    });
+
                const passwordInput = document.getElementById('password');
                const passwordInput2 = document.getElementById('confirmpassword');
                const toggleButton = document.getElementById('togglePassword');
@@ -169,52 +182,43 @@ function updatePasswordRequirements() {
   }
 }
                $(document).ready(function(){
-                // Function to get URL parameters
-    function getUrlParameter(name) {
-        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-        var results = regex.exec(location.search);
-        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-    }
-
-    // Get the 'username' parameter from the URL
-    var urlUsername = getUrlParameter('username');
-
-    // Check if 'username' parameter is not empty
-    if (urlUsername !== '') {
-        // Set the value of the 'username' input field
-        $('#username').val(urlUsername);
-    }
+                // Function to get URL parameter
                 $(document).on('click', '.forgotpass-btn', function () {
-                     $('#load').show();
-                      $('#svg').hide();
-                    var password = $('#password').val();
-                    var confirmpassword = $('#confirmpassword').val();
-                    var username = $('#username').val();
-                    var formData = new FormData();
-                    formData.append('fogorpasschange', 'fogorpasschange');
-                    formData.append('username', username);
-                    formData.append('password', password);
-                    formData.append('confirmpassword', confirmpassword);
-                    console.log('Sending AJAX request...');
-                    $.ajax({
-                        url: "send.php",
-                        type: "POST",
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        success: function (result) {
-                            console.log('AJAX request successful:', result);
-                                 $('#load').hide();
-                      $('#svg').show();
-                            $('#forgotpassuccess').html(result);
-                        },
-                        error: function (xhr, status, error) {
-                            console.error('AJAX request failed:', xhr, status, error);
-                            $('#forgotpassuccess').html("AJAX request failed: " + xhr.statusText);
-                        }
-                    });
-                });
+                        $('#load').show();
+                        $('#svg').hide();
+                        var password = $('#password').val();
+                        var confirmpassword = $('#confirmpassword').val();
+                        var idnumber = $('#idnumber').val();
+                        
+                        // Construct the data object
+                        var data = {
+                            fogorpasschange: 'fogorpasschange',
+                            idnumber: idnumber,
+                            password: password,
+                            confirmpassword: confirmpassword
+                        };
 
+                        console.log('Sending AJAX request...');
+                        $.ajax({
+                            url: "{{ route('password.update') }}", // Assuming you have a route named 'password.update'
+                            type: "POST",
+                            headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+                            data: data,
+                            success: function (result) {
+                                console.log('AJAX request successful:', result);
+                                $('#load').hide();
+                                $('#svg').show();
+                                // Display success message
+                                $('#forgotpassuccess').html("<div class='alert alert-success' role='alert'>Password updated successfully! You may now Login <a href='{{route('login')}}'>Here</a></div>");
+                            },
+                            error: function (xhr, status, error) {
+                                console.error('AJAX request failed:', xhr, status, error);
+                                // Display error message
+                                $('#forgotpassuccess').html('<div class="alert alert-danger" role="alert">Failed to update password. Please try again.</div>');
+                            }
+                        });
+                    });
             });
         </script>

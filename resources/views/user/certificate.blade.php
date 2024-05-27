@@ -386,7 +386,9 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-primary upload-indigency">Submit</button>
+    <button type="button" class="btn btn-primary upload-indigency"><span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span><i>Submit</i></button>
+   
+        
 </div>
 </div>
 </div>
@@ -459,7 +461,7 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-primary upload-certifictae">Submit</button>
+    <button type="button" class="btn btn-primary upload-certifictae"><span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span><i>Submit</i></button>
 </div>
 </div>
 </div>
@@ -520,7 +522,7 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-primary upload-bpermit">Submit</button>
+    <button type="button" class="btn btn-primary upload-bpermit"><span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span><i>Submit</i></button>
 </div>
 </div>
 </div>
@@ -585,7 +587,7 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-primary upload-cessation">Submit</button>
+    <button type="button" class="btn btn-primary upload-cessation"><span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span><i>Submit</i></button>
 </div>
 </div>
 </div>
@@ -685,7 +687,7 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-primary upload-ftj">Submit</button>
+    <button type="button" class="btn btn-primary upload-ftj"><span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span><i>Submit</i></button>
 </div>
 </div>
 </div>
@@ -750,7 +752,7 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-primary upload-soloparent">Submit</button>
+    <button type="button" class="btn btn-primary upload-soloparent"><span class='spinner-border spinner-border-sm d-none' role='status' aria-hidden='true'></span><i>Submit</i></button>
 </div>
 </div>
 </div>

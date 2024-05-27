@@ -11,8 +11,8 @@ class OfficialController extends Controller
     {
         // Validate the incoming request data
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|regex:/^[a-zA-Z0-9\s\-&]+$/',
-            'position' => 'required|string|regex:/^[a-zA-Z0-9\s\-&]+$/',
+            'name' => 'required|string|regex:/^[a-zA-Z0-9\s\-&.,_$#@!]+$/',
+            'position' => 'required|string|regex:/^[a-zA-Z0-9\s\-&.,_$#@!]+$/',
             'profile' => 'required|file|max:50000|mimes:png,jpg,jpeg',
         ],[
             'name.required' => 'The Name of Officer field is required.',
@@ -33,10 +33,11 @@ class OfficialController extends Controller
         }
         $existingOfficial = Official::where(function ($query) use ($request) {
             $query->where('name', $request->name)
-                ->orWhere('position', $request->position);
+                ->orWhere('position', $request->position)
+                ->where('status', 'active');
         })
         ->where(function ($query) {
-            $query->whereIn('status', ['active', 'Archive']);
+            $query->whereIn('status', ['active']);
         })
         ->first();
     
@@ -75,9 +76,9 @@ class OfficialController extends Controller
 {
     $officialId = $request->input('id');
     $status = $request->input('status');
-
     // Update the status of the official
     $official = Official::find($officialId);
+    
     $official->status = $status;
     $official->save();
 
@@ -96,5 +97,39 @@ public function archiveAll()
         // Return error response if an exception occurs
         return response()->json(['error' => 'Failed to archive all official members'], 500);
     }
+}
+public function edit($id)
+{
+    $official = Official::find($id);
+    return response()->json($official);
+}
+
+public function update(Request $request, $id)
+{
+    $request->validate([
+        'name' => 'required|string|regex:/^[a-zA-Z0-9\s\-&.,_$#@!]+$/',
+        'position' => 'required|string|regex:/^[a-zA-Z0-9\s\-&.,_$#@!]+$/',
+        'profile' => 'nullable|image|mimes:png,jpg,jpeg|max:51200',
+    ]);
+
+    $official = Official::find($id);
+    if (!$official) {
+        return response()->json(['message' => 'Official not found'], 404);
+    }
+
+    $official->name = $request->name;
+    $official->position = $request->position;
+
+    if ($request->hasFile('profile')) {
+        $file = $request->file('profile');
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        // Move the uploaded file to public/profiles folder
+        $file->move(public_path('residentprofile'), $fileName);
+        $official->profile_path = $fileName;
+    }
+
+    $official->save();
+
+    return response()->json(['message' => 'Official updated successfully']);
 }
 }

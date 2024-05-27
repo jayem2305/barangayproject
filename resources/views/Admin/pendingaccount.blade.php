@@ -36,7 +36,7 @@
                         <li><a class="dropdown-item " href="../Admin/forum" class="nav-item nav-link text-white"><i class="bi bi-info-circle"></i> Forum</i></a></li>
                     </ul>
                 </li>
-                    <a href="logout" class="nav-item nav-link text-white"><i class="bi bi-door-closed-fill"></i> Logout</a>
+                    <a href="/" class="nav-item nav-link text-white"><i class="bi bi-door-closed-fill"></i> Logout</a>
                 </div>
             </div>
         </nav>

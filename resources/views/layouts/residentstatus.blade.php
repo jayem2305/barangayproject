@@ -149,7 +149,7 @@
     // Set the message content
     $('#liveToast .toast-body').text(message);
     // Show the toast
-    $('.toast').toast('show');
+    $('.toastset').toast('show');
 }
     var table = $('#myTable').DataTable();
     var ext;
@@ -167,37 +167,60 @@
         success: function(data) {
             // Clear existing table rows
             table.clear().draw();
-            // Populate table body with resident data
-            $.each(data, function(index, resident) {
-                if(resident.ext == null){
-                ext = "";
-            }else{
-                ext = resident.ext;
-            }
-            var restrictBtn = '<button type="button" class="btn btn-danger btn-lg btn-restrict"data-toggle="modal" data-target="#restrictionModal" data-reg='+resident.reg_number +'>Restrict</button>';
-            var viewBtn = '<input type="hidden" value="'+resident.reg_number +'" id="viewbtnid"><button type="button" class="btn btn-warning btn-lg btn-view"><i class="bi bi-eye-fill"></i></button>'+ restrictBtn;
-            // Check if status is "Restricted", if yes, render different buttons
-            if (resident.status === 'Restricted') {
-                viewBtn = '<input type="hidden" value="'+resident.reg_number +
-                '" id="unrestricted"><button type="button" class="btn btn-warning btn-lg btn-unrestrict" ><span id="unrestrictbtn">Unrestrict</span><div class="spinner-border"style="display: none;" role="status"><span class="visually-hidden" >Loading...</span></div></button>';
-            }
 
-            table.row.add([
-                   "<img src=../residentprofile/" + resident.image_filename + " class='rounded-circle mx-auto d-block' alt='...' width=50 heght=50>",
-                    resident.lname + ", " + resident.fname + " "+ resident.mname + " " +ext,
+            var residents = data.residents;
+            var members = data.members;
+            var viewBtn;
+            // Create a map of reg_number to address for residents
+            var addressMap = {};
+            $.each(residents, function(index, resident) {
+                addressMap[resident.reg_number] = resident.address;
+            });
+
+            // Combine residents and members, updating member addresses
+            var combinedData = [];
+            $.each(members, function(index, member) {
+                if (member.address == null || member.address === "") {
+                    member.address = addressMap[member.reg_num] || "No Address";
+                 
+                }
+                combinedData.push(member);
+            });
+            combinedData = combinedData.concat(residents);
+
+            // Populate table body with combined resident and member data
+            $.each(combinedData, function(index, resident) {
+                if (resident.ext == null) {
+                    ext = "";
+                } else {
+                    ext = resident.ext;
+                }
+                var regNumber = resident.reg_number || resident.id;
+                var restrictBtn = '<button type="button" class="btn btn-danger btn-lg btn-restrict" data-toggle="modal" data-target="#restrictionModal" data-reg='+ regNumber +'>Restrict</button>';
+                var viewBtn = '<input type="hidden" value="'+ regNumber +'" id="viewbtnid"><button type="button" class="btn btn-warning btn-lg btn-view" data-viewset="'+ regNumber +'"><i class="bi bi-eye-fill"></i></button>' + restrictBtn;
+
+                // Check if status is "Restricted", if yes, render different buttons
+                if (resident.Status === 'Restricted' || resident.status === 'Restricted' ) {
+                    viewBtn = '<input type="hidden" value="'+ regNumber +'" id="unrestricted"><button type="button" class="btn btn-warning btn-lg btn-unrestrict"><span id="unrestrictbtn">Unrestrict</span><div class="spinner-border" style="display: none;" role="status"><span class="visually-hidden">Loading...</span></div></button>';
+                }
+                var imageUrl = resident.image_filename ? "../residentprofile/" : "../uploads/";
+                imageUrl += resident.image_filename ? resident.image_filename : resident.image_filename;
+                table.row.add([
+                    "<img src=" + imageUrl + " class='rounded-circle mx-auto d-block' alt='...' width=50 height=50>",
+                    resident.lname + ", " + resident.fname + " " + resident.mname + " " + ext,
                     resident.household,
                     resident.address,
                     resident.gender,
                     viewBtn
                 ]).draw();
             });
-            
+
             // Add click event listener to the "Restrict" button
             $('#myTable tbody').on('click', '.btn-restrict', function() {
                 var rowData = table.row($(this).parents('tr')).data();
                 var residentName = rowData[0]; // Get resident name from the clicked row
                 var regNumber = $(this).data('reg');
-                 $('#regid').val(regNumber);
+                $('#regid').val(regNumber);
                 showModal(residentName);
             });
         },
@@ -206,6 +229,7 @@
         }
     });
 }
+
 $('#myTable tbody').on('click', '.btn-unrestrict', function() {
     var regNumbers = $('#unrestricted').val();
     $(this).find('#unrestrictbtn').hide();
@@ -261,26 +285,32 @@ $('#btnRestrict').click(function() {
             // Handle success response
             console.log("Data saved successfully:", response);
             // Close the modal
+            $('#restrict').show();
+            $('.spinner-border').hide();
             $('#restrictionModal').modal('hide');
-            $('#restrict').find('#spinner').hide();
             $('#residentDetailsModal').modal('hide');
             updateTableData();
             showToast('Account Restricted successfully');
+            //showSuccessToast('Account Restricted successfully');
+
         },
         error: function(xhr, status, error) {
             // Handle error response
             console.error("Error saving data:", error);
             // Close the modal
-            $('#restrict').find('#spinner').hide();
-            $('#residentDetailsModal').modal('hide');
-            $('#restrictionModal').modal('hide');
+            $('#restrict').show();
+            $('.spinner-border').hide();
+            showToast('I Advised to state your reason why is it Restricted');
+
+
         }
     });
 });
 // Add click event listener to the "View" button
 $('#myTable tbody').on('click', '.btn-view', function() {
-    var rowData = table.row($(this).parents('tr')).data(); // Assuming resident data is in the first column
-    var regNumber = $('#viewbtnid').val();
+    // var rowData = table.row($(this).parents('tr')).data(); // Assuming resident data is in the first column
+    var regNumber = $(this).data('viewset'); // Get regNumber from data-viewset attribute of the clicked button
+
     $.ajax({
         url: '{{ route("admin.getResidentsview") }}',
         type: 'POST',
@@ -292,15 +322,24 @@ $('#myTable tbody').on('click', '.btn-view', function() {
         },
         success: function(resident) {
             // Populate modal with resident details
-            populateModal(resident);
+            //console.log(resident);
+            if (resident.household == "Head of The Family" && typeof regNumber === 'string' && regNumber.startsWith('REG_')) {
+                populateModal(resident);
+                $('#residentDetailsModal').modal('show');
+            }else {
+                populateModalmember(resident);
+                $('#residentdetails').modal('show');
+            }
             // Show the modal
-            $('#residentDetailsModal').modal('show');
+            console.log("Resident Object:",regNumber);
+            
         },
         error: function(xhr, status, error) {
             console.error("Error fetching resident details:", error);
         }
     });
 });
+
 
 
 // Function to populate modal with resident details
@@ -324,6 +363,11 @@ function populateModal(resident) {
     } else {
         voters_filename = resident.voters_filename;
     }
+    var personalStatus = checkNullValues(resident.indicate_if);
+    
+    // Update the display in the modal
+    $('#personaldisplay').text("Personal Status: " + personalStatus);
+
     // Populate modal content with resident details
     $('#residentDetailsModal .modal-body').html(`
         <div class="row">
@@ -350,7 +394,7 @@ function populateModal(resident) {
             <div class="col-lg-4">  <p><strong>Contact Number:</strong>0${resident.cnum}</p></div>
             <div class="col-lg-4">  <p><strong>Uri ng Pag-Pagmamayari:</strong> ${resident.owner_type}</p></div>
             <div class="col-lg-4">  <p><strong>Pangalan ng May-Ari:</strong> ${resident.owner_name}</p></div>
-            <div class="col-lg-6">  <p><strong>Personal Status:</strong> ${resident.indicate_if}</p></div>
+            <div class="col-lg-6">  <p id="personaldisplay"><strong >Personal Status:</strong> ${personalStatus}</p></div>
             <div class="col-lg-6">  <p><strong>Number of Members of Family:</strong> ${resident.number_of_family}</p></div>
             <hr><div class="col-lg-12">  <p><strong>Valid ID:<br></strong>
             <img src="../residentprofile/${resident.valid_id_filename}"class="rounded mx-auto d-block" alt="Profile pic" width="700" height="300" ></p>
@@ -366,6 +410,44 @@ function populateModal(resident) {
         </div>
         <br>
         `);
+
+}
+function populateModalmember(member) {
+    if (member.ext == null) {
+        ext = "";
+    } else {
+        ext = member.ext + ".";
+    }
+    var personalStatus = checkNullValues(member.indicate_if);
+console.log(member.Status);
+    // Populate modal content with member details
+    $('#profilePic').attr('src', '../uploads/' + member.profile2x2);
+    $('#controll').text("REG_MEMBER_"+member.id);
+    $('#statusacc').text(member.Status);
+    $('#nameidsplay').text(member.lname + ', ' + member.fname + ' ' + member.mname + ' '+ ext);
+    $('#birthdaydsiplay').text('Birthday: ' + member.birthday);
+    $('#statusdisplay').text(member.household);
+    $('#agedisplay').text('Age: ' + member.age + ' years old');
+    $('#birthdisplay').text('Birth Place: ' + member.birthplace);
+    $('#genderdisplay').text('Gender: ' + member.gender);
+    $('#occupationdisplay').text('Occupation: ' + member.occupation);
+    $('#civildisplay').text('Civil Status: ' + member.civil_status);
+    $('#citizendisplay').text('Citizenship: ' + member.citizenship);
+    $('#personaldisplaymember').text('Personal Status: ' + personalStatus);
+    
+    // Show the modal
+   // $('#residentDetailsModal').modal('show');
+}
+
+function checkNullValues(dataString) {
+    if (!dataString || dataString === 'null') return ''; // If the string is null or 'null', return an empty string
+    var values = dataString.split(','); // Split the string by comma
+    // Filter out 'null' values
+    values = values.filter(function(item) {
+        return item.trim() !== 'null';
+    });
+    // Join the filtered values back into a string
+    return values.join(', ');
 }
 
 updateTableData();
@@ -457,7 +539,8 @@ $(document).ready(function() {
                 if (official.status === 'Archive') {
                     viewBtn = '<button class="btn btn-lg btn-warning restore-official" data-id="' + official.id + '">Restore</button>';
                 } else {
-                    viewBtn = '<button class="btn btn-lg btn-danger delete-official" data-id="' + official.id + '">Archive</button>';
+                    viewBtn = ' <button class="btn btn-lg btn-success edit-official" data-id="' + official.id + '">Update</button>'+
+                    '   <button class="btn btn-lg btn-danger delete-official" data-id="' + official.id + '">Archive</button>';
                 }
 
                 // Construct the new row data
@@ -503,6 +586,8 @@ $(document).on('click', '.restore-official', function() {
                 // Handle success response
                 fetchAndPopulateOfficials();
                 console.log("Official Member Restore successfully!");
+                showSuccessToast('Resotred successfully.');
+
                 //alert("Official Member Archived successfully!");
                 // You may need to reload the page or update the UI accordingly
                 //fetchAndPopulateOfficials();
@@ -536,6 +621,8 @@ $(document).on('click', '.delete-official', function() {
                 console.log("Official Member Archived successfully!");
                 // You may need to reload the page or update the UI accordingly
                 fetchAndPopulateOfficials(response);
+            showErrorToast('Official Member Archived successfully!');
+
             },
             error: function(xhr, status, error) {
                 // Handle error response
@@ -559,6 +646,8 @@ $(document).on('click', '.archive-all-officials', function() {
             console.log('All official members archived successfully');
             // Update the officials list after archiving all officials
             fetchAndPopulateOfficials();
+            showErrorToast('All Officials Are Archived');
+
         },
         error: function(xhr, status, error) {
             console.error('An error occurred while archiving all officials:', error);
@@ -568,7 +657,94 @@ $(document).on('click', '.archive-all-officials', function() {
 }
 });
 
-});
 
-    
+
+$(document).ready(function() {
+    $(document).on('click', '.edit-official', function(){
+    var officialId = $(this).data('id');
+
+    // Fetch data using AJAX
+    $.ajax({
+      url: '/officials/' + officialId + '/edit',
+      method: 'GET',
+      
+      success: function(data) {
+        // Populate the form fields with the existing data
+        $('#updatename').val(data.name);
+        $('#updateposition').val(data.position);
+        // Show the modal
+        $('#updateofficials').modal('show');
+        $('.btn-confirm-update').data('id', officialId);
+      }
+    });
+  });
+
+  // Handle form submission
+  $('.btn-confirm-update').on('click', function(e) {
+    e.preventDefault();
+    var officialId = $(this).data('id');
+    var formData = new FormData();
+    formData.append('name', $('#updatename').val());
+    formData.append('position', $('#updateposition').val());
+    if ($('#updateprofile')[0].files.length > 0) {
+      formData.append('profile', $('#updateprofile')[0].files[0]);
+    }
+    $.ajax({
+      url: '/officials/' + officialId,
+      method: 'POST',
+      data: formData,
+      headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+      processData: false,
+      contentType: false,
+      success: function(response) {
+        // Handle success (e.g., close modal, show a success message)
+        $('#updateofficials').modal('hide');
+        showSuccessToast('Official updated successfully.');
+        // Call fetchAndPopulateOfficials initially to populate the list
+fetchAndPopulateOfficials();
+
+        //location.reload(); // Refresh the page or update the UI accordingly
+      },
+      error: function(xhr) {
+        console.log(xhr.responseText);
+        if (xhr.responseJSON && xhr.responseJSON.errors) {
+          var errorMessages = parseErrorMessages(xhr.responseJSON.errors);
+          showErrorToast(errorMessages);
+        } else {
+          showErrorToast('An error occurred while updating the official.');
+        }
+      }
+    });
+  });
+
+function showSuccessToast(message) {
+    var toastElement = $('#liveToastupdate');
+    toastElement.removeClass('text-bg-danger').addClass('text-bg-success');
+    $('#toastTitle').removeClass('text-danger').addClass('text-success').text('Success');
+    $('.toast-body').text(message);
+    var successToast = new bootstrap.Toast(toastElement);
+    successToast.show();
+  }
+
+  function showErrorToast(message) {
+    var toastElement = $('#liveToastupdate');
+    toastElement.removeClass('text-bg-success').addClass('text-bg-danger');
+    $('#toastTitle').removeClass('text-success').addClass('text-danger').text('Error');
+    $('.toast-body').text(message);
+    var errorToast = new bootstrap.Toast(toastElement);
+    errorToast.show();
+  }
+  function parseErrorMessages(errors) {
+    var messages = '';
+    for (var key in errors) {
+      if (errors.hasOwnProperty(key)) {
+        messages += errors[key].join('<br>');
+      }
+    }
+    return messages;
+  }
+});
+});
 </script>

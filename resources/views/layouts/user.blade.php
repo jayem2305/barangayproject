@@ -622,6 +622,7 @@ $(document).ready(function() {
         var citizenship = $('#citizenship_addmember').val();
         var occupation = $('#occupation_addmember').val();
         var profile2x2 = $('#profile2x2_addmember')[0].files[0]; // File input
+        var voters = $('#voters')[0].files[0]; // File input
 
         // Create a FormData object to send files
         var formData = new FormData();
@@ -638,6 +639,7 @@ $(document).ready(function() {
         formData.append('citizenship', citizenship);
         formData.append('occupation', occupation);
         formData.append('profile2x2', profile2x2);
+        formData.append('voters', voters);
         formData.append('employed', $('#employed_addmember').is(':checked') ? $('#employed_addmember').val() : null);
         formData.append('unemployed', $('#unemployed_addmember').is(':checked') ? $('#unemployed_addmember').val() : null);
         formData.append('PWD', $('#PWD_addmember').is(':checked') ? $('#PWD_addmember').val() : null);
@@ -685,15 +687,13 @@ $(document).ready(function() {
 
             error: function(xhr, status, errorThrown) {
                 console.error('AJAX request failed:', xhr, status, errorThrown);
+                
         // Display validation errors
         // Display validation errors
 if (xhr.responseJSON && xhr.responseJSON.errors) {
     $.each(xhr.responseJSON.errors, function(key, value) {
-        var input = $('#' + key + '_addmember');
-        input.addClass('is-invalid').removeClass('is-valid');
-        input.parent().find('.valid-feedback').remove();
-        input.parent().find('.invalid-feedback').remove(); // Remove previous error message
-        input.parent().append('<div class="invalid-feedback">' + value + '</div>');
+        $('#liveToastdanger .toastdanger').text(value);
+            $('#liveToastdanger').toast('show');
     });
 } else {
     // Clear previous error messages
@@ -963,6 +963,7 @@ updatedData.append('civil_status', $('#civil_editmember').val());
 updatedData.append('citizenship', $('#citizenship_editmember').val());
 updatedData.append('occupation', $('#occupation_editmember').val());
 updatedData.append('profile2x2', $('#profile2x2_editmember')[0].files[0]);
+updatedData.append('voters', $('#votersupdate')[0].files[0]);
 
 // Checkboxes
 updatedData.append('employed', $('#employed_editmember').is(':checked') ? $('#employed_editmember').val() : null);

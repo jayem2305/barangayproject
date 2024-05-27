@@ -7,6 +7,12 @@ use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use App\Models\FTJRequest;
+use App\Models\IndigencyRequest;
+use App\Models\CertificateRequest;
+use App\Models\BusinessPermit;
+use App\Models\BusinessCessation;
+use App\Models\SoloParentRequest;
 
 class StatisticsController extends Controller
 {
@@ -25,39 +31,39 @@ class StatisticsController extends Controller
 
         return response()->json($data);
     }
-    public function index(Request $request)
+    public function sumCopies(Request $request)
     {
-        try {
-            // Fetch the numerical report data from the database
-            $numericalReport = DB::select('
-                SELECT
-                    MONTHNAME(Created_at) AS month_name,
-                    WEEK(Created_at) AS week_number,
-                    SUM(copy) AS total_copies
-                FROM
-                    (
-                        SELECT Created_at, copy FROM indigency_requests
-                        UNION ALL
-                        SELECT Created_at, copy FROM certificate_requests
-                        UNION ALL
-                        SELECT Created_at, copy FROM ftj_requests
-                        UNION ALL
-                        SELECT Created_at, copy FROM business_permits
-                        UNION ALL
-                        SELECT Created_at, copy FROM business_cessations
-                    ) AS all_requests
-                GROUP BY
-                    month_name, week_number
-                ORDER BY
-                    YEAR(Created_at), MONTH(Created_at), week_number
-            ');
+        $year = $request->input('year');
+        
+        $data = $this->getMonthlyData(FTJRequest::class, $year)
+            ->union($this->getMonthlyData(IndigencyRequest::class, $year))
+            ->union($this->getMonthlyData(CertificateRequest::class, $year))
+            ->union($this->getMonthlyData(BusinessPermit::class, $year))
+            ->union($this->getMonthlyData(BusinessCessation::class, $year))
+            ->union($this->getMonthlyData(SoloParentRequest::class, $year))
+            ->get();
 
-            // Return the numerical report data as JSON response
-            return response()->json($numericalReport);
-        } catch (\Exception $e) {
-            // Handle any errors and return an error response
-            return response()->json(['error' => $e->getMessage()], 500);
+        $monthlyData = [];
+
+        foreach ($data as $row) {
+            $month = $row->month;
+            $week = $row->week;
+            if (!isset($monthlyData[$month])) {
+                $monthlyData[$month] = ['1' => 0, '2' => 0, '3' => 0, '4' => 0];
+            }
+            if ($week >= 1 && $week <= 4) {
+                $monthlyData[$month][$week] += $row->total_copies;
+            }
         }
 
+        return response()->json(['monthlyData' => $monthlyData]);
+    }
+
+    private function getMonthlyData($model, $year)
+    {
+        return DB::table((new $model)->getTable())
+            ->select(DB::raw('MONTH(created_at) as month, FLOOR((DAY(created_at)-1)/7)+1 as week, SUM(copy) as total_copies'))
+            ->whereYear('created_at', $year)
+            ->groupBy('month', 'week');
     }
 }

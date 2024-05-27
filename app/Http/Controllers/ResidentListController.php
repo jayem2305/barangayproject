@@ -44,13 +44,21 @@ class ResidentListController extends Controller
     ]);
     }
     
-public function getResidents()
+    public function getResidents()
     {
-        // Fetch resident data with status "Resident"
+        // Fetch resident data with status "Resident" or "Restricted"
         $residents = Resident::whereIn('status', ['Resident', 'Restricted'])->get();
+        $members = Member::whereIn('status', ['Resident', 'Restricted'])->get();
         
-        return response()->json($residents);
+        // Combine the data into an array
+        $data = [
+            'residents' => $residents,
+            'members' => $members
+        ];
+        
+        return response()->json($data);
     }
+    
 
     public function store(Request $request)
     {
@@ -61,7 +69,7 @@ public function getResidents()
             'name' => 'required|string',
             'reason' => 'required|string|regex:/^[a-zA-Z0-9\s.,?!@#$%^&*()-_=+]+$/', 
         ]);
-
+        if (strpos($residentId, 'REG_') === 0) {
         try {
             // Fetch the resident based on the ID
             $resident = Resident::findOrFail($residentId);
@@ -70,6 +78,7 @@ public function getResidents()
             Log::info('Resident Email:', ['email' => $email]);
             $subject="Account Restriction Notification";
             $Body = $validatedData['reason'];;
+          
             // Send email notification using Mailable class
             try {
                 Mail::to($email)->send(new AccountApprovalNotification($subject, $Body));
@@ -94,35 +103,71 @@ public function getResidents()
             Log::error('Error sending email notification: ' . $e->getMessage());
             return response()->json(['error' => 'Internal Server Error'], 500);
         }   
+    }else {
+        // If not, assume it's a Member ID
+        $resident = Member::find($residentId);
+        if ($resident) {
+            // Update the status
+            $resident->Status = "Restricted";
+            $resident->save();
+
+            // Return a success response
+            return response()->json(['message' => 'Status updated successfully']);
+        } else {
+            // Return an error response if resident is not found
+            return response()->json(['error' => 'Resident not found'], 404);
+        }
+    } 
     }
     public function updateStatus(Request $request)
 {
     $regNumber = $request->input('regNumbers');
     Log::error('Retrieved Resident:', ['resident' => $regNumber]);
    
+    if (strpos($regNumber, 'REG_') === 0) {
+            // Retrieve the resident based on the registration number
+        $resident = Resident::where('reg_number', $regNumber)->first();
 
-    // Retrieve the resident based on the registration number
-    $resident = Resident::where('reg_number', $regNumber)->first();
+        if ($resident) {
+            // Update the status
+            $resident->status = "Resident";
+            $resident->save();
 
-    if ($resident) {
-        // Update the status
-        $resident->status = "Resident";
-        $resident->save();
-
-        // Return a success response
-        return response()->json(['message' => 'Status updated successfully']);
+            // Return a success response
+            return response()->json(['message' => 'Status updated successfully']);
+        } else {
+            // Return an error response if resident is not found
+            return response()->json(['error' => 'Resident not found'], 404);
+        }
     } else {
-        // Return an error response if resident is not found
-        return response()->json(['error' => 'Resident not found'], 404);
-    }
+        // If not, assume it's a Member ID
+        $resident = Member::find($regNumber);
+        if ($resident) {
+            // Update the status
+            $resident->Status = "Resident";
+            $resident->save();
+
+            // Return a success response
+            return response()->json(['message' => 'Status updated successfully']);
+        } else {
+            // Return an error response if resident is not found
+            return response()->json(['error' => 'Resident not found'], 404);
+        }
+    } 
+ 
 }
 
 public function getResidentsview(Request $request)
     {
         $regNumber = $request->input('regNumber');
         // Fetch resident data with status "Resident"
-        $residents = Resident::where('reg_number', $regNumber)->first();
-        
+        if (strpos($regNumber, 'REG_') === 0) {
+            // If the format is like "REG_20240426_02", it corresponds to a Resident
+            $residents = Resident::where('reg_number', $regNumber)->first();
+        } else {
+            // If not, assume it's a Member ID
+            $residents = Member::find($regNumber);
+        } 
         return response()->json($residents);
     }
    

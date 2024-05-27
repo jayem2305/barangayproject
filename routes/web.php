@@ -75,7 +75,9 @@ Route::post('/Admin/certificate/ed', [CertificatesController::class, 'sendEmailN
 Route::post('/Admin/certificate/Decline', [CertificatesController::class, 'sendEmailNotificationDecline'])->name('declined');
 
 
-
+Route::post('/sum-copies', [StatisticsController::class, 'sumCopies'])->name('sum.copies');
+Route::post('/export-excel', [ExportController::class, 'exportExcel']);
+Route::get('/download-excel/{filename}', [ExportController::class, 'downloadExcel']);
 Route::get('/statistical/get', [StatisticsController::class, 'getResidentsAndMembers'])->name('admin.getmembers');
 Route::get('/statistical/index', [StatisticsController::class, 'index'])->name('admin.index.stat');
 Route::get('/Admin', [AdminController::class, 'statisticalreport'])->name('admin.statisticalreport');
@@ -122,6 +124,10 @@ Route::post('/export',  [ExportController::class, 'export'])->name('export');
 Route::get('/get-image', [UserController::class, 'getImage'])->name('get.image');
 Route::get('/get-projects', [UserController::class, 'getProjects'])->name('get.project');
 Route::get('/get-news-events', [UserController::class, 'getNewsAndEvents'])->name('get.events');
+// Route to get the official data for editing
+Route::get('/officials/{id}/edit', [OfficialController::class, 'edit']);
+// Route to update the official data
+Route::post('/officials/{id}', [OfficialController::class, 'update']);
 
 
 
@@ -154,5 +160,8 @@ Route::post('/register/step1', [AuthController::class, 'step1'])->name('register
 Route::post('/register/step2', [AuthController::class, 'step2'])->name('register.step2');
 //Route::post('/register/storeMember',  [AuthController::class, 'storeMember'])->name('store.member');
 Route::post('/register/laststep', [AuthController::class, 'laststep'])->name('register.laststep');
-Route::get('/reset-password/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
-Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
+Route::get('/forgotpass/{regnum}', function ($regnum) {
+    return view('auth.forgotpass', ['regnum' => $regnum]);
+})->name('password.reset');
+
+Route::post('/forgotpass', [AuthController::class, 'resetPassword'])->name('password.update');

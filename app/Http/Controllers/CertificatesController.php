@@ -389,7 +389,11 @@ public function getData($type)
             $pdf->Cell(0, 10, $data_officials->name, 0, 1, 'C');
             $pdf->SetFont('times', 'B', 12);
             $pdf->SetXY(135, 216);
-            $pdf->MultiCell(65, 10, $data_officials->position ,0, 'C');
+            if( $data_officials->position != "Punong Barangay"){
+                $pdf->MultiCell(65, 10, "Barangay Kagawad" ,0, 'C'); 
+            }else{
+                $pdf->MultiCell(65, 10, $data_officials->position ,0, 'C');
+            }
 
             $pdfFilePath = public_path('cert/') . $data->name . '-' . 'Certificate.pdf';
             $pdf->Output($pdfFilePath, 'F'); // Output to file
@@ -551,7 +555,11 @@ public function getData($type)
             $pdf->Cell(0, 10, $data_officials->name, 0, 1, 'C');
             $pdf->SetFont('times', 'B', 12);
             $pdf->SetXY(135, 216);
-            $pdf->MultiCell(65, 10, $data_officials->position ,0, 'C');
+            if( $data_officials->position != "Punong Barangay"){
+                $pdf->MultiCell(65, 10, "Barangay Kagawad" ,0, 'C'); 
+            }else{
+                $pdf->MultiCell(65, 10, $data_officials->position ,0, 'C');
+            }
 
             $pdfFilePath = public_path('cert/') . $data->name . '-' . 'Certificate.pdf';
             $pdf->Output($pdfFilePath, 'F'); // Output to file
@@ -611,7 +619,11 @@ public function getData($type)
                 $y += 4;
                 $pdf->SetXY(16, $y);
                 $pdf->SetFont('times', 'B', 11);
-                $pdf->MultiCell(60, 10, $official->position, 1,'C');
+                if( $data_officials->position != "Punong Barangay"){
+                    $pdf->MultiCell(65, 10, "Barangay Kagawad" ,0, 'C'); 
+                }else{
+                    $pdf->MultiCell(65, 10, $data_officials->position ,0, 'C');
+                }
                 $y += 13; // Adjust as needed based on spacing
             }
 
@@ -644,7 +656,11 @@ public function getData($type)
             $pdf->Cell(0, 10, $data_officials->name, 0, 1, 'C');
             $pdf->SetFont('times', 'B', 12);
             $pdf->SetXY(135, 206);
-            $pdf->MultiCell(65, 10, $data_officials->position ,0, 'C');
+            if( $data_officials->position != "Punong Barangay"){
+                $pdf->MultiCell(65, 10, "Barangay Kagawad" ,0, 'C'); 
+            }else{
+                $pdf->MultiCell(65, 10, $data_officials->position ,0, 'C');
+            }
 
             $pdfFilePath = public_path('cert/') . $data->name . '-' . 'Certificate.pdf';
             $pdf->Output($pdfFilePath, 'F'); // Output to file
@@ -705,7 +721,11 @@ public function getData($type)
                 $y += 4;
                 $pdf->SetXY(16, $y);
                 $pdf->SetFont('times', 'B', 11);
-                $pdf->MultiCell(60, 10, $official->position, 1,'C');
+                if( $data_officials->position != "Punong Barangay"){
+                    $pdf->MultiCell(65, 10, "Barangay Kagawad" ,0, 'C'); 
+                }else{
+                    $pdf->MultiCell(65, 10, $data_officials->position ,0, 'C');
+                }
                 $y += 13; // Adjust as needed based on spacing
             }
 
@@ -737,7 +757,11 @@ public function getData($type)
             $pdf->Cell(0, 10, $data_officials->name, 0, 1, 'C');
             $pdf->SetFont('times', 'B', 12);
             $pdf->SetXY(135, 206);
-            $pdf->MultiCell(65, 10, $data_officials->position ,0, 'C');
+            if( $data_officials->position != "Punong Barangay"){
+                $pdf->MultiCell(65, 10, "Barangay Kagawad" ,0, 'C'); 
+            }else{
+                $pdf->MultiCell(65, 10, $data_officials->position ,0, 'C');
+            }
 
             $pdfFilePath = public_path('cert/') . $data->name . '-' . 'Certificate.pdf';
             $pdf->Output($pdfFilePath, 'F'); // Output to file
@@ -803,7 +827,11 @@ public function getData($type)
                 $y += 4;
                 $pdf->SetXY(16, $y);
                 $pdf->SetFont('times', 'B', 11);
-                $pdf->MultiCell(60, 10, $official->position, 1,'C');
+                if( $data_officials->position != "Punong Barangay"){
+                    $pdf->MultiCell(65, 10, "Barangay Kagawad" ,0, 'C'); 
+                }else{
+                    $pdf->MultiCell(65, 10, $data_officials->position ,0, 'C');
+                }
                 $y += 13; // Adjust as needed based on spacing
             }
 
@@ -843,7 +871,11 @@ public function getData($type)
             $pdf->Cell(0, 10, $data_officials->name, 0, 1, 'C');
             $pdf->SetFont('times', 'B', 12);
             $pdf->SetXY(135, 206);
-            $pdf->MultiCell(65, 10, $data_officials->position ,0, 'C');
+            if( $data_officials->position != "Punong Barangay"){
+                $pdf->MultiCell(65, 10, "Barangay Kagawad" ,0, 'C'); 
+            }else{
+                $pdf->MultiCell(65, 10, $data_officials->position ,0, 'C');
+            }
 
             $pdfFilePath = public_path('cert/') . $data->name . '-' . 'Certificate.pdf';
             $pdf->Output($pdfFilePath, 'F'); // Output to file
@@ -877,9 +909,9 @@ public function getData($type)
             
             // Set document properties
             $pdf->SetCreator('Barangay 781 Zone 85');
-            $pdf->SetTitle('Solo Parent Request');
-            $pdf->SetSubject('Barangay Certificate');
-            $pdf->SetKeywords('SP_Req');
+            $pdf->SetTitle('First Time Job Seeker Oath Taking');
+            $pdf->SetSubject('First Time job Seeker Certificate');
+            $pdf->SetKeywords('FTJ_Req');
             // Add a page
             $pdf->AddPage();
             // Display image as template

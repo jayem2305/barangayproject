@@ -36,7 +36,7 @@
             <li><a class="dropdown-item" href="../Admin/forum" class="nav-item nav-link text-white"><i class="bi bi-info-circle"></i> Forum</i></a></li>
         </ul>
     </li>
-    <a href="logout" class="nav-item nav-link text-white"><i class="bi bi-door-closed-fill"></i> Logout</a>
+    <a href="/" class="nav-item nav-link text-white"><i class="bi bi-door-closed-fill"></i> Logout</a>
 </div>
 </div>
 </nav>
@@ -123,9 +123,15 @@
                           </div>
                       </div>
                       <div class="col-lg-2">
-            <label for="formGroupExampleInput" class="form-label">Age</label>
+            <label for="formGroupExampleInput" class="form-label">Minimum Age</label>
                         <div class="input-group mb-3">
-                          <input type="number" class="form-control form-control-lg" id="age" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                          <input type="number" class="form-control form-control-lg" id="minage" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" min="0" >
+                      </div>
+                  </div>
+                  <div class="col-lg-2">
+            <label for="formGroupExampleInput" class="form-label">Maximum Age</label>
+                        <div class="input-group mb-3">
+                          <input type="number" class="form-control form-control-lg" id="maxage" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" min="0" >
                       </div>
                   </div>
                   <div class="col-lg-2">
@@ -156,18 +162,6 @@
                 </select>
           </div>
       </div>
-      <div class="col-lg-2">
-      <label for="formGroupExampleInput" class="form-label">Status</label>
-        <div class="input-group mb-3">
-          <select class="form-select form-select-lg mb-3" id="status" aria-label="Large select example" disabled>
-                        <option disabled>----</option>
-                        <option value="All">All</option>
-                        <option value="Adult">Adult</option>
-                        <option value="Minor">Minor</option>
-                        <option value="Senior">Senior</option>      
-                </select>
-      </div>
-  </div>
   <table class="table" id="tableResident">
     <thead>
         <tr>
@@ -195,12 +189,12 @@
             <select class="form-select" aria-label="Large select example" id="yearSelect" name="selectedYear">
                 <option selected>Select a Year</option>
             </select>
-                <button id="exportButton" class="btn btn-success"><i class="bi bi-printer-fill" ></i> PRINT REPORT</button>
+                    <button id="exportButtontable" class="btn btn-success"><i class="bi bi-printer-fill" ></i> PRINT REPORT</button>
             </div> 
         </div>
         <br>
         <div class="row">
-<table class="table" id="tablemonths">
+<table class="table table-striped table-hover" id="tablemonths">
     <thead>
         <tr>
             <th>Month</th>

@@ -31,8 +31,8 @@ class DataExport implements FromCollection, WithHeadings
             });
         }
 
-        if ($this->filters['age']) {
-            $residentQuery->where('age', $this->filters['age']);
+        if (!empty($this->filters['maxage']) && !empty($this->filters['minage'])) {
+            $residentQuery->whereBetween('age', [$this->filters['minage'], $this->filters['maxage']]);
         }
 
         if ($this->filters['address']) {
@@ -41,6 +41,8 @@ class DataExport implements FromCollection, WithHeadings
 
         if (!empty($this->filters['voters']) && $this->filters['voters'] === 'Voters') {
             $residentQuery->whereNotNull('voters_filename');
+        }else if (!empty($this->filters['voters']) && $this->filters['voters'] === 'Non-Voters') {
+            $residentQuery->whereNull('voters');
         }
 
 
@@ -61,8 +63,8 @@ class DataExport implements FromCollection, WithHeadings
             });
         }
 
-        if ($this->filters['age']) {
-            $memberQuery->where('age', $this->filters['age']);
+        if (!empty($this->filters['maxage']) && !empty($this->filters['minage'])) {
+            $memberQuery->whereBetween('age', [$this->filters['minage'], $this->filters['maxage']]);
         }
 
         if ($this->filters['address']) {
@@ -72,6 +74,13 @@ class DataExport implements FromCollection, WithHeadings
         if ($this->filters['sex'] && $this->filters['sex'] !== 'All') {
             $memberQuery->where('gender', $this->filters['sex']);
         }
+
+        if (!empty($this->filters['voters']) && $this->filters['voters'] === 'Voters') {
+            $memberQuery->whereNotNull('voters');
+        }else if (!empty($this->filters['voters']) && $this->filters['voters'] === 'Non-Voters') {
+            $memberQuery->whereNull('voters');
+        }
+        
 
         if ($this->filters['status'] && $this->filters['status'] !== 'All') {
             $memberQuery->where('status', $this->filters['status']);

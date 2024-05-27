@@ -482,7 +482,7 @@
                 </div>
             </div>
             <!-- Continued from previous code snippet -->
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="row">
                     <div class="col-lg-12">
                         <label for="formGroupExampleInput" class="form-label">Relation to family</label>
@@ -492,10 +492,19 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <label for="proofofowner">2x2 Picture<span class="text-danger">*</span> </label>
                 <div class="input-group mb-3">
                     <input class="form-control form-control-lg" type="file" placeholder="2x2 Picture"name="profile2x2_addmember" id="profile2x2_addmember" >
+                </div>
+                <div class="valid-secondary text-primary" style="margin-top: -1rem;">
+                  Note: Jpg, png, or Jpeg with Maximum 50mb only
+              </div>
+          </div>
+          <div class="col-lg-4">
+                <label for="proofofowner">Voters Certificate (Manil Voters Only)<span class="text-danger">*</span> </label>
+                <div class="input-group mb-3">
+                    <input class="form-control form-control-lg" type="file" placeholder="Voters Certificate "name="voters" id="voters" >
                 </div>
                 <div class="valid-secondary text-primary" style="margin-top: -1rem;">
                   Note: Jpg, png, or Jpeg with Maximum 50mb only
@@ -704,7 +713,7 @@
                 </div>
             </div>
             <!-- Continued from previous code snippet -->
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="row">
                     <div class="col-lg-12">
                         <label for="formGroupExampleInput" class="form-label">Relation to family</label>
@@ -714,10 +723,19 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <label for="proofofowner">2x2 Picture<span class="text-danger">*</span> </label>
                 <div class="input-group mb-3">
                     <input class="form-control form-control-lg" type="file" placeholder="2x2 Picture"name="profile2x2_editmember" id="profile2x2_editmember" >
+                </div>
+                <div class="valid-secondary text-primary" style="margin-top: -1rem;">
+                  Note: Jpg, png, or Jpeg with Maximum 50mb only
+              </div>
+          </div>
+          <div class="col-lg-4">
+                <label for="proofofowner">Voters Certificate (Manil Voters Only)<span class="text-danger">*</span> </label>
+                <div class="input-group mb-3">
+                    <input class="form-control form-control-lg" type="file" placeholder="Voters Certificate "name="votersupdate" id="votersupdate" >
                 </div>
                 <div class="valid-secondary text-primary" style="margin-top: -1rem;">
                   Note: Jpg, png, or Jpeg with Maximum 50mb only
@@ -892,6 +910,17 @@
     </div>
   </div>
 </div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="liveToastdanger" class="toast text-bg-danger" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header text-danger">
+      <strong class="me-auto">Somthings not Right</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body toastdanger">
+      Family Member added successfully
+    </div>
+  </div>
+</div>
                     <!-- Remaining input fields with modified IDs -->
                     <div class="modal fade" id="residentDetailsModal" tabindex="-1" aria-labelledby="residentDetailsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -917,7 +946,7 @@
             <div class="col-lg-3">  <p><strong id="birthdisplay">Birt Place:</strong></p></div>
             <div class="col-lg-3">  <p><strong id="genderdisplay">Gender:</strong> <p></div>
             <div class="col-lg-4">  <p><strong id="occupationdisplay">Occupation:</strong> </p></div>
-            <div class="col-lg-4">  <p><strong id="civildisplay"></strong>Civil Status:</strong> </p></div>
+            <div class="col-lg-4">  <p><strong id="civildisplay"></strong> </p></div>
             <div class="col-lg-4">  <p><strong id="citizendisplay">Citizenship:</strong> </p></div>
             <div class="col-lg-6">  <p><strong id="personaldisplay">Personal Status:</strong></p></div>
                 </div>    

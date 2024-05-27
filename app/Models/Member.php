@@ -25,6 +25,7 @@ class Member extends Model
         'indicate_if_member',
         'valid_id_member',
         'image_member',
+        'voters_member',
         // Add other fillable fields here as needed
     ];
 

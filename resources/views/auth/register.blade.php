@@ -434,7 +434,7 @@ data-password="password" name="firststep"> <span class="next-text ">Next</span>
     </div>
 </div>
 <div class="col-lg-4">
-<label for="proofofowner">letter ng May-ari<span class="text-danger">*</span> </label>
+<label for="proofofowner">Letter ng May-ari<span class="text-danger">*</span> </label>
     <div class="input-group mb-3">
         <input class="form-control form-control-lg" type="file" placeholder="letter ng May-ari"name="proofofowner" id="proofofowner" >
     </div>

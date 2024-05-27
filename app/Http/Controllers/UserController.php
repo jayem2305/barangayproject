@@ -296,6 +296,7 @@ public function store(Request $request)
             'citizenship' => 'required|string|max:255',
             'occupation' => 'required|string|max:255',
             'profile2x2' => 'required|image|mimes:jpeg,png,jpg|max:50000',
+            'voters' => 'nullable|max:50000',
         ], [
             'lname.required' => 'The last name field is required.',
             'lname.regex' => 'The last name field must contain only letters and spaces.',
@@ -351,6 +352,14 @@ public function store(Request $request)
             $filename = time() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('uploads'), $filename);
             $member->profile2x2 = $filename;
+        }
+        if ($request->hasFile('voters')) {
+            $file = $request->file('voters');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads'), $filename);
+            $member->voters = $filename;
+        } else {
+            $member->voters = null;  // or retain existing value if editing
         }
         $indicateIf = [];
 
@@ -426,7 +435,6 @@ public function store(Request $request)
 }
 public function edit($id)
 {
-    
     $member = Member::findOrFail($id);
     return $member;
 }
@@ -446,6 +454,7 @@ public function update(Request $request) {
         'citizenship' => 'required|regex:/^[a-zA-Z\s]+$/',
         'occupation' => 'required|regex:/^[a-zA-Z\s]+$/',
         'profile2x2' => $request->hasFile('profile2x2') ? 'required|mimes:png,jpg,jpeg|max:50000' : '',
+        'voters' => $request->hasFile('voters') ? 'nullable|mimes:png,jpg,jpeg|max:50000' : '',
     ];
 
     // Validate the input data
@@ -478,12 +487,19 @@ public function update(Request $request) {
         $user->occupation = $request->input('occupation');
         // Update user data
         $user->fill($request->except(['profile2x2']));
+        $user->fill($request->except(['voters']));
 
         if ($request->hasFile('profile2x2')) {
             $image2x2 = $request->file('profile2x2');
             $image2x2Name = $image2x2->getClientOriginalName();
             $image2x2->move(public_path('uploads'), $image2x2Name);
             $user->profile2x2 = $image2x2Name;
+        }
+        if ($request->hasFile('voters')) {
+            $voters = $request->file('voters');
+            $votersName = $voters->getClientOriginalName();
+            $voters->move(public_path('uploads'), $votersName);
+            $user->voters = $votersName;
         }
 
         $indicateIf = [];

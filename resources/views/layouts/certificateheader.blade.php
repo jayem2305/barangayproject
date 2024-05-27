@@ -271,11 +271,24 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
+    function toggleSpinner(button, show) {
+        var spinner = $(button).find('.spinner-border');
+        var icon = $(button).find('i');
 
+        if (show) {
+            spinner.removeClass('d-none');
+            icon.addClass('d-none');
+        } else {
+            spinner.addClass('d-none');
+            icon.removeClass('d-none');
+        }
+    }
 
     $(document).ready(function() {
         displaytable();
     $('.upload-indigency').click(function (e) {
+        var button = this; // Reference to the clicked button
+    toggleSpinner(button, true);
     e.preventDefault();
     var voters = $('#voters').val();
     var name = $('#names_display').val();
@@ -303,6 +316,8 @@ document.addEventListener("DOMContentLoaded", function() {
         success: function (response) {
             console.log(response);
             displaytable();
+        toggleSpinner(button, false);
+
             // Show success toast message
             $('#display').text('successfully Requested');
             $('.toast').removeClass('text-bg-danger').addClass('text-bg-success');
@@ -315,6 +330,8 @@ document.addEventListener("DOMContentLoaded", function() {
             console.error(xhr.responseJSON);
             var errorMessage = xhr.responseJSON.message;
             // Show error toast message
+        toggleSpinner(button, false);
+
             $('#display').text('Please try again.');
             $('.toast').removeClass('text-bg-success').addClass('text-bg-danger');
             $('.toast-body').text(errorMessage);
@@ -323,6 +340,8 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 $('.upload-bpermit').click(function (e) {
+    var button = this; // Reference to the clicked button
+    toggleSpinner(button, true);
     e.preventDefault();
     var voters = $('.voters').val();
     var name = $('#names_display_bpermit').val();
@@ -349,6 +368,8 @@ $('.upload-bpermit').click(function (e) {
         processData: false,
         success: function (response) {
             console.log(response);
+        toggleSpinner(button, false);
+
             displaytable();
             $('#display').text('successfully Requested');
             $('.toast').removeClass('text-bg-danger').addClass('text-bg-success');
@@ -360,7 +381,7 @@ $('.upload-bpermit').click(function (e) {
             console.error(xhr.responseJSON);
             var errorMessage = xhr.responseJSON.message;
             // Show error toast message
-            
+        toggleSpinner(button, false);
             $('#display').text('Please try again.');
             $('.toast').removeClass('text-bg-success').addClass('text-bg-danger');
             $('.toast-body').text(errorMessage);
@@ -369,6 +390,8 @@ $('.upload-bpermit').click(function (e) {
     });
 });
 $('.upload-cessation').click(function (e) {
+    var button = this; // Reference to the clicked button
+    toggleSpinner(button, true);
     e.preventDefault();
     var voters = $('#voters_cessation').val();
     var name = $('#names_display').val();
@@ -397,6 +420,7 @@ $('.upload-cessation').click(function (e) {
         processData: false,
         success: function (response) {
             console.log(response);
+        toggleSpinner(button, false);
             displaytable();
             $('#display').text('successfully Requested');
             $('.toast').removeClass('text-bg-danger').addClass('text-bg-success');
@@ -409,6 +433,7 @@ $('.upload-cessation').click(function (e) {
             console.error(xhr.responseJSON);
             var errorMessage = xhr.responseJSON.message;
             // Show error toast message
+        toggleSpinner(button, false);
             $('#display').text('Please try again.');
             $('.toast').removeClass('text-bg-success').addClass('text-bg-danger');
             $('.toast-body').text(errorMessage);
@@ -418,6 +443,8 @@ $('.upload-cessation').click(function (e) {
 });
 
 $('.upload-certifictae').click(function (e) {
+    var button = this; // Reference to the clicked button
+    toggleSpinner(button, true);
     e.preventDefault();
     var voters = $('#voters_cert').val();
     var name = $('#names_display_cert').val();
@@ -445,6 +472,7 @@ $('.upload-certifictae').click(function (e) {
         success: function (response) {
             console.log(response);
             // Show success toast message
+        toggleSpinner(button, false);
             displaytable();
             $('#display').text('successfully Requested');
             $('.toast').removeClass('text-bg-danger').addClass('text-bg-success');
@@ -458,6 +486,7 @@ $('.upload-certifictae').click(function (e) {
             console.error(xhr.responseJSON);
             var errorMessage = xhr.responseJSON.message;
             // Show error toast message
+        toggleSpinner(button, false);
             $('#display').text('Please try again.');
             $('.toast').removeClass('text-bg-success').addClass('text-bg-danger');
             $('.toast-body').text(errorMessage);
@@ -467,6 +496,8 @@ $('.upload-certifictae').click(function (e) {
 });
 
 $('.upload-soloparent').click(function (e) {
+    var button = this; // Reference to the clicked button
+    toggleSpinner(button, true);
     e.preventDefault();
     var voters = $('#voters_solo').val();
     var name = $('#names_display_solo').val();
@@ -499,6 +530,7 @@ $('.upload-soloparent').click(function (e) {
         success: function (response) {
             console.log(response);
             // Show success toast message
+        toggleSpinner(button, false);
             displaytable();
             $('#display').text('successfully Requested');
             $('.toast').removeClass('text-bg-danger').addClass('text-bg-success');
@@ -512,6 +544,7 @@ $('.upload-soloparent').click(function (e) {
             console.error(xhr.responseJSON);
             var errorMessage = xhr.responseJSON.message;
             // Show error toast message
+        toggleSpinner(button, false);
             $('#display').text('Please try again.');
             $('.toast').removeClass('text-bg-success').addClass('text-bg-danger');
             $('.toast-body').text(errorMessage);
@@ -521,6 +554,8 @@ $('.upload-soloparent').click(function (e) {
 });
 
 $('.upload-ftj').click(function (e) {
+    var button = this; // Reference to the clicked button
+    toggleSpinner(button, true);
     e.preventDefault();
     var voters = $('#voters_ftj').val();
     var name = $('#names_display_ftj').val();
@@ -560,6 +595,7 @@ $('.upload-ftj').click(function (e) {
         success: function (response) {
             console.log(response);
             // Show success toast message
+        toggleSpinner(button, false);
             displaytable();
             $('#display').text('successfully Requested');
             $('.toast').removeClass('text-bg-danger').addClass('text-bg-success');
@@ -573,6 +609,7 @@ $('.upload-ftj').click(function (e) {
             console.error(xhr.responseJSON);
             var errorMessage = xhr.responseJSON.message;
             // Show error toast message
+        toggleSpinner(button, false);
             $('#display').text('Please try again.');
             $('.toast').removeClass('text-bg-success').addClass('text-bg-danger');
             $('.toast-body').text(errorMessage);
@@ -658,6 +695,8 @@ function displaytable(){
 $(document).ready(function() {
     // Attach click event handler to a parent element (e.g., #myTable)
     $('#myTable').on('click', '.cancel-request', function (e) {
+        var button = this; // Reference to the clicked button
+    toggleSpinner(button, true);
         e.preventDefault();
         var id = $(this).closest('tr').find('.row-id').val(); // Retrieve the ID from the hidden input field in the same row as the clicked button
         var type= $(this).closest('tr').find('.row-type').val(); // Retrieve the ID from the hidden input field in the same row as the clicked button
@@ -676,6 +715,7 @@ $(document).ready(function() {
             success: function (response) {
                 console.log(response);
                 // Reload table data after successful cancellation
+        toggleSpinner(button, false);
                 displaytable();
                 // Show success toast message
                 $('#display').text('Request Cancelled');
@@ -687,6 +727,7 @@ $(document).ready(function() {
                 console.error(xhr.responseJSON);
                 var errorMessage = xhr.responseJSON.error;
                 // Show error toast message
+        toggleSpinner(button, false);
                 $('#display').text('Please try again.');
                 $('.toast').removeClass('text-bg-success').addClass('text-bg-danger');
                 $('.toast-body').text(errorMessage);

@@ -453,16 +453,21 @@ return response()->json(['status' => 'success']);
 {
     $email = $request->input('email');
     $exists = Resident::where('email', $email)->exists();
+    $checkreg = Resident::where('email', $email)->first();
 
+    $regnum = $checkreg->reg_number;
     try {
         if ($exists) {
             $token = Str::random(60);
             $subject = "Forget Password Reset";
-            $body = new HtmlString("Click the button to change your Password <a href='" . url('/reset-password/' . $token) . "'>Click Here!</a>");
+            $body = new HtmlString("Click the button to change your Password <a href='" . route('password.reset', ['regnum' => $regnum]) . "'>Click Here!</a>");
+
 
             // Send email notification using Mailable class
             try {
                 Mail::to($email)->send(new AccountApprovalNotification($subject, $body));
+                //$request->session()->put('userId', $checkreg);
+
                 return response()->json(['exists' => true]);
             } catch (\Exception $e) {
                 Log::error('Exception while sending email: ' . $e->getMessage());
@@ -476,7 +481,53 @@ return response()->json(['status' => 'success']);
         return response()->json(['error' => 'Internal Server Error'], 500);
     }
 }
+public function resetPassword(Request $request)
+{
+    // Validate the request data
+    $request->validate([
+        'idnumber' => 'required', // You might need to adjust validation rules according to your requirements
+        'password' => [
+            'required',
+            'string',
+            'min:8',
+            'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/',
+        ],
+        'confirmpassword' => [
+            'required',
+            'string',
+            'min:8',
+            'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/',
+        ], // Ensure confirmpassword matches password
+    ], [
+        'password.regex' => 'Password must have at least 8 characters, at least 1 uppercase letter, 1 number, and 1 special character.',
+        'confirmpassword.regex' => 'Password must have at least 8 characters, at least 1 uppercase letter, 1 number, and 1 special character.',
+    ]);
 
+    if($request->password != $request->confirmpassword){
+        return response()->json(['error' => 'Passwords does not Match'], 404);
+    }
+    // Get the user ID or any identifier from the request
+    $idnumber = $request->input('idnumber');
+
+    // Retrieve the user based on the identifier
+    $user = Resident::where('reg_number', $idnumber)->first();
+
+    if (!$user) {
+        // If user not found, return error response
+        return response()->json(['error' => 'User not found'], 404);
+    }
+
+    // Update the user's password
+    $user->password = $request->input('password');
+    $user->save();
+
+    // Optionally, you can log in the user after password update
+    Auth::login($user);
+
+    // Return a success response
+    return response()->json(['message' => 'Password updated successfully']);
+    
 }
 
 
+}

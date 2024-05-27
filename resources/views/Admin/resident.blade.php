@@ -35,7 +35,7 @@
                         <li><a class="dropdown-item" href="../Admin/forum" class="nav-item nav-link text-white"><i class="bi bi-info-circle"></i> Forum</i></a></li>
                     </ul>
                 </li>
-                    <a href="logout" class="nav-item nav-link text-white"><i class="bi bi-door-closed-fill"></i> Logout</a>
+                    <a href="/" class="nav-item nav-link text-white"><i class="bi bi-door-closed-fill"></i> Logout</a>
                 </div>
             </div>
         </nav>
@@ -172,7 +172,7 @@
 
 
 
-                        <div class="modal fade" id="Addofficials" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="Addofficials" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -206,9 +206,8 @@
   </div>
 </div>
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
-  <div id="liveToast" class="toast text-bg-danger" role="alert" aria-live="assertive" aria-atomic="true">
+  <div id="liveToast" class="toast text-bg-danger " role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-header">
-    
       <strong class="me-auto text-danger"><i class="bi bi-exclamation-triangle-fill"></i> Invalid Input !</strong>
       <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
@@ -231,7 +230,7 @@
       </div>
       <div class="modal-footer">
       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" id="btnRestrict" class="btn btn-danger"><span id="restrict">Restrict</span> <div class="spinner-border" role="status" style="display: none;">
+        <button type="button" id="btnRestrict" class="btn btn-danger"><span id="restrict">Restrict</span> <div class="spinner-border sample" role="status" style="display: none;">
   <span class="visually-hidden">Loading...</span>
 </div></button>
       </div>
@@ -239,7 +238,7 @@
   </div>
 </div>
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
-  <div id="liveToast" class="toast text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+  <div id="liveToast" class="toast text-bg-success toastset" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-header text-success">
       <strong class="me-auto">Account Restriction</strong>
       <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -259,7 +258,91 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+            <p id="personaldisplay"></p>
+
                 <!-- Resident details will be populated here dynamically -->
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updateofficials" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="declineModalLabel">Add Official Members</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="members" class="form-label">Official Name <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="updatename" placeholder="Name of the Official Member">
+          <div class="form-text" id="update-error-name" style="display: none;"></div>
+        </div>
+        <div class="mb-3">
+          <label for="position" class="form-label">Official Position <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="updateposition" placeholder="Position of the Member">
+        </div>
+        <div class="mb-3">
+          <label for="profile" class="form-label">Profile Picture <span class="text-danger">*</span></label>
+          <input type="file" class="form-control" id="updateprofile">
+          <div class="form-text" id="update-error-profile" style="display: none;"></div>
+          <div class="form-text" id="uupdate-basic-addon4">Maximum file size: 50 MB, maximum number of files: 1<br>Accepted file types: .pdf .png .jpg .jpeg</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary btn-confirm-update" id="liveToastBtn"><span class="decinepbtn">Submit</span> <div class="spinner-border" role="status" style="display: none;">
+            <span class="visually-hidden">Loading...</span>
+          </div></button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="liveToastupdate" class="toast text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <strong class="me-auto text-success">Officials Updated</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="residentdetails" tabindex="-1" aria-labelledby="residentDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="residentDetailsModalLabel">Family member Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            <div class="row">
+            <div class="col-lg-4">
+            <img src="../residentprofile/img.png"class="img-thumbnail mx-auto d-block" alt="Profile pic" style="width: 250px; height: 250px;" id="profilePic" >
+            <br>
+            </div>
+            <div class="col-lg-8">
+                <div class="row">
+                    <div class="col-lg-6 text-start"><p>Contoll #:<strong id="controll"></strong > </p></div>
+                    <div class="col-lg-6 text-start"><p>Status: <strong id="statusacc"></strong > </p></div>
+                    <h1 class="text-center" id="nameidsplay"> </h1>
+                    <h3 class="text-center" ><strong id="statusdisplay"></strong></h3>
+                    <div class="col-lg-3">  <p><strong id="birthdaydsiplay">Birthday:</strong> </p> </div>
+            <div class="col-lg-3">  <p><strong  id="agedisplay">Age:</strong> </p> </div>
+            <div class="col-lg-3">  <p><strong id="birthdisplay">Birt Place:</strong></p></div>
+            <div class="col-lg-3">  <p><strong id="genderdisplay">Gender:</strong> <p></div>
+            <div class="col-lg-4">  <p><strong id="occupationdisplay">Occupation:</strong> </p></div>
+            <div class="col-lg-4">  <p><strong id="civildisplay"></strong></p></div>
+            <div class="col-lg-4">  <p><strong id="citizendisplay">Citizenship:</strong> </p></div>
+            <div class="col-lg-6">  <p><strong id="personaldisplaymember">Personal Status:</strong></p></div>
+                </div>    
+            </div>
+           
+        </div>
+        <br>
             </div>
             
         </div>
