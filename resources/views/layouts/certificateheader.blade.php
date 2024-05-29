@@ -216,7 +216,7 @@ $('.names_display').click(function() {
             if (selectedImageFilename) {
                 $.each(data, function(index, fullName) {
             if (fullName.profile2x2) {
-                var imageUrl = '../uploads/' + fullName.profile2x2; // Update the path to your image directory
+                var imageUrl = '../residentprofile/' + fullName.profile2x2; // Update the path to your image directory
                 var imageElement = $('<img>', {
                     src: imageUrl,
                     alt: fullName.name + ' Image',
@@ -324,7 +324,12 @@ document.addEventListener("DOMContentLoaded", function() {
             $('.toast-body').text('Request submitted successfully.');
             $('.toast').toast('show');
             $('#exampleModal').modal('hide');
-            
+            $('#voters').val('');
+            $('#names_display').val('');
+            $('#copy').val(1);
+            $('#purpose').val('');
+            $('#otherpurpose').val('');
+            $('#requirements').val('');
         },
         error: function (xhr, status, error) {
             console.error(xhr.responseJSON);
@@ -376,6 +381,9 @@ $('.upload-bpermit').click(function (e) {
             $('.toast-body').text('Request submitted successfully.');
             $('.toast').toast('show');
             $('#modalBpermit').modal('hide');
+            $('.voters, #names_display_bpermit, #bname, #baddress').val('');
+            $('#copy_bpermit').val(1);
+            $('#requirements_bpermit').val(null);
         },
         error: function (xhr, status, error) {
             console.error(xhr.responseJSON);
@@ -427,6 +435,9 @@ $('.upload-cessation').click(function (e) {
             $('.toast-body').text('Request submitted successfully.');
             $('.toast').toast('show');
             $('#modalBcessation').modal('hide');
+            $('#voters_cessation, #names_display, #cbname, #CEOname, #cbaddress').val('');
+            $('#copy_cessation').val(1);
+            $('#requirements_display').val(null);
 
         },
         error: function (xhr, status, error) {
@@ -480,6 +491,9 @@ $('.upload-certifictae').click(function (e) {
             $('.toast').toast('show');
             $('#exampleModalCertificate').modal('hide');
             $('#otherpurposecert').val('');
+            $('#voters_cert, #names_display_cert, #purposecert, #otherpurposecert, #requirements_cert').val('');
+            $('#copy_cert').val(1);
+            $('#requirements_display').val(null);
             
         },
         error: function (xhr, status, error) {
@@ -538,6 +552,9 @@ $('.upload-soloparent').click(function (e) {
             $('.toast').toast('show');
             $('#otherpurposecert').val('');
             $('#exampleModalsolo').modal('hide');
+            $('#voters_solo, #names_display_solo, #requirements_solo, #childdisplay').val('');
+            $('#copy_solo').val(1);
+            $('#requirements_display').val(null);
 
         },
         error: function (xhr, status, error) {
@@ -603,7 +620,10 @@ $('.upload-ftj').click(function (e) {
             $('.toast').toast('show');
             $('#otherpurposecert').val('');
             $('#exampleModalftjcert').modal('hide');
-
+            $('#voters_ftj, #names_display_ftj, #requirements_ftj, #ftjtypes,#numberofliving,#typeofdays,#pname,#page,#paddress ').val('');
+            $('#copy_ftj').val(1);
+            $('#requirements_display').val(null);
+            $('#requirements_parents_ftj').val(null);
         },
         error: function (xhr, status, error) {
             console.error(xhr.responseJSON);

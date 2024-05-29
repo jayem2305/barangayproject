@@ -128,7 +128,7 @@
                 // Update History
                 $('#history').html(response.history);
                 // Update Logo
-                $('#logo').attr('src', '../barangayprorfile/'+response.logo);
+                $('#logo').attr('src', '../uploads/'+response.logo);
             },
             error: function(xhr, status, error) {
                 console.error(xhr.responseText);

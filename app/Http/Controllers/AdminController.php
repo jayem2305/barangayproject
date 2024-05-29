@@ -43,7 +43,7 @@ class AdminController extends Controller
     {
         try {
             $request->validate([
-                'topic' => 'required|string|max:255|regex:/^[a-zA-Z0-9\s\W]+$/|unique:forums,topic',
+                'topic' => 'required|string|max:255|regex:/^[a-zA-Z0-9\s\W]+$/',
                 'description' => 'nullable|string|regex:/^[a-zA-Z0-9\s\W]+$/',
                 'name' => 'required|string|regex:/^[a-zA-Z0-9\s\W]+$/',
             ]);

@@ -60,7 +60,7 @@
         <div class="col-lg-6">
             <div class="card">
                 <div class="card-body">
-                    <h3>Mission</h3>
+                    <h5 class="card-title">Mission</h5>
                     <div id="mission"></div>
                 </div>
             </div>
@@ -68,7 +68,7 @@
         <div class="col-lg-6">
             <div class="card">
                 <div class="card-body">
-                    <h3>Vision</h3>
+                    <h5 class="card-title">Vision</h5>
                     <div id="vision"></div>
                 </div>
             </div>
@@ -77,11 +77,11 @@
             <div class="card mb-3" >
                 <div class="row g-0">
                     <div class="col-md-4">
-                    <img src="..." class="img-fluid rounded-start" alt="..." id="logo">
+                    <img src="..." class="img-fluid rounded-start" alt="..." id="logo" style="margin-top:1rem; margin-left: 1rem;">
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
-                            <h3>History</h3>
+                            <h5 class="card-title">History</h5>
                             <div id="history"></div> 
                         </div>
                     </div>
@@ -99,6 +99,47 @@
         </div>
     </div>
 </div> 
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6">
+            <h2>Contact Details</h2>
+            <h4><i class="bi bi-circle"></i> Barangay 781 Zone 85 Sta. Ana Manila City</h4>
+            <hr>
+            <h4><i class="bi bi-circle"></i> +012 8856 9560</h4>
+            <hr>
+            <h4><i class="bi bi-circle"></i> barangay781.2023@gmail.com</h4>
+        </div>
+        <div class="col-lg-6">
+            <style type="text/css">
+                #map-container-google-2 {
+                    overflow: hidden;
+                    padding-bottom: 75%; /* Increase this value to make the map larger */
+                    position: relative;
+                    height:0;
+                    margin-bottom: -20rem;
+                }
+
+                #map-container-google-2 iframe {
+                    left: 0;
+                    top: 0;
+                    height: 50%;
+                    width: 100%; /* Set to 100% to take the entire width of the container */
+                    position: absolute;
+                }
+                .custom-close-button {
+    color: white;
+}
+            </style>
+            <div class="row">
+                <!-- Google map -->
+<div id="map-container-google-2" class="z-depth-1-half map-container col-lg-12">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3861.3711620152803!2d121.00593120950249!3d14.577914177575233!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c997b217d703%3A0x49c1cd83e3086f25!2sBrgy.%20781%2C%20San%20Andres%2C%20Manila%2C%20Metro%20Manila!5e0!3m2!1sen!2sph!4v1698527704865!5m2!1sen!2sph" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
+
+            </div>
+        </div>
+    </div>
+</div>
     </div>
 </div>
 

@@ -110,6 +110,34 @@
 
                     <!-- Template Javascript -->
                     <script src="../js/main.js"></script>
+                    <script>
+    document.getElementById('employed').addEventListener('change', function() {
+        const unemployedCheckbox = document.getElementById('unemployed');
+        unemployedCheckbox.disabled = this.checked;
+    });
+    document.getElementById('unemployed').addEventListener('change', function() {
+        const employedCheckbox = document.getElementById('employed');
+        employedCheckbox.disabled = this.checked;
+    });
+    document.getElementById('student').addEventListener('change', function() {
+        const OSYCheckbox = document.getElementById('OSY');
+        const OSCCheckbox = document.getElementById('OSC');
+        OSYCheckbox.disabled = this.checked;
+        OSCCheckbox.disabled = this.checked;
+    });
+    document.getElementById('OSY').addEventListener('change', function() {
+        const studentCheckbox = document.getElementById('student');
+        const OSCCheckbox = document.getElementById('OSC');
+        studentCheckbox.disabled = this.checked;
+        OSCCheckbox.disabled = this.checked;
+    });
+    document.getElementById('OSC').addEventListener('change', function() {
+        const studentCheckbox = document.getElementById('student');
+        const OSYCheckbox = document.getElementById('OSY');
+        OSYCheckbox.disabled = this.checked;
+        studentCheckbox.disabled = this.checked;
+    });
+</script>
    <script>
     
     // JavaScript to show the modal on page load
@@ -899,6 +927,28 @@ $(document).ready(function() {
     });
 });
 </script>
-
+<script>
+    $(document).ready(function() {
+        $.ajax({
+            url: "{{ route('getInfos') }}",
+            type: "GET",
+            dataType: "json",
+            success: function(response) {
+                // Update Mission
+                $('#mission').html(response.mission);
+                // Update Vision
+                $('#vision').html(response.vission);
+                // Update History
+                $('#history').html(response.history);
+                // Update Logo
+                $('#logo').attr('src', '../uploads/'+response.logo);
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+       
+</script>
 </body>
 </html>

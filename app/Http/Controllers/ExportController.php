@@ -24,7 +24,7 @@ class ExportController extends Controller
             'status' => $request->input('status')
         ];
     
-        return Excel::download(new DataExport($filters), 'data.xlsx');
+        return Excel::download(new DataExport($filters), 'RECORD OF BARANGAY INHABITANTS.xlsx');
     }
     public function exportExcel(Request $request)
     {

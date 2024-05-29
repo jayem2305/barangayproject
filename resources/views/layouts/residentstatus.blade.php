@@ -203,8 +203,9 @@
                 if (resident.Status === 'Restricted' || resident.status === 'Restricted' ) {
                     viewBtn = '<input type="hidden" value="'+ regNumber +'" id="unrestricted"><button type="button" class="btn btn-warning btn-lg btn-unrestrict"><span id="unrestrictbtn">Unrestrict</span><div class="spinner-border" style="display: none;" role="status"><span class="visually-hidden">Loading...</span></div></button>';
                 }
-                var imageUrl = resident.image_filename ? "../residentprofile/" : "../uploads/";
-                imageUrl += resident.image_filename ? resident.image_filename : resident.image_filename;
+                var imageUrl = resident.image_filename ? "../residentprofile/" + resident.image_filename : "../residentprofile/" + resident.profile2x2;
+        
+        console.log(imageUrl);
                 table.row.add([
                     "<img src=" + imageUrl + " class='rounded-circle mx-auto d-block' alt='...' width=50 height=50>",
                     resident.lname + ", " + resident.fname + " " + resident.mname + " " + ext,

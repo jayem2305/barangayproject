@@ -118,7 +118,7 @@ function registerPost(Request $request){
     'citizenship' => 'required|regex:/^[a-zA-Z\s ]+$/',
     'occupation' => 'required|regex:/^[a-zA-Z\s ]+$/',
     'email' => 'required|email|unique:residents,email',
-    'password' => 'required|min:8|regex:/^(?=.*[a-zA-Z0-9 ])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]+$/',
+    'password' => 'required|min:8|regex:/^(?=.*[a-zA-Z0-9 ])(?=.*\d)(?=.*[$@$!%*?&_])[A-Za-z\d$@$!%*?&_]+$/',
 
 
 ];
@@ -295,7 +295,7 @@ return response()->json(['status' => 'success']);
     public function laststep(Request $request)
     {
         $validatedData = $request->validate([
-            'voterscert' => 'required|mimes:pdf,png,jpg,jpeg|max:50000', 
+            'voterscert' => 'nullable|max:50000', 
             'idv' => 'required|mimes:pdf,png,jpg,jpeg|max:50000',
             'pic' => 'required|mimes:png,jpg,jpeg|max:50000',
         ]);
@@ -311,7 +311,8 @@ return response()->json(['status' => 'success']);
                 return response()->json(['error' => 'Invalid votersCertificate file.'], 422);
             }
         } else {
-            return response()->json(['error' => 'votersCertificate file is required.'], 422);
+            // Handle the case where no file is uploaded (optional)
+            $request->session()->put('voters_filename', null);  // or handle as needed
         }
     
         if ($request->hasFile('idv')) {
@@ -319,7 +320,7 @@ return response()->json(['status' => 'success']);
             if ($valid->isValid()) {
                 $validName = time() . '_' . $valid->getClientOriginalName();
                 $valid->move(public_path('residentprofile'), $validName);
-                $request->session()->put('valid_id_filename', $votersCertificateName);
+                $request->session()->put('valid_id_filename', $validName);
             } else {
                 return response()->json(['error' => 'Invalid valid file.'], 422);
             }
@@ -332,7 +333,7 @@ return response()->json(['status' => 'success']);
             if ($twobytwo->isValid()) {
                 $twobytwoName = time() . '_' . $twobytwo->getClientOriginalName();
                 $twobytwo->move(public_path('residentprofile'), $twobytwoName);
-                $request->session()->put('image_filename', $votersCertificateName);
+                $request->session()->put('image_filename', $twobytwoName);
             } else {
                 return response()->json(['error' => 'Invalid twobytwo file.'], 422);
             }
@@ -490,13 +491,13 @@ public function resetPassword(Request $request)
             'required',
             'string',
             'min:8',
-            'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/',
+            'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]+$/',
         ],
         'confirmpassword' => [
             'required',
             'string',
             'min:8',
-            'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/',
+            'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]+$/',
         ], // Ensure confirmpassword matches password
     ], [
         'password.regex' => 'Password must have at least 8 characters, at least 1 uppercase letter, 1 number, and 1 special character.',

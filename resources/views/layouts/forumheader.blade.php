@@ -126,7 +126,7 @@ $('.names_display').change(function() {
             // If there's a selected value, set it as selected
             if (selectedValue) {
                 $('.names_display').val(selectedValue);
-                var imagePath = selectedImageFilename ? '../uploads/' : '../residentprofile/';
+                var imagePath = '../residentprofile/';
            // console.log(selectedImageFilename);
             $('#displayimage').attr('src', imagePath + selectedImageFilename);
             household = selectedImageFilename;
@@ -191,6 +191,11 @@ function fetchForumData(forumId) {
                         return forum.id === forumId; // Assuming forumId is the ID of the selected forum
                     });
                     if (selectedForum) {
+                        if(selectedForum.description == null){
+                            selectedForum.description = ' ';
+                        }else{
+                            selectedForum.description = selectedForum.description
+                        }
                         $('#forumTopic').html('<h1 class="text-capitalize">' + selectedForum.topic+ '</h1>');
                         $('#forumDescription').html('<p class="text-capitalize">' + selectedForum.description + '</p>');
                         $('#labelname').html('<p class="text-capitalize">' + selectedForum.name + '</p>');
@@ -206,54 +211,77 @@ function fetchForumData(forumId) {
 }
 
 
-    $(document).on('click', '.btn-forum', function () {
-        var name = $('#names_display').val();
-        var topic = $('#topic').val();
-        var description = $('#description').val();
-        var formData = new FormData();
-        formData.append('addforum', 'addforum');
-        formData.append('name', name);
-        formData.append('topic', topic);
-        formData.append('description', description);
+$(document).on('click', '.btn-forum', function () {
+    var name = $('#names_display').val();
+    var topic = $('#topic').val();
+    var description = $('#description').val();
+    var formData = new FormData();
+    formData.append('addforum', 'addforum');
+    formData.append('name', name);
+    formData.append('topic', topic);
+    formData.append('description', description);
 
-        // Get the CSRF token from the meta tag
-        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+    // Get the CSRF token from the meta tag
+    var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-        $.ajax({
-            url: "{{ route('Admin.forumpost.user') }}",
-            type: "POST",
-            headers: {
-                'X-CSRF-TOKEN': csrfToken
-            },
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(result) {
-                console.log('AJAX request successful:', result);
-               fetchForumData();
-            //updateForumButtons();
-
-                $('#topic').removeClass('is-invalid');
-                $('#valid').removeClass('invalid-feedback');
-                $('#valid').text(" ");
-                // Handle success response here
-            },
-            error: function(xhr, status, errorThrown) {
-                console.error('AJAX request failed:', xhr, status, errorThrown);
-                // Handle error response here
-                if(xhr.status == 422) {
+    $.ajax({
+        url: "{{ route('Admin.forumpost.user') }}",
+        type: "POST",
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        },
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(result) {
+            console.log('AJAX request successful:', result);
+            // Display success toast
+            var toast = $('#liveToast');
+            toast.find('.toast-header').removeClass('text-danger').addClass('text-success').find('strong').text('Forum Added Successfully');
+            toast.find('.toast-body').removeClass('text-bg-danger').addClass('text-bg-success');
+            toast.find('.toast-body').text('Your forum has been added successfully.');
+            toast.toast('show');
+            
+            // Fetch and update forum data here
+            fetchForumData();
+            
+            // Reset input fields
+            $('#topic').val('');
+            $('#description').val('');
+            
+            // Remove any validation classes and messages
+            $('#topic').removeClass('is-invalid');
+            $('#valid').removeClass('invalid-feedback');
+            $('#valid').text('');
+        },
+        error: function(xhr, status, errorThrown) {
+            console.error('AJAX request failed:', xhr, status, errorThrown);
+            // Handle error response here
+            if(xhr.status == 422) {
                 var errors = xhr.responseJSON.errors;
-                    $('#topic').addClass('is-invalid');
-                    $('#valid').addClass('invalid-feedback');
-                    $('#valid').text(errors.topic[0]);
-            }else{
-                $('#topic').removeClass('is-invalid');
-                $('#valid').removeClass('invalid-feedback');
-                $('#valid').text(" ");
+                // Display error toast
+                var toast = $('#liveToast');
+                toast.find('.toast-header').removeClass('text-success').addClass('text-danger').find('strong').text('Forum Added Unsuccessfully');
+                toast.find('.toast-body').removeClass('text-bg-success').addClass('text-bg-danger');
+                var errorMessage = '';
+                for (var key in errors) {
+                    if (errors.hasOwnProperty(key)) {
+                        errorMessage += errors[key][0] + '\n'; // Concatenate each error message
+                    }
+                }
+                toast.find('.toast-body').text(errorMessage.trim());
+                toast.toast('show');
+
+            } else {
+                var toast = $('#liveToast');
+                toast.find('.toast-header').removeClass('text-success').addClass('text-danger').find('strong').text('Error');
+                toast.find('.toast-body').removeClass('text-bg-success').addClass('text-bg-danger').text('An error occurred while adding the forum.');
+                toast.toast('show');
             }
-            }
-        });
-   }); 
+        }
+    });
+});
+
 
    function displayForumData(forums) {
         var forumHTML = "";
@@ -329,10 +357,37 @@ console.log(id_form);
             // Assuming fetchForumData() function fetches forum data asynchronously
             fetchForumData(); // Update forum data after posting comment
             displayComments(id_form);
-
+            $('#comment').val(' ')
+            var toast = $('#liveToast');
+            toast.find('.toast-header').removeClass('text-danger').addClass('text-success').find('strong').text('Comment Added Successfully');
+            toast.find('.toast-body').removeClass('text-bg-danger').addClass('text-bg-success');
+            toast.find('.toast-body').text('Your Comment has been added successfully.');
+            toast.toast('show');
         },
         error: function(xhr, status, errorThrown) {
-            console.error('Error posting comment:', errorThrown);
+            console.error('AJAX request failed:', xhr, status, errorThrown);
+            // Handle error response here
+            if(xhr.status == 422) {
+                var errors = xhr.responseJSON.errors;
+                // Display error toast
+                var toast = $('#liveToast');
+                toast.find('.toast-header').removeClass('text-success').addClass('text-danger').find('strong').text('Comment Added Unsuccessfully');
+                toast.find('.toast-body').removeClass('text-bg-success').addClass('text-bg-danger');
+                var errorMessage = '';
+                for (var key in errors) {
+                    if (errors.hasOwnProperty(key)) {
+                        errorMessage += errors[key][0] + '\n'; // Concatenate each error message
+                    }
+                }
+                toast.find('.toast-body').text(errorMessage.trim());
+                toast.toast('show');
+
+            } else {
+                var toast = $('#liveToast');
+                toast.find('.toast-header').removeClass('text-success').addClass('text-danger').find('strong').text('Comment Added Unsuccessfully');
+                toast.find('.toast-body').removeClass('text-bg-success').addClass('text-bg-danger').text('An error occurred while adding the Comment.');
+                toast.toast('show');
+            }
         }
     });
 }); 
@@ -346,8 +401,7 @@ function displayComments(forumId) {
             
             if (comments) {
                 comments.forEach(function(comment) {
-                    var imagePath = comment.profile ? '../uploads/' : '../residentprofile/';
-                    var imageUrl = imagePath + (comment.profile ? comment.profile : 'default-image.png'); // Replace 'default-image.png' with the default image path if needed
+                    var imageUrl = '../residentprofile/'+ comment.profile;
                     commentsHtml += '<div class="row">';
                     commentsHtml += '<input type="hidden" value="' + comment.id + '" class="idcomments">';
                     commentsHtml += '<div class="profiles col-lg-1 col-sm-1 col-xs-1 col-md-1"><img src='+ imageUrl +' class="rounded-circle me-3" alt="Profile Picture" width="50" height="50"></div>';
@@ -381,7 +435,7 @@ function displayComments(forumId) {
 
         // Get the comment ID
         var commentId = $(this).data('comment-id');
-        var replyNames = $(this).data('replyname');
+        var replyNames = $('.names_display').val();
         var replyImages = $(this).data('replyimage');
         // Create and append the input tag and submit button
         var replyFormHtml = '<div class="row"><div class="reply-form mb-3 d-grid gap-2 d-md-flex justify-content-md-end col-lg-12">';
@@ -417,11 +471,37 @@ function displayComments(forumId) {
                 // Handle the response (e.g., display a success message)
                 console.log(response);
                 displayReplies(commentId);
+                var toast = $('#liveToast');
+                toast.find('.toast-header').removeClass('text-danger').addClass('text-success').find('strong').text('Reply Added Successfully');
+                toast.find('.toast-body').removeClass('text-bg-danger').addClass('text-bg-success');
+                toast.find('.toast-body').text('Your Reply has been added successfully.');
+                toast.toast('show');
             },
-            error: function(xhr, status, error) {
-                // Handle errors
-                console.error(error);
+            error: function(xhr, status, errorThrown) {
+            console.error('AJAX request failed:', xhr, status, errorThrown);
+            // Handle error response here
+            if(xhr.status == 422) {
+                var errors = xhr.responseJSON.errors;
+                // Display error toast
+                var toast = $('#liveToast');
+                toast.find('.toast-header').removeClass('text-success').addClass('text-danger').find('strong').text('Reply Added Unsuccessfully');
+                toast.find('.toast-body').removeClass('text-bg-success').addClass('text-bg-danger');
+                var errorMessage = '';
+                for (var key in errors) {
+                    if (errors.hasOwnProperty(key)) {
+                        errorMessage += errors[key][0] + '\n'; // Concatenate each error message
+                    }
+                }
+                toast.find('.toast-body').text(errorMessage.trim());
+                toast.toast('show');
+
+            } else {
+                var toast = $('#liveToast');
+                toast.find('.toast-header').removeClass('text-success').addClass('text-danger').find('strong').text('Reply Added Unsuccessfully');
+                toast.find('.toast-body').removeClass('text-bg-success').addClass('text-bg-danger').text('An error occurred while adding the Reply.');
+                toast.toast('show');
             }
+        }
         });
         
         // Optionally, you can remove the reply form after submission

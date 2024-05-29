@@ -439,7 +439,7 @@ data-password="password" name="firststep"> <span class="next-text ">Next</span>
         <input class="form-control form-control-lg" type="file" placeholder="letter ng May-ari"name="proofofowner" id="proofofowner" >
     </div>
     <div class="valid-secondary text-primary" style="margin-top: -1rem;">
-        Only for non-owners.
+        Para sa Hindi may Ari ng Tirahan.
                             </div>
 </div>
 <div class="col-lg-6">
@@ -506,7 +506,10 @@ data-password="password" name="firststep"> <span class="next-text ">Next</span>
     <div class="form-floating">
         <input type="file" class="form-control" id="voterscert" name="voterscert" >
         <label for="voterscert">Voters Certificate:</label>
-    </div>
+    </div><br>
+    <div class="valid-secondary text-primary" style="margin-top: -1rem;">
+                        If applicable
+                            </div>
 </div>
   <div class="col-lg-4" >
     <div class="alert alert-primary d-flex align-items-center" role="alert">

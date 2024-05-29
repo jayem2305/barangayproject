@@ -22,7 +22,7 @@
        <div class="navbar-nav ms-auto mb-2 mb-lg-0">
         <a href="../Admin" class="nav-item nav-link text-white"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
           <path fill-rule="evenodd" d="M0 0h1v15h15v1H0zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07"/>
-      </svg> Statistical Report </a>
+      </svg> Numerical Report </a>
       <a href="../admin/contentmanager" class="nav-item nav-link text-white"><i class="bi bi-menu-button-wide"></i> Content Manager</a>
       <a href="../Admin/certificate" class="nav-item nav-link text-primary"><i class="bi bi-file-earmark-richtext-fill"></i> Certificates</i></a>
       <li class="dropdown">
@@ -150,19 +150,19 @@
         <div class="modal-body">
     <div class="container-fluid">
         <div class="row ">
-            <div class="col-4">
+            <div class="col-lg-4">
             <label for="formGroupExampleInput" class="form-label">Are you a voters of Manila ? <span class="text-danger">*</span></label>
             <input type="text" class="form-control" name="voters" id="voters"  readonly>
             </div>
-            <div class="col-8">
+            <div class="col-lg-8">
                 <label for="formGroupExampleInput" class="form-label">Name of Requester <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" name="names_display" id="names_display"  readonly>
             </div>
-            <div class="col-3">
+            <div class="col-lg-3">
                 <label for="formGroupExampleInput" class="form-label">Number of copies <span class="text-danger">*</span></label>
                 <input type="number" class="form-control" id="copy" readonly>
             </div>
-            <div class="col-9">
+            <div class="col-lg-9">
             <label for="formGroupExampleInput" class="form-label">Purpose of Barangay Certificate <span class="text-danger">*</span></label>
             <input type="text" class="form-control" name="purpose" id="purpose" readonly>
             </div>
@@ -174,7 +174,7 @@
                 </div>
             </div>
         </div>
-            <div class="col-12">
+            <div class="col-lg-12">
                 <br>
                 <label for="formGroupExampleInput" class="form-label">Uploaded PDF Requirements <span class="text-danger">*</span></label>
                 <div id="pdfViewer">
@@ -199,15 +199,15 @@
         <div class="modal-body">
             <div class="container-fluid">
         <div class="row gy-3">
-        <div class="col-4">
+        <div class="col-lg-4">
             <label for="formGroupExampleInput" class="form-label">Are you a voters of Manila ? <span class="text-danger">*</span></label>
             <input type="text" class="form-control" name="voters" id="voters_permit"  readonly>
             </div>
-            <div class="col-8">
+            <div class="col-lg-8">
                 <label for="formGroupExampleInput" class="form-label">Name of Requester <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" name="names_display" id="names_display_permit"  readonly>
             </div>
-            <div class="col-3">
+            <div class="col-lg-3">
                 <label for="formGroupExampleInput" class="form-label">Number of copies <span class="text-danger">*</span></label>
                 <input type="number" class="form-control" id="copy_permit" readonly>
             </div>
@@ -227,7 +227,7 @@
             <label for="formGroupExampleInput" class="form-label">Purpose <span class="text-danger">*</span></label>
             <input type="text" class="form-control" name="purpose" id="purpose_permit" readonly>
             </div>
-            <div class="col-12">
+            <div class="col-lg-12">
                 <br>
                 <label for="formGroupExampleInput" class="form-label">Uploaded PDF Requirements <span class="text-danger">*</span></label>
                 <div id="pdfViewer_permit">
@@ -251,16 +251,16 @@
         <div class="modal-body">
             <div class="container-fluid">
         <div class="row gy-3">
-            <div class="col-4">
+            <div class="col-lg-4">
             <input type="hidden" class="form-control" value="First-Time Job Seeker" name="cbpermit" id="cbpermit">
             <label for="formGroupExampleInput" class="form-label">Are you a voters of Manila ? <span class="text-danger">*</span></label>
             <input type="text" class="form-control form-control-lg" name="voters" id="voters_ftj" readonly>
             </div>
-            <div class="col-8">
+            <div class="col-lg-8">
                 <label for="formGroupExampleInput" class="form-label">Name of Requester <span class="text-danger">*</span></label>
             <input type="text" class="form-control form-control-lg" name="names_display" id="names_display_ftj" readonly>
             </div>
-            <div class="col-3">
+            <div class="col-lg-3">
                 <label for="formGroupExampleInput" class="form-label">Number of copies <span class="text-danger">*</span></label>
                 <input type="number" class="form-control form-control-lg" id="copy_ftj" max="5" min="1" value="1" readonly>
             </div>
@@ -268,7 +268,7 @@
             <label for="formGroupExampleInput" class="form-label">Type of First-Time Job Seeker<span class="text-danger">*</span></label>
             <input type="text" class="form-control form-control-lg" name="ftjtypes" id="ftjtypes" readonly>
             </div>
-            <div class="col-12">
+            <div class="col-lg-12">
                 <label for="formGroupExampleInput" class="form-label">Uploaded PDF Requirements</label>
                 <div id="requirements_ftj" ></div>
             </div>
@@ -288,7 +288,7 @@
                     <label for="formGroupExampleInput" class="form-label">Guardians Current Address: <span class="text-danger">*</span></label>
                         <input type="text" class="form-control form-control-lg" placeholder="Guardian Current Address" name="paddress" id="paddress" readonly >
                     </div>
-                    <div class="col-12">
+                    <div class="col-lg-12">
                     <label for="formGroupExampleInput" class="form-label">Approval of Guardian With Valid ID <span class="text-danger">*</span> </label>
                     <div id="requirements_parents_ftj"></div>
                     </div>  
@@ -370,7 +370,7 @@
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
   <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-header text-success">
-      <strong class="me-auto">Document Status</strong>
+      <strong class="toast-header me-auto">Document Status</strong>
       <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
     <div class="toast-body text-bg-success">

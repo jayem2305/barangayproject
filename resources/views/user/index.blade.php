@@ -135,7 +135,7 @@
                 <button type="button" class="btn-close custom-close-button" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; top: 1rem; right: 1rem; z-index: 2;"></button>
                 <img src="../pic/popup.png" class="img-fluid" alt="..." style="width: 100%; height: auto; display: block;">
                 <div class="position-absolute w-100 h-100 d-flex justify-content-start align-items-end p-3" style="top: 0; left: 0;">
-                    <a href="onlineservices" class="btn btn-primary btn-lg" role="button" style="z-index: 3;">CLICK HERE TO APPLY</a>
+                    <a href="../User/certificate" class="btn btn-primary btn-lg" role="button" style="z-index: 3;">CLICK HERE TO APPLY</a>
                 </div>
             </div>
         </div>

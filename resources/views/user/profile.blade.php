@@ -65,7 +65,7 @@
                         </div>
                     </div>
                     <!-- Profile About and Family Members -->
-                    <div class="card-body p-4 text-black" style="font-size: 20px; margin-top: 100px;"> 
+                    <div class="card-body p-4 text-black" style="font-size: 20px; margin-top: 150px;"> 
                         <div class="mb-5"> 
                             <p class="lead fw-normal mb-1" style="font-size: 30px;">About</p> 
                             <div class="p-4" style="background-color: #f8f9fa;" >
@@ -502,7 +502,7 @@
               </div>
           </div>
           <div class="col-lg-4">
-                <label for="proofofowner">Voters Certificate (Manil Voters Only)<span class="text-danger">*</span> </label>
+                <label for="voters">Voters Certificate (Manila Voters Only) </label>
                 <div class="input-group mb-3">
                     <input class="form-control form-control-lg" type="file" placeholder="Voters Certificate "name="voters" id="voters" >
                 </div>

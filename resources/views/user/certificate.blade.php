@@ -338,7 +338,7 @@
             </div>
         </div>
         <div class="row ">
-            <div class="col-4">
+            <div class="col-lg-4">
             <input type="hidden" class="form-control" value="Barangay Indigency" name="indigency" id="indigency">
             <label for="formGroupExampleInput" class="form-label">Are you a voters of Manila ? <span class="text-danger">*</span></label>
                 <select class="form-select form-select-lg mb-3" aria-label="Large select example"name="voters" id="voters">
@@ -347,22 +347,22 @@
                     <option value="Voters">Voters</option>
                 </select>
             </div>
-            <div class="col-8">
+            <div class="col-lg-8">
                 <label for="formGroupExampleInput" class="form-label">Name of Requester <span class="text-danger">*</span></label>
                 <select class="form-select form-select-lg mb-3 names_display" aria-label="Large select example"name="names_display" id="names_display" >
                     <option selected disabled>-----</option>
                     <!-- Names of members and Head Ofthe family-->
                 </select>
             </div>
-            <div class="col-3">
+            <div class="col-lg-3">
                 <label for="formGroupExampleInput" class="form-label">Number of copies <span class="text-danger">*</span></label>
                 <input type="number" class="form-control" id="copy" max="5" min="1" value="1">
             </div>
-            <div class="col-9">
+            <div class="col-lg-9">
                 <label for="formGroupExampleInput" class="form-label">Upload your Requirements <span class="text-danger">*</span> <span class="text-primary"><i class="bi bi-info-circle"></i> Compiled it in PDF format with maximum 50mb</span></label>
                 <input type="file" class="form-control" id="requirements" >
             </div>
-            <div class="col-12">
+            <div class="col-lg-12">
             <label for="formGroupExampleInput" class="form-label">Purpose of Barangay Indigency <span class="text-danger">*</span></label>
                 <select class="form-select form-select-lg mb-3 purpose" aria-label="Large select example"name="purpose" id="purpose">
                     <option selected disabled>-----</option>
@@ -413,7 +413,7 @@
             </div>
         </div>
         <div class="row gy-3">
-            <div class="col-4">
+            <div class="col-lg-4">
             <input type="hidden" class="form-control" value="Barangay Certificate" name="certificate" id="certificate">
             <label for="formGroupExampleInput" class="form-label">Are you a voters of Manila ? <span class="text-danger">*</span></label>
                 <select class="form-select form-select-lg mb-3" aria-label="Large select example"name="voters" id="voters_cert">
@@ -422,22 +422,22 @@
                     <option value="Voters">Voters</option>
                 </select>
             </div>
-            <div class="col-8">
+            <div class="col-lg-8">
                 <label for="formGroupExampleInput" class="form-label">Name of Requester <span class="text-danger">*</span></label>
                 <select class="form-select form-select-lg mb-3 names_display" aria-label="Large select example" name="names_display" id="names_display_cert" >
                     <option selected disabled>-----</option>
                     <!-- Names of members and Head Ofthe family-->
                 </select>
             </div>
-            <div class="col-3">
+            <div class="col-lg-3">
                 <label for="formGroupExampleInput" class="form-label">Number of copies <span class="text-danger">*</span></label>
                 <input type="number" class="form-control" id="copy_cert" max="5" min="1" value="1">
             </div>
-            <div class="col-9">
+            <div class="col-lg-9">
                 <label for="formGroupExampleInput" class="form-label">Upload your Requirements <span class="text-danger">*</span> <span class="text-primary"><i class="bi bi-info-circle"></i> Compiled it in PDF format with maximum 50mb</span></label>
                 <input type="file" class="form-control" id="requirements_cert" >
             </div>
-            <div class="col-12">
+            <div class="col-lg-12">
             <label for="formGroupExampleInput" class="form-label">Purpose of Barangay Certificate <span class="text-danger">*</span></label>
                 <select class="form-select form-select-lg mb-3 purpose" aria-label="Large select example"name="purpose" id="purposecert">
                     <option selected disabled>-----</option>
@@ -485,7 +485,7 @@
             </div>
         </div>
         <div class="row gy-3">
-            <div class="col-4">
+            <div class="col-lg-4">
             <input type="hidden" class="form-control" value="Business Permit" name="bpermit" id="bpermit">
             <label for="formGroupExampleInput" class="form-label">Are you a voters of Manila ? <span class="text-danger">*</span></label>
                 <select class="form-select form-select-lg mb-3 voters" aria-label="Large select example"name="voters" id="voters">
@@ -494,18 +494,18 @@
                     <option value="Voters">Voters</option>
                 </select>
             </div>
-            <div class="col-8">
+            <div class="col-lg-8">
                 <label for="formGroupExampleInput" class="form-label">Name of Requester <span class="text-danger">*</span></label>
                 <select class="form-select form-select-lg mb-3 names_display" aria-label="Large select example"name="name" id="names_display_bpermit" >
                     <option selected disabled>-----</option>
                     <!-- Names of members and Head Ofthe family-->
                 </select>
             </div>
-            <div class="col-3">
+            <div class="col-lg-3">
                 <label for="formGroupExampleInput" class="form-label">Number of copies <span class="text-danger">*</span></label>
                 <input type="number" class="form-control form-control-lg copy" name="copy_bpermit" id="copy_bpermit" max="5" min="1" value="1">
             </div>
-            <div class="col-9">
+            <div class="col-lg-9">
                 <label for="formGroupExampleInput" class="form-label">Upload your Requirements <span class="text-danger">*</span> <span class="text-primary"><i class="bi bi-info-circle"></i> Compiled it in PDF format with maximum 50mb</span></label>
                 <input type="file" class="form-control form-control-lg requirements" name="requirements_bpermit" id="requirements_bpermit" >
             </div>
@@ -546,7 +546,7 @@
             </div>
         </div>
         <div class="row gy-3">
-            <div class="col-4">
+            <div class="col-lg-4">
             <input type="hidden" class="form-control" value="Cessation of Business" name="cbpermit" id="cbpermit">
             <label for="formGroupExampleInput" class="form-label">Are you a voters of Manila ? <span class="text-danger">*</span></label>
                 <select class="form-select form-select-lg mb-3 voters" aria-label="Large select example" name="voters" id="voters_cessation">
@@ -555,18 +555,18 @@
                     <option value="Voters">Voters</option>
                 </select>
             </div>
-            <div class="col-8">
+            <div class="col-lg-8">
                 <label for="formGroupExampleInput" class="form-label">Name of Requester <span class="text-danger">*</span></label>
                 <select class="form-select form-select-lg mb-3 names_display" aria-label="Large select example"name="names_display" >
                     <option selected disabled>-----</option>
                     <!-- Names of members and Head Ofthe family-->
                 </select>
             </div>
-            <div class="col-3">
+            <div class="col-lg-3">
                 <label for="formGroupExampleInput" class="form-label">Number of copies <span class="text-danger">*</span></label>
                 <input type="number" class="form-control form-control-lg" id="copy_cessation" name="copy_cessation" max="5" min="1" value="1">
             </div>
-            <div class="col-9">
+            <div class="col-lg-9">
                 <label for="formGroupExampleInput" class="form-label">Upload your Requirements <span class="text-danger">*</span> <span class="text-primary"><i class="bi bi-info-circle"></i> Compiled it in PDF format with maximum 50mb</span></label>
                 <input type="file" class="form-control form-control-lg requirements" id="requirements_display" name="requirements" >
             </div>
@@ -611,7 +611,7 @@
             </div>
         </div>
         <div class="row gy-3">
-            <div class="col-4">
+            <div class="col-lg-4">
             <input type="hidden" class="form-control" value="First-Time Job Seeker" name="cbpermit" id="cbpermit">
             <label for="formGroupExampleInput" class="form-label">Are you a voters of Manila ? <span class="text-danger">*</span></label>
                 <select class="form-select form-select-lg mb-3 voters" aria-label="Large select example"name="voters" id="voters_ftj">
@@ -620,18 +620,18 @@
                     <option value="Voters">Voters</option>
                 </select>
             </div>
-            <div class="col-8">
+            <div class="col-lg-8">
                 <label for="formGroupExampleInput" class="form-label">Name of Requester <span class="text-danger">*</span></label>
                 <select class="form-select form-select-lg mb-3 names_display" aria-label="Large select example"name="names_display" id="names_display_ftj" >
                     <option selected disabled>-----</option>
                     <!-- Names of members and Head Ofthe family-->
                 </select>
             </div>
-            <div class="col-3">
+            <div class="col-lg-3">
                 <label for="formGroupExampleInput" class="form-label">Number of copies <span class="text-danger">*</span></label>
                 <input type="number" class="form-control form-control-lg" id="copy_ftj" max="5" min="1" value="1">
             </div>
-            <div class="col-9">
+            <div class="col-lg-9">
                 <label for="formGroupExampleInput" class="form-label">Upload your Requirements <span class="text-danger">*</span> <span class="text-primary"><i class="bi bi-info-circle"></i> Compiled it in PDF format with maximum 50mb</span></label>
                 <input type="file" class="form-control form-control-lg" id="requirements_ftj" >
             </div>
@@ -711,7 +711,7 @@
             </div>
         </div>
         <div class="row gy-3">
-            <div class="col-4">
+            <div class="col-lg-4">
             <input type="hidden" class="form-control" value="First-Time Job Seeker" name="cbpermit" id="cbpermit">
             <label for="formGroupExampleInput" class="form-label">Are you a voters of Manila ? <span class="text-danger">*</span></label>
                 <select class="form-select form-select-lg mb-3" aria-label="Large select example"name="voters" id="voters_solo">
@@ -720,18 +720,18 @@
                     <option value="Voters">Voters</option>
                 </select>
             </div>
-            <div class="col-8">
+            <div class="col-lg-8">
                 <label for="formGroupExampleInput" class="form-label">Name of Requester <span class="text-danger">*</span></label>
                 <select class="form-select form-select-lg mb-3 names_display" aria-label="Large select example"name="names_display_solo" id="names_display_solo" >
                     <option selected disabled>-----</option>
                     <!-- Names of members and Head Ofthe family-->
                 </select>
             </div>
-            <div class="col-3">
+            <div class="col-lg-3">
                 <label for="formGroupExampleInput" class="form-label">Number of copies <span class="text-danger">*</span></label>
                 <input type="number" class="form-control form-control-lg" id="copy_solo" max="5" min="1" value="1">
             </div>
-            <div class="col-9">
+            <div class="col-lg-9">
                 <label for="formGroupExampleInput" class="form-label">Upload your Requirements <span class="text-danger">*</span> <span class="text-primary"><i class="bi bi-info-circle"></i> Compiled it in PDF format with maximum 50mb</span></label>
                 <input type="file" class="form-control form-control-lg" id="requirements_solo" >
             </div>

@@ -78,7 +78,88 @@
                     <script src="../lib/waypoints/waypoints.min.js"></script>
                     <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
                     <script src="../lib/lightbox/js/lightbox.min.js"></script>
-
+                    <script>
+    document.getElementById('employed').addEventListener('change', function() {
+        const unemployedCheckbox = document.getElementById('unemployed');
+        unemployedCheckbox.disabled = this.checked;
+    });
+    document.getElementById('unemployed').addEventListener('change', function() {
+        const employedCheckbox = document.getElementById('employed');
+        employedCheckbox.disabled = this.checked;
+    });
+    document.getElementById('student').addEventListener('change', function() {
+        const OSYCheckbox = document.getElementById('OSY');
+        const OSCCheckbox = document.getElementById('OSC');
+        OSYCheckbox.disabled = this.checked;
+        OSCCheckbox.disabled = this.checked;
+    });
+    document.getElementById('OSY').addEventListener('change', function() {
+        const studentCheckbox = document.getElementById('student');
+        const OSCCheckbox = document.getElementById('OSC');
+        studentCheckbox.disabled = this.checked;
+        OSCCheckbox.disabled = this.checked;
+    });
+    document.getElementById('OSC').addEventListener('change', function() {
+        const studentCheckbox = document.getElementById('student');
+        const OSYCheckbox = document.getElementById('OSY');
+        OSYCheckbox.disabled = this.checked;
+        studentCheckbox.disabled = this.checked;
+    });
+////////
+    document.getElementById('employed_addmember').addEventListener('change', function() {
+        const unemployedCheckbox = document.getElementById('unemployed_addmember');
+        unemployedCheckbox.disabled = this.checked;
+    });
+    document.getElementById('unemployed_addmember').addEventListener('change', function() {
+        const employedCheckbox = document.getElementById('employed_addmember');
+        employedCheckbox.disabled = this.checked;
+    });
+    document.getElementById('student_addmember').addEventListener('change', function() {
+        const OSYCheckbox = document.getElementById('OSY_addmember');
+        const OSCCheckbox = document.getElementById('OSC_addmember');
+        OSYCheckbox.disabled = this.checked;
+        OSCCheckbox.disabled = this.checked;
+    });
+    document.getElementById('OSY_addmember').addEventListener('change', function() {
+        const studentCheckbox = document.getElementById('student_addmember');
+        const OSCCheckbox = document.getElementById('OSC_addmember');
+        studentCheckbox.disabled = this.checked;
+        OSCCheckbox.disabled = this.checked;
+    });
+    document.getElementById('OSC_addmember').addEventListener('change', function() {
+        const studentCheckbox = document.getElementById('student_addmember');
+        const OSYCheckbox = document.getElementById('OSY_addmember');
+        OSYCheckbox.disabled = this.checked;
+        studentCheckbox.disabled = this.checked;
+    });
+    ///////
+    document.getElementById('employed_editmember').addEventListener('change', function() {
+        const unemployedCheckbox = document.getElementById('unemployed_editmember');
+        unemployedCheckbox.disabled = this.checked;
+    });
+    document.getElementById('unemployed_editmember').addEventListener('change', function() {
+        const employedCheckbox = document.getElementById('employed_editmember');
+        employedCheckbox.disabled = this.checked;
+    });
+    document.getElementById('student_editmember').addEventListener('change', function() {
+        const OSYCheckbox = document.getElementById('OSY_editmember');
+        const OSCCheckbox = document.getElementById('OSC_editmember');
+        OSYCheckbox.disabled = this.checked;
+        OSCCheckbox.disabled = this.checked;
+    });
+    document.getElementById('OSY_editmember').addEventListener('change', function() {
+        const studentCheckbox = document.getElementById('student_editmember');
+        const OSCCheckbox = document.getElementById('OSC_editmember');
+        studentCheckbox.disabled = this.checked;
+        OSCCheckbox.disabled = this.checked;
+    });
+    document.getElementById('OSC_editmember').addEventListener('change', function() {
+        const studentCheckbox = document.getElementById('student_editmember');
+        const OSYCheckbox = document.getElementById('OSY_editmember');
+        OSYCheckbox.disabled = this.checked;
+        studentCheckbox.disabled = this.checked;
+    });
+</script>
                     <!-- Template Javascript -->
                     <script src="../js/main.js"></script>
    <script>
@@ -101,7 +182,7 @@
     console.log(response.logo); // Log the response to the console
     if (response.logo) {
         // Update the image container with the fetched image
-        image = $('#imageContainer').html('<img src="{{ asset("../barangayprorfile") }}/' + response.logo + '"class=" rounded-circle mx-auto d-block" alt="logo" width="200" height="200" ">');
+        image = $('#imageContainer').html('<img src="{{ asset("../uploads") }}/' + response.logo + '"class=" rounded-circle mx-auto d-block" alt="logo" width="200" height="200" ">');
     } else {
         // Handle if no image is found
         $('#imageContainer').html('<p>No image found</p>');
@@ -195,12 +276,14 @@
     $(document).ready(function(){
         refreshprofile();
         function refreshprofile() {
+            
         // Ajax request when document is ready
         $.ajax({
             url: "{{ route('user.profile_user') }}", // URL of the profile route
             type: 'GET',
             dataType: 'json',
             success: function(response){
+                
                 console.log(response); // Log the entire response object to console
                 var ext;
                 if(response.user.ext == null){
@@ -268,14 +351,60 @@
 }
 console.log('Response indicate_if:', user.indicate_if);
 // Test the function with the provided data
-$('#employed').prop('checked', checkCheckbox('Employed', user.indicate_if));
-$('#unemployed').prop('checked', checkCheckbox('Unemployed', user.indicate_if));
-$('#PWD').prop('checked', checkCheckbox('PWD', user.indicate_if));
-$('#OFW').prop('checked', checkCheckbox('OFW', user.indicate_if));
-$('#soloparent').prop('checked', checkCheckbox('Solo Parent', user.indicate_if));
-$('#OSY').prop('checked', checkCheckbox('Out of School Youth (OSY)', user.indicate_if));
-$('#student').prop('checked', checkCheckbox('Student', user.indicate_if));
-$('#OSC').prop('checked', checkCheckbox('Out of School Children (OSC)', user.indicate_if));
+// Function to handle initial checkbox state based on the dataString
+function handleInitialCheckboxState(dataString) {
+    $('#employed').prop('checked', checkCheckbox('Employed', dataString));
+    $('#unemployed').prop('checked', checkCheckbox('Unemployed', dataString));
+    $('#PWD').prop('checked', checkCheckbox('PWD', dataString));
+    $('#OFW').prop('checked', checkCheckbox('OFW', dataString));
+    $('#soloparent').prop('checked', checkCheckbox('Solo Parent', dataString));
+    $('#OSY').prop('checked', checkCheckbox('Out of School Youth (OSY)', dataString));
+    $('#student').prop('checked', checkCheckbox('Student', dataString));
+    $('#OSC').prop('checked', checkCheckbox('Out of School Children (OSC)', dataString));
+
+    // Disable checkboxes based on initial state
+    const employedCheckbox = document.getElementById('employed');
+    const unemployedCheckbox = document.getElementById('unemployed');
+    unemployedCheckbox.disabled = employedCheckbox.checked;
+
+    const studentCheckbox = document.getElementById('student');
+    const OSYCheckbox = document.getElementById('OSY');
+    const OSCCheckbox = document.getElementById('OSC');
+    OSYCheckbox.disabled = studentCheckbox.checked;
+    OSCCheckbox.disabled = studentCheckbox.checked;
+}
+
+// Call the function with the provided data
+handleInitialCheckboxState(user.indicate_if);
+
+// Event listeners to handle changes in checkbox state
+document.getElementById('employed').addEventListener('change', function() {
+    const unemployedCheckbox = document.getElementById('unemployed');
+    unemployedCheckbox.disabled = this.checked;
+});
+document.getElementById('unemployed').addEventListener('change', function() {
+    const employedCheckbox = document.getElementById('employed');
+    employedCheckbox.disabled = this.checked;
+});
+document.getElementById('student').addEventListener('change', function() {
+    const OSYCheckbox = document.getElementById('OSY');
+    const OSCCheckbox = document.getElementById('OSC');
+    OSYCheckbox.disabled = this.checked;
+    OSCCheckbox.disabled = this.checked;
+});
+document.getElementById('OSY').addEventListener('change', function() {
+    const studentCheckbox = document.getElementById('student');
+    const OSCCheckbox = document.getElementById('OSC');
+    studentCheckbox.disabled = this.checked;
+    OSCCheckbox.disabled = this.checked;
+});
+document.getElementById('OSC').addEventListener('change', function() {
+    const studentCheckbox = document.getElementById('student');
+    const OSYCheckbox = document.getElementById('OSY');
+    OSYCheckbox.disabled = this.checked;
+    studentCheckbox.disabled = this.checked;
+});
+
 
 
 
@@ -504,6 +633,7 @@ $('#OSC').prop('checked', checkCheckbox('Out of School Children (OSC)', user.ind
 
     // Event listener for save changes button click
     $('.update-btn').click(function(){
+        
         $('input, select, textarea').removeClass('is-invalid is-valid').siblings('.valid-feedback, .invalid-feedback').remove();
         updateProfile(); // Call the updateProfile function
     });
@@ -746,7 +876,7 @@ $.ajax({
             var html = '<div class="col-12 col-sm-6 col-md-4 col-lg-3">';
             html += '<div class="our-team">';
             html += '<div class="picture">';
-            html += '<img class="img-fluid rounded-circle" src="../uploads/' + member.profile2x2 + '" style="width: 356px; height: 356px;">';
+            html += '<img class="img-fluid rounded-circle" src="../residentprofile/' + member.profile2x2 + '" style="width: 356px; height: 356px;">';
             html += '</div>';
             html += '<div class="team-content">';
             html += '<h3 class="name">' + member.lname+", " + member.fname  +" "+ mname + ext +'</h3>';
@@ -856,7 +986,7 @@ $('.view-member-link').click(function(e) {
             }
             // Populate input fields with member data
             $('#nameidsplay').text(response.lname + ' ' + response.fname + ' ' + mname + ' ' + ext);
-            $('#profilePic').attr('src', "../uploads/"+response.profile2x2);
+            $('#profilePic').attr('src', "../residentprofile/"+response.profile2x2);
             $('#birthdaydsiplay').text("Birthday: "+response.birthday);
             $('#agedisplay').text("Age: "+response.age);
             $('#birthdisplay').text("Birth Place: "+response.birthplace);
@@ -938,8 +1068,11 @@ function deleteMember(memberId) {
     });
 }
 }
+
+
 $('.editmember-btn').click(function(e) {
     e.preventDefault();
+
 var memberId = $('#id_editmember').val();
 var lname = $('#lname_editmember').val();
 $('input, select, textarea').removeClass('is-invalid is-valid');
@@ -974,6 +1107,7 @@ updatedData.append('soloparent', $('#soloparent_editmember').is(':checked') ? $(
 updatedData.append('OSY', $('#OSY_editmember').is(':checked') ? $('#OSY_editmember').val() : null);
 updatedData.append('student', $('#student_editmember').is(':checked') ? $('#student_editmember').val() : null);
 updatedData.append('OSC', $('#OSC_editmember').is(':checked') ? $('#OSC_editmember').val() : null);
+
     console.log("This is the lname: "+lname);
     // Send AJAX request to update member data
     $.ajax({
@@ -1012,6 +1146,7 @@ updatedData.append('OSC', $('#OSC_editmember').is(':checked') ? $('#OSC_editmemb
             // Handle success response
             $('#editMemberModal').modal('hide'); // Close modal after successful update
             // You might want to show a success message or update the UI here
+            
         },
         error: function(xhr, status, errorThrown) {
                 console.error('AJAX request failed:', xhr, status, errorThrown);

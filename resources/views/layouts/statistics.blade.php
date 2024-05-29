@@ -139,7 +139,9 @@
                     var blob = new Blob([data], { type: xhr.getResponseHeader('Content-Type') });
                     var link = document.createElement('a');
                     link.href = window.URL.createObjectURL(blob);
-                    link.download = 'data.xlsx';
+                    var today = new Date();
+                    var formattedDate = (today.getMonth() + 1) + '-' + today.getDate() + '-' + today.getFullYear();
+                    link.download = 'RBI_' + formattedDate + '.xlsx';
                     link.click();
                 },
                 error: function(xhr, status, error) {

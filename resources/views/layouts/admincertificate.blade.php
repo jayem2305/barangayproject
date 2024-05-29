@@ -222,7 +222,7 @@ $(document).ready( function () {
     var type = $(this).attr('id');
     var tableId;
     var claimtableid;
-    var id ,name,date,address,type,purpose,phone_number,action;
+   
     claimtableid = '#ClaimTable';
      tableId = '#ApprovalTable';
     $.ajax({
@@ -237,6 +237,7 @@ $(document).ready( function () {
         } else {
             // Append new rows to the table
             $.each(response, function(index, item) {
+                var id ,name,date,address,type,purpose,phone_number,action;
                 if(item.type == "First Time Job Seeker Oath Taking" || item.type == "First Time Job Seeker" ||item.type == "First Time Job seeker (Minor)"){
                 id = "FTJ_"+formatDatecontroll(item.created_at) +"_"+item.id;
                 name = item.name;
@@ -972,13 +973,41 @@ $('.decline_request').on('click', function() {
         updatePendingCount();
         toggleSpinner(button, false);
         $("#declineReason").val('');
-
+        var toast = $('#liveToast');
+        toast.find('.toast-header').removeClass('text-danger').addClass('text-success').find('strong').text('Decline Succesfully');
+        toast.find('.toast-body').removeClass('text-bg-danger').addClass('text-bg-success');
+        toast.find('.toast-body').text("Decline Message Succesfully Send to the Email");
+        toast.toast('show');
         },
-        error: function(xhr, status, error) {
-            // Handle error
-            console.error(error);
-            toggleSpinner(button, false);
+        error: function(xhr, status, errorThrown) {
+    console.error('AJAX request failed:', xhr, status, errorThrown);
+    // Handle error response here
+    if(xhr.status == 422) {
+        var errors = xhr.responseJSON.errors;
+        // Display error toast
+        var toast = $('#liveToast');
+        toast.find('.toast-header').removeClass('text-success').addClass('text-danger').find('strong').text('Decline Unsuccesfully');
+        toast.find('.toast-body').removeClass('text-bg-success').addClass('text-bg-danger');
+        var errorMessage = '';
+        for (var key in errors) {
+            if (errors.hasOwnProperty(key)) {
+                errorMessage += errors[key][0] + '\n'; // Concatenate each error message
+            }
         }
+        toast.find('.toast-body').text("Declined message is Empty");
+        toast.toast('show');
+        toggleSpinner(button, false);
+
+    } else {
+        // Display generic error message
+        var toast = $('#liveToast');
+        toast.find('.toast-header').removeClass('text-success').addClass('text-danger').find('strong').text('Error');
+        toast.find('.toast-body').removeClass('text-bg-success').addClass('text-bg-danger').text('An error occurred while adding the forum.');
+        toast.toast('show');
+        toggleSpinner(button, false);
+
+    }
+}
     });
 });
 

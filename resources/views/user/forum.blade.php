@@ -204,4 +204,15 @@
                     <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i
                         class="bi bi-arrow-up"></i></a>
 
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header text-success">
+      <strong class="me-auto">Forum Added Succesfully</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body text-bg-success">
+      Hello, world! This is a toast message.
+    </div>
+  </div>
+</div>
         @endsection

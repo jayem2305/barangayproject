@@ -146,25 +146,42 @@ $(document).ready(function(){
 
                 $('#topic').removeClass('is-invalid');
                 $('#valid').removeClass('invalid-feedback');
-                $('#valid').text(" ");
-                // Handle success response here
-            },
-            error: function(xhr, status, errorThrown) {
-                console.error('AJAX request failed:', xhr, status, errorThrown);
-                // Handle error response here
-                if(xhr.status == 422) {
+                $('#topic').val('');
+            $('#description').val('');
+            var toast = $('#liveToast');
+            toast.find('.toast-header').removeClass('text-danger').addClass('text-success').find('strong').text('Forum Added Successfully');
+            toast.find('.toast-body').removeClass('text-bg-danger').addClass('text-bg-success');
+            toast.find('.toast-body').text('Your Forum has been added successfully.');
+            toast.toast('show');
+            
+        },
+        error: function(xhr, status, errorThrown) {
+            console.error('AJAX request failed:', xhr, status, errorThrown);
+            // Handle error response here
+            if(xhr.status == 422) {
                 var errors = xhr.responseJSON.errors;
-                    $('#topic').addClass('is-invalid');
-                    $('#valid').addClass('invalid-feedback');
-                    $('#valid').text(errors.topic[0]);
-            }else{
-                $('#topic').removeClass('is-invalid');
-                $('#valid').removeClass('invalid-feedback');
-                $('#valid').text(" ");
+                // Display error toast
+                var toast = $('#liveToast');
+                toast.find('.toast-header').removeClass('text-success').addClass('text-danger').find('strong').text('Forum Added Unsuccessfully');
+                toast.find('.toast-body').removeClass('text-bg-success').addClass('text-bg-danger');
+                var errorMessage = '';
+                for (var key in errors) {
+                    if (errors.hasOwnProperty(key)) {
+                        errorMessage += errors[key][0] + '\n'; // Concatenate each error message
+                    }
+                }
+                toast.find('.toast-body').text(errorMessage.trim());
+                toast.toast('show');
+
+            } else {
+                var toast = $('#liveToast');
+                toast.find('.toast-header').removeClass('text-success').addClass('text-danger').find('strong').text('Error');
+                toast.find('.toast-body').removeClass('text-bg-success').addClass('text-bg-danger').text('An error occurred while adding the forum.');
+                toast.toast('show');
             }
-            }
-        });
+        }
     });
+});
 
 // Add event listener for modal trigger
 $('.forum-view').click(function() {
@@ -209,8 +226,9 @@ function fetchForumData(forumId) {
 $(document).on('click', '.trash-button', function(){
     var button = $(this);
     var forumId = button.data('forum-id');
-
+    var confirmDelete = confirm("Are you sure you want to Archive this forum?");
     // Send Ajax request to update forum status
+    if (confirmDelete) {
     $.ajax({
         url: "/forums/" + forumId + "/archive",
         type: "POST",
@@ -219,12 +237,39 @@ $(document).on('click', '.trash-button', function(){
             // Handle success response
             console.log(response.message);
             location.reload();
+            var toast = $('#liveToast');
+            toast.find('.toast-header').removeClass('text-danger').addClass('text-success').find('strong').text('Comment Added Successfully');
+            toast.find('.toast-body').removeClass('text-bg-danger').addClass('text-bg-success');
+            toast.find('.toast-body').text('Your Comment has been added successfully.');
+            toast.toast('show');
         },
-        error: function(xhr, status, error){
-            // Handle error
-            console.error(xhr.responseText);
+        error: function(xhr, status, errorThrown) {
+            console.error('AJAX request failed:', xhr, status, errorThrown);
+            // Handle error response here
+            if(xhr.status == 422) {
+                var errors = xhr.responseJSON.errors;
+                // Display error toast
+                var toast = $('#liveToast');
+                toast.find('.toast-header').removeClass('text-success').addClass('text-danger').find('strong').text('Comment Added Unsuccessfully');
+                toast.find('.toast-body').removeClass('text-bg-success').addClass('text-bg-danger');
+                var errorMessage = '';
+                for (var key in errors) {
+                    if (errors.hasOwnProperty(key)) {
+                        errorMessage += errors[key][0] + '\n'; // Concatenate each error message
+                    }
+                }
+                toast.find('.toast-body').text(errorMessage.trim());
+                toast.toast('show');
+
+            } else {
+                var toast = $('#liveToast');
+                toast.find('.toast-header').removeClass('text-success').addClass('text-danger').find('strong').text('Comment Added Unsuccessfully');
+                toast.find('.toast-body').removeClass('text-bg-success').addClass('text-bg-danger').text('An error occurred while adding the Comment.');
+                toast.toast('show');
+            }
         }
     });
+}
 });
 var buttonsUpdated = false;
 function updateForumButtons() {
@@ -294,10 +339,36 @@ $(document).on('click', '.restore-button', function(){
             // Update the status in the UI
             $('#status' + forumId).text('active');
             location.reload();
+            var toast = $('#liveToast');
+            toast.find('.toast-header').removeClass('text-danger').addClass('text-success').find('strong').text('Comment Added Successfully');
+            toast.find('.toast-body').removeClass('text-bg-danger').addClass('text-bg-success');
+            toast.find('.toast-body').text('Your Comment has been added successfully.');
+            toast.toast('show');
         },
-        error: function(xhr, status, error){
-            // Handle error
-            console.error(xhr.responseText);
+        error: function(xhr, status, errorThrown) {
+            console.error('AJAX request failed:', xhr, status, errorThrown);
+            // Handle error response here
+            if(xhr.status == 422) {
+                var errors = xhr.responseJSON.errors;
+                // Display error toast
+                var toast = $('#liveToast');
+                toast.find('.toast-header').removeClass('text-success').addClass('text-danger').find('strong').text('Comment Added Unsuccessfully');
+                toast.find('.toast-body').removeClass('text-bg-success').addClass('text-bg-danger');
+                var errorMessage = '';
+                for (var key in errors) {
+                    if (errors.hasOwnProperty(key)) {
+                        errorMessage += errors[key][0] + '\n'; // Concatenate each error message
+                    }
+                }
+                toast.find('.toast-body').text(errorMessage.trim());
+                toast.toast('show');
+
+            } else {
+                var toast = $('#liveToast');
+                toast.find('.toast-header').removeClass('text-success').addClass('text-danger').find('strong').text('Comment Added Unsuccessfully');
+                toast.find('.toast-body').removeClass('text-bg-success').addClass('text-bg-danger').text('An error occurred while adding the Comment.');
+                toast.toast('show');
+            }
         }
     });
 });
@@ -382,10 +453,38 @@ $(document).on('click', '.restore-button', function(){
             // Assuming fetchForumData() function fetches forum data asynchronously
             fetchForumData(); // Update forum data after posting comment
             displayComments(id_form);
+            var toast = $('#liveToast');
+            toast.find('.toast-header').removeClass('text-danger').addClass('text-success').find('strong').text('Comment Added Successfully');
+            toast.find('.toast-body').removeClass('text-bg-danger').addClass('text-bg-success');
+            toast.find('.toast-body').text('Your Comment has been added successfully.');
+            toast.toast('show');
+        $('#comment').val(" ");
 
         },
         error: function(xhr, status, errorThrown) {
-            console.error('Error posting comment:', errorThrown);
+            console.error('AJAX request failed:', xhr, status, errorThrown);
+            // Handle error response here
+            if(xhr.status == 422) {
+                var errors = xhr.responseJSON.errors;
+                // Display error toast
+                var toast = $('#liveToast');
+                toast.find('.toast-header').removeClass('text-success').addClass('text-danger').find('strong').text('Comment Added Unsuccessfully');
+                toast.find('.toast-body').removeClass('text-bg-success').addClass('text-bg-danger');
+                var errorMessage = '';
+                for (var key in errors) {
+                    if (errors.hasOwnProperty(key)) {
+                        errorMessage += errors[key][0] + '\n'; // Concatenate each error message
+                    }
+                }
+                toast.find('.toast-body').text(errorMessage.trim());
+                toast.toast('show');
+
+            } else {
+                var toast = $('#liveToast');
+                toast.find('.toast-header').removeClass('text-success').addClass('text-danger').find('strong').text('Comment Added Unsuccessfully');
+                toast.find('.toast-body').removeClass('text-bg-success').addClass('text-bg-danger').text('An error occurred while adding the Comment.');
+                toast.toast('show');
+            }
         }
     });
 });
@@ -402,7 +501,7 @@ function displayComments(forumId) {
                 comments.forEach(function(comment) {
                     commentsHtml += '<div class="row">';
                     commentsHtml += '<input type="hidden" value="' + comment.id + '" class="idcomments">';
-                    commentsHtml += '<div class="profiles col-lg-1 col-sm-1 col-xs-1 col-md-1"><img src='+ comment.profile + ' class="rounded-circle me-3" alt="Profile Picture" width="50" height="50"></div>';
+                    commentsHtml += '<div class="profiles col-lg-1 col-sm-1 col-xs-1 col-md-1"><img src=../residentprofile/'+ comment.profile + ' class="rounded-circle me-3" alt="Profile Picture" width="50" height="50"></div>';
                     commentsHtml +=  '<div class="profiles col-lg-11 col-sm-11 col-xs-11 md-lg-11"><div class="card" style="background-color:#D9D9D9;"> <div class="card-body"><b>'+ comment.name + "</b><br>" + comment.comment + '<br><br><button type="button" class="btn btn-success btn-sm reply-btn" data-comment-id="' + comment.id + '">Reply</button><hr>';
                     commentsHtml += '<div style="width: 58rem; height: 20rem;overflow-y: auto;overflow-x: hidden;"><div class="replydisplay" data-comment-id="' + comment.id + '"><br></div></div></div></div></div>'; // Create a placeholder for replies
                     commentsHtml += '<div class="time col-lg-12 text-xl-end text-body-secondary fw-lighter">' + formatTime(comment.created_at) + '</div>';
@@ -478,11 +577,37 @@ $(document).ready(function() {
                 // Handle the response (e.g., display a success message)
                 console.log(response);
                 displayReplies(commentId);
+                var toast = $('#liveToast');
+                toast.find('.toast-header').removeClass('text-danger').addClass('text-success').find('strong').text('Reply Added Successfully');
+                toast.find('.toast-body').removeClass('text-bg-danger').addClass('text-bg-success');
+                toast.find('.toast-body').text('Your Reply has been added successfully.');
+                toast.toast('show');
             },
-            error: function(xhr, status, error) {
-                // Handle errors
-                console.error(error);
+            error: function(xhr, status, errorThrown) {
+            console.error('AJAX request failed:', xhr, status, errorThrown);
+            // Handle error response here
+            if(xhr.status == 422) {
+                var errors = xhr.responseJSON.errors;
+                // Display error toast
+                var toast = $('#liveToast');
+                toast.find('.toast-header').removeClass('text-success').addClass('text-danger').find('strong').text('Reply Added Unsuccessfully');
+                toast.find('.toast-body').removeClass('text-bg-success').addClass('text-bg-danger');
+                var errorMessage = '';
+                for (var key in errors) {
+                    if (errors.hasOwnProperty(key)) {
+                        errorMessage += errors[key][0] + '\n'; // Concatenate each error message
+                    }
+                }
+                toast.find('.toast-body').text(errorMessage.trim());
+                toast.toast('show');
+
+            } else {
+                var toast = $('#liveToast');
+                toast.find('.toast-header').removeClass('text-success').addClass('text-danger').find('strong').text('Reply Added Unsuccessfully');
+                toast.find('.toast-body').removeClass('text-bg-success').addClass('text-bg-danger').text('An error occurred while adding the Reply.');
+                toast.toast('show');
             }
+        }
         });
         
         // Optionally, you can remove the reply form after submission
@@ -501,7 +626,7 @@ function displayReplies(commentid) {
                 replies.forEach(function(reply) {
                     // If the reply was successfully saved, display it
                     repliesHtml += '<div class="row">';
-                    repliesHtml += '<div class="profiles col-lg-1 col-sm-1 col-xs-1 col-md-1"><img src='+ reply.replyimage + ' class="rounded-circle me-3" alt="Profile Picture" width="50" height="50"></div>';
+                    repliesHtml += '<div class="profiles col-lg-1 col-sm-1 col-xs-1 col-md-1"><img src=../residentprofile/'+ reply.replyimage + ' class="rounded-circle me-3" alt="Profile Picture" width="50" height="50"></div>';
                     repliesHtml +=  '<div class="profiles col-lg-11 col-sm-11 col-xs-11 md-lg-11"><div class="card" style="background-color:#D9D9D9;"> <div class="card-body"><b>'+ reply.replyname + "</b><br>" + reply.reply_text + '</div></div></div>';
                     repliesHtml += '<div class="time col-lg-12 text-xl-end text-body-secondary fw-lighter">' + formatTime(reply.created_at) + '</div>';
                     repliesHtml += '</div>';

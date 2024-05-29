@@ -1314,6 +1314,9 @@ public function sendEmailNotificationDecline(Request $request)
     $regnum = $request->input('controlnum');
     Log::info('Received resident email:', ['email' => $email]);
     try {
+        if(empty($text)){
+         return response()->json(['error' => 'Decline Message is Empty'], 422);
+        }
         if($type == "First Time Job Seeker"||$type == "First Time Job seeker (Minor)"||$type == "First Time Job Seeker Oath Taking" ){
             $resident = FtjRequest::findOrFail($id);
         }else if($type == "Business Cessation"){

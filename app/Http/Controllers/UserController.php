@@ -295,7 +295,7 @@ public function store(Request $request)
             'civil_status' => 'required|in:Single,Married,Widowed',
             'citizenship' => 'required|string|max:255',
             'occupation' => 'required|string|max:255',
-            'profile2x2' => 'required|image|mimes:jpeg,png,jpg|max:50000',
+            'profile2x2' => 'required|mimes:png,jpg,jpeg|max:50000',
             'voters' => 'nullable|max:50000',
         ], [
             'lname.required' => 'The last name field is required.',
@@ -345,19 +345,22 @@ public function store(Request $request)
         $member->civil_status = $request->civil_status;
         $member->citizenship = $request->citizenship;
         $member->occupation = $request->occupation;
+        $member->fill($request->except(['voters']));
 
         // Handle file upload
         if ($request->hasFile('profile2x2')) {
             $file = $request->file('profile2x2');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads'), $filename);
+            $filename = time() . '_profile2x2.' . $file->getClientOriginalExtension();
+            $file->move(public_path('residentprofile'), $filename);
             $member->profile2x2 = $filename;
         }
+
+        // Handle voters file upload (optional)
         if ($request->hasFile('voters')) {
-            $file = $request->file('voters');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads'), $filename);
-            $member->voters = $filename;
+            $filevoters = $request->file('voters');
+            $filename_voters = time() . '_voters.' . $filevoters->getClientOriginalExtension();
+            $filevoters->move(public_path('uploads'), $filename_voters);
+            $member->voters = $filename_voters;
         } else {
             $member->voters = null;  // or retain existing value if editing
         }
@@ -486,13 +489,13 @@ public function update(Request $request) {
         $user->citizenship = $request->input('citizenship');
         $user->occupation = $request->input('occupation');
         // Update user data
-        $user->fill($request->except(['profile2x2']));
-        $user->fill($request->except(['voters']));
+        $user->fill($request->except(['profile2x2', 'voters']));
+
 
         if ($request->hasFile('profile2x2')) {
             $image2x2 = $request->file('profile2x2');
             $image2x2Name = $image2x2->getClientOriginalName();
-            $image2x2->move(public_path('uploads'), $image2x2Name);
+            $image2x2->move(public_path('residentprofile'), $image2x2Name);
             $user->profile2x2 = $image2x2Name;
         }
         if ($request->hasFile('voters')) {
@@ -585,7 +588,11 @@ public function submitRequestindignecy(Request $request)
             }
         }],
     
-        'copy' => 'required|min:1|max:5',
+        'copy' => ['required', function ($attribute, $value, $fail) {
+            if ($value > 5) {
+                $fail('Requuesting a copy Mustbe limit to 5.');
+            }
+        }],
         'purpose' => ['required', function ($attribute, $value, $fail) {
         if ($value === 'null') {
             $fail('Invalid Purpose.');
@@ -607,7 +614,6 @@ public function submitRequestindignecy(Request $request)
         'requirements.mimes' => 'Requirements must be a PDF file.',
         'requirements.max' => 'Requirements file size must not exceed 50MB.'
     ]);
-
     // Save the data to the database
     $requestModel = new IndigencyRequest();
     $requestModel->email = $email;
@@ -690,7 +696,11 @@ public function submitBusinessPermit(Request $request)
                 $fail('Name for requester is Required');
             }
         }],
-        'copy' => 'required|min:1|max:5',
+        'copy'=> ['required', function ($attribute, $value, $fail) {
+            if ($value > 5) {
+                $fail('Requuesting a copy Mustbe limit to 5.');
+            }
+        }],
         'bname' => 'required|regex:/^[a-zA-Z\s\p{P}0-9]+$/u',
         'baddress' => 'required|regex:/^[a-zA-Z\s\p{P}0-9]+$/u',
         'requirements_bpermit' => 'required|mimes:pdf|max:50000'
@@ -751,7 +761,11 @@ public function submitCessation(Request $request)
                 $fail('Name for requester is Required');
             }
         }],
-        'copy_cessation' => 'required|min:1|max:5',
+        'copy_cessation' => ['required', function ($attribute, $value, $fail) {
+            if ($value > 5) {
+                $fail('Requuesting a copy Mustbe limit to 5.');
+            }
+        }],
         'bname' => 'required|regex:/^[a-zA-Z\s\p{P}0-9]+$/u',
         'CEOname' => 'required|regex:/^[a-zA-Z\s\p{P}0-9]+$/u',
         'cbaddress' => 'required|regex:/^[a-zA-Z\s\p{P}0-9]+$/u',
@@ -817,7 +831,11 @@ public function submitRequestcertificate(Request $request)
             }
         }],
     
-        'copy' => 'required|min:1|max:5',
+        'copy' => ['required', function ($attribute, $value, $fail) {
+            if ($value > 5) {
+                $fail('Requuesting a copy Mustbe limit to 5.');
+            }
+        }],
         'purpose' => ['required', function ($attribute, $value, $fail) {
             if ($value === 'null') {
                 $fail('Invalid Purpose.');
@@ -882,7 +900,11 @@ public function submitRequestsoloparent(Request $request)
                 $fail('Name for requester is Required');
             }
         }],
-        'copy' => 'required|min:1|max:5',
+        'copy' => ['required', function ($attribute, $value, $fail) {
+            if ($value > 5) {
+                $fail('Requuesting a copy Mustbe limit to 5.');
+            }
+        }],
         'requirements' => 'required|mimes:pdf|max:50000',
         'selectedChildren' => ['required', function ($attribute, $value, $fail) {
             $children = json_decode($value, true);
@@ -945,7 +967,11 @@ public function submitRequestftj(Request $request)
                 $fail('Name for requester is Required');
             }
         }],
-        'copy' => 'required|min:1|max:5',
+        'copy' => ['required', function ($attribute, $value, $fail) {
+            if ($value > 5) {
+                $fail('Requuesting a copy Mustbe limit to 5.');
+            }
+        }],
         'requirements' => 'required|mimes:pdf|max:50000',
         'type' => 'required|in:First Time Job seeker (Minor),First Time Job Seeker Oath Taking,First Time Job Seeker',
         'pname' => 'nullable|regex:/^[a-zA-Z\s\p{P}0-9]+$/u',
@@ -1070,9 +1096,24 @@ public function cancelRequest(Request $request)
         $userId = $request->session()->get('userId');
         try {
             $request->validate([
-                'topic' => 'required|string|max:255|regex:/^[a-zA-Z0-9\s\W]+$/|unique:forums,topic',
+                'topic' => 'required|string|max:255|regex:/^[a-zA-Z0-9\s\W]+$/',
                 'description' => 'nullable|string|regex:/^[a-zA-Z0-9\s\W]+$/',
-                'name' => 'required|string|regex:/^[a-zA-Z0-9\s\W]+$/',
+                'name' => ['required', function ($attribute, $value, $fail) {
+                    if ($value === 'undefined' || $value === 'null') {
+                        $fail('Name for requester is Required');
+                    }
+                }],
+            ], [
+                'topic.required' => 'The topic field is required.',
+                'topic.string' => 'The topic must be a string.',
+                'topic.max' => 'The topic must not exceed 255 characters.',
+                'topic.regex' => 'The topic may only contain letters, numbers, spaces, and special characters.',
+                'topic.unique' => 'The topic has already been taken.',
+                'description.string' => 'The description must be a string.',
+                'description.regex' => 'The description may only contain letters, numbers, spaces, and special characters.',
+                'name.required' => 'The name field is required.',
+                'name.string' => 'The name must be a string.',
+                'name.regex' => 'The name may only contain letters, numbers, spaces, and special characters.',
             ]);
             
             $forum = new Forum();
@@ -1120,7 +1161,11 @@ public function cancelRequest(Request $request)
     // Validate the request data
     $validatedData = $request->validate([
         'comment' => 'required|string',
-        'adminname' => 'required|string',
+        'adminname' => ['required', function ($attribute, $value, $fail) {
+            if ($value === 'undefined' || $value === 'null') {
+                $fail('Name for requester is Required');
+            }
+        }],
         'profile' => 'required|string',
         'id_form' => 'required|exists:forums,id', // Assuming the foreign key is 'id_form' referencing the 'id' column of the 'forms' table
     ]);

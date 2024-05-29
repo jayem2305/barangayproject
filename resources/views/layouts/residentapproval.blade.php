@@ -140,6 +140,7 @@ $(document).ready(function () {
         }else{
             voters_filename = resident.voters_filename;
         }
+        var personalStatus = checkNullValues(resident.indicate_if);
         // Populate modal content with resident details
         $('#residentDetailsModal .modal-body').html(`
         <div class="row">
@@ -166,7 +167,7 @@ $(document).ready(function () {
             <div class="col-lg-4">  <p><strong>Contact Number:</strong>0${resident.cnum}</p></div>
             <div class="col-lg-4">  <p><strong>Uri ng Pag-Pagmamayari:</strong> ${resident.owner_type}</p></div>
             <div class="col-lg-4">  <p><strong>Pangalan ng May-Ari:</strong> ${resident.owner_name}</p></div>
-            <div class="col-lg-6">  <p><strong>Personal Status:</strong> ${resident.indicate_if}</p></div>
+            <div class="col-lg-6">  <p><strong>Personal Status:</strong> ${personalStatus}</p></div>
             <div class="col-lg-6">  <p><strong>Number of Members of Family:</strong> ${resident.number_of_family}</p></div>
             <hr><div class="col-lg-12">  <p><strong>Valid ID:<br></strong>
             <img src="../residentprofile/${resident.valid_id_filename}"class="rounded mx-auto d-block" alt="Profile pic" width="700" height="300" ></p>
@@ -198,7 +199,16 @@ $(document).ready(function () {
 
         `);
     }
-
+    function checkNullValues(dataString) {
+    if (!dataString || dataString === 'null') return ''; // If the string is null or 'null', return an empty string
+    var values = dataString.split(','); // Split the string by comma
+    // Filter out 'null' values
+    values = values.filter(function(item) {
+        return item.trim() !== 'null';
+    });
+    // Join the filtered values back into a string
+    return values.join(', ');
+}
     // AJAX request to fetch resident data
     $.ajax({
         url: "{{ route('residents.pendingaccount') }}",

@@ -53,7 +53,7 @@
                         <div class="card">
                           <div class="card-body">
                             <h5 class="card-title">Mission</h5>
-                            <p class="card-text">To have effective dedicated leaders that will provide outstanding services in terms of public safety, clean and beautiful environment, healthy constituents and spiritual growth towards future development.</p>
+                            <div id="mission"></div>
                         </div>
                     </div>
                 </div>
@@ -61,7 +61,7 @@
                     <div class="card">
                       <div class="card-body">
                         <h5 class="card-title">Vision</h5>
-                        <p class="card-text">A peaceful, drug-cleared, healthy and progressive barangay with empowered and productive citizenry under a transparent and competent government.</p>
+                        <div id="vision"></div>
                     </div>
                 </div>
             </div>
@@ -70,13 +70,12 @@
                 <div class="card">
                   <div class="row">
                     <div class="col-md-3">
-                      <img src="../pic/brgy_logo.png" class="img-fluid rounded-start" alt="..." style="margin-top:1rem; margin-left: 1rem;">
+                    <img src="..." class="img-fluid rounded-start" alt="..." id="logo"style="margin-top:1rem; margin-left: 1rem;">
                   </div>
                   <div class="col-md-9">
                       <div class="card-body">
                         <h5 class="card-title">History</h5>
-                        <p class="card-text justify-content-center">The history of Barangay 781 Zone 85 can be traced back to the early 1900s when the area was still part of a larger barangay. Over time, as the population grew, there was a need to create smaller subdivisions to effectively govern and provide essential services to the residents. It was around the 1950s when the division of barangays began to happen, and Barangay 781 Zone 85 emerged as its own distinct and autonomous unit. Throughout the years, the barangay has undergone modernization and development, witnessing changes in governance and infrastructure. Today, Barangay 781 Zone 85 stands as a vibrant and dynamic community, contributing to the overall progress of its city and serving as an important hub for its residents. Comprehending the history of a specific barangay provides valuable insights into the evolution of local communities. Understanding the background of Barangay 781 Zone 85 not only sheds light on its origins and growth but also highlights the significance of effective governance and community engagement.</p>
-                        <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+                        <div id="history"></div> 
                     </div>
                 </div>
             </div>
